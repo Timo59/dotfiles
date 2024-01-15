@@ -1,0 +1,6 @@
+# The following packages will be installed by pip to the currently active environment
+matplotlib
+networkx
+numpy
+pybind11
+scipy

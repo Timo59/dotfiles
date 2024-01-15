@@ -6,9 +6,9 @@ echo "Setting up your Mac..."
 # Do not run zsh when installation has finished - https://github.com/ohmyzsh/ohmyzsh#unattended-install
 if ! [ -e $HOME/.oh-my-zsh ]; then
   /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)" bash --unattended
+else
+  echo 'Oh my zsh already installed'
 fi
-
-echo "Oh My Zsh installed"
  
 # Check for Homebrew and install if we don't have it
 if test ! $(command -v brew); then
@@ -16,6 +16,8 @@ if test ! $(command -v brew); then
 
   echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
   eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+  echo 'Homebrew already installed'
 fi
 
 # Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
@@ -36,16 +38,28 @@ eval "$(/usr/libexec/path_helper)"
 sudo tlmgr update --self
 sudo tlmgr install $(tail -n +2 Texfile | tr "\n" " ")
 
-# Create a projects directories
-# mkdir $HOME/Code
-# mkdir $HOME/Herd
+source $HOME/.zshrc
 
-# Create Code subdirectories
-# mkdir $HOME/Code/blade-ui-kit
-# mkdir $HOME/Code/laravel
+# Install the relevant python versions and set the global
+if ! [ -e $PYENV_ROOT/versions/3.9* ]; then
+  pyenv install 3.9
+  pyenv global 3.9
+fi
+pip install --upgrade pip 
+
+# Install all requirements from a pip requirement.txt file - https://pip.pypa.io/en/stable/reference/requirements-file-format/
+pip install --requirement Pyfile
+
+# Create a projects directories
+if ! [ -e $HOME/Code ]; then
+  mkdir $HOME/Code
+fi
+if ! [ -e $HOME/Private ]; then
+  mkdir $HOME/Private
+fi
 
 # Clone Github repositories
-# ./clone.sh
+./clone.sh
 
 # Symlink the Mackup config file to the home directory
 # ln -s ./.mackup.cfg $HOME/.mackup.cfg

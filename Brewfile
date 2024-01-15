@@ -13,12 +13,14 @@ brew 'git'
 brew 'gnupg'			# GNU Privacy Guard to encrypt data (used in tlmgr)
 brew 'mackup'			# Backup App preferences to a cloud storage
 brew 'mas' 			# Mac App Store CLI
-brew 'pkg-config'		# helper tool to compile applications and libraries
+brew 'pkg-config'		# Helper tool to compile applications and libraries
+brew 'pyenv'
 # brew 'stripe/stripe-cli/stripe'
 # brew 'stripe/stripe-mock/stripe-mock'
 brew 'svn' 			# Needed to install fonts
 
 # Apps
+cask 'adobe-acrobat-reader'	
 cask 'basictex'
 cask 'caffeine'
 cask 'discord'
@@ -26,10 +28,16 @@ cask 'discord'
 cask 'github'
 cask 'google-chrome'
 # cask 'insomnia'		-- Design, debug, and test APIs locally or in the cloud
+cask 'microsoft-excel'
+cask 'microsoft-powerpoint'
+cask 'microsoft-word'
+cask 'onedrive'
+cask 'pycharm'
 # cask 'slack'			-- Team communication and collaboration software
-cask 'texmaker'
+cask 'spotify'
 # cask 'tuple'			-- Remote pair programming app
 # cask 'visual-studio-code'	-- Editor by Microsoft
+cask 'whatsapp'
 cask 'zoom'
 
 # Mac App Store
