@@ -4,3 +4,6 @@ networkx
 numpy
 pybind11
 scipy
+notebook
+qiskit
+qiskit-aer

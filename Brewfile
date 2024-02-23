@@ -13,6 +13,7 @@ brew 'git'
 brew 'gnupg'			# GNU Privacy Guard to encrypt data (used in tlmgr)
 brew 'mackup'			# Backup App preferences to a cloud storage
 brew 'mas' 			# Mac App Store CLI
+brew 'openconnect'		# Open client for Cisco AnyConnect VPN
 brew 'pkg-config'		# Helper tool to compile applications and libraries
 brew 'pyenv'
 # brew 'stripe/stripe-cli/stripe'
@@ -35,6 +36,7 @@ cask 'onedrive'
 cask 'pycharm'
 # cask 'slack'			-- Team communication and collaboration software
 cask 'spotify'
+cask 'texshop'
 # cask 'tuple'			-- Remote pair programming app
 # cask 'visual-studio-code'	-- Editor by Microsoft
 cask 'whatsapp'
