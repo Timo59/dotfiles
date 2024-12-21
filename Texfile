@@ -1,13 +1,17 @@
 # Packages from CTAN
 bbm
+bbm-macros
 biblatex
 cancel
 csquotes
 comment
 enumitem
 extarrows
+ifoddpage
 pgfplots
 physics
+preview
 qcircuit
+relsize
 subfiles
 standalone

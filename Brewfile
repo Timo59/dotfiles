@@ -24,11 +24,14 @@ brew 'svn' 			# Needed to install fonts
 cask 'adobe-acrobat-reader'	
 cask 'basictex'
 cask 'caffeine'
+cask 'clion'
 cask 'discord'
 # cask 'docker'			-- Software for isolating applications in containers
+cask 'flutter'
 cask 'github'
 cask 'google-chrome'
 # cask 'insomnia'		-- Design, debug, and test APIs locally or in the cloud
+cask 'intellij-idea'
 cask 'microsoft-excel'
 cask 'microsoft-powerpoint'
 cask 'microsoft-word'
