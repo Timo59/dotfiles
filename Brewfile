@@ -8,8 +8,10 @@ tap 'homebrew/bundle'
 # brew 'awscli'			-- command line interface for Amazon web services; could be useful when using Amazon braket
 brew 'bash' 			# Latest Bash version
 brew 'coreutils' 		# Those that come with macOS are outdated
+brew 'cmake'			# Cross platform compiler; mainly used for C/C++
 brew 'gh'			# GitHub CLI
 brew 'git'
+brew 'git-filter-repo'		# Quickly rewrite git repository history
 brew 'gnupg'			# GNU Privacy Guard to encrypt data (used in tlmgr)
 brew 'mackup'			# Backup App preferences to a cloud storage
 brew 'mas' 			# Mac App Store CLI
