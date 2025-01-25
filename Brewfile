@@ -13,6 +13,7 @@ brew 'gh'			# GitHub CLI
 brew 'git'
 brew 'git-filter-repo'		# Quickly rewrite git repository history
 brew 'gnupg'			# GNU Privacy Guard to encrypt data (used in tlmgr)
+brew 'libomp			# LLVM's OpenMP runtime library
 brew 'mackup'			# Backup App preferences to a cloud storage
 brew 'mas' 			# Mac App Store CLI
 brew 'openconnect'		# Open client for Cisco AnyConnect VPN
