@@ -1,14 +1,23 @@
 #!/bin/sh
 
-echo "Cloning GitHub repositories..."
+REPO_URL=git@github.com:Timo59/QonvexOptimization.git
+TARGET_DIR=$HOME/Code/QonvexOptimization
 
-DIR=$HOME/Code
+if [ ! -d $TARGET_DIR ]; then
+  echo "Cloning GitHub repositories..."
+  # Clone the main repository Qonvex Optimization with its submodules
+  git clone --recurse-submodules $REPO_URL $TARGET_DIR
+fi
 
-# Clone the main repository of Qonvex Optimization
-git clone git@github.com:Timo59/QonvexOptimization.git $DIR/QonvexOptimization
+# Pull all changes from the remote repository
+cd $TARGET_DIR
+echo "Updating main repository..."
+git submodule update --init --recursive
 
-# Initialize and update the submodules
-git -C $DIR/QonvexOptimization submodule update --init --recursive
-git -C $DIR/QonvexOptimization submodule sync --recursive
-
-git clone git@github.com:Timo59/VQAPySim.git $DIR/VQAPySim
+# Update each submodule
+git submodule foreach '
+  echo "Updating $name..."
+  BRANCH=$(git symbolic-ref --short HEAD)
+  git fetch --all
+  git pull origin $BRANCH
+'

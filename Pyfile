@@ -1,9 +1,10 @@
 # The following packages will be installed by pip to the currently active environment
-matplotlib
-networkx
-numpy
-pybind11
-scipy
+# Pure packages are not installed system-wide anymore but in a virtual environment from now on
+#matplotlib
+#networkx
+#numpy
+#pybind11
+#scipy
 notebook
-qiskit
-qiskit-aer
+#qiskit
+#qiskit-aer

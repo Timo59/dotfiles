@@ -9,7 +9,7 @@ tap 'homebrew/bundle'
 brew 'bash' 			# Latest Bash version
 brew 'coreutils' 		# Those that come with macOS are outdated
 brew 'cmake'			# Cross platform compiler; mainly used for C/C++
-brew 'gh'			# GitHub CLI
+#brew 'gh'			# GitHub CLI
 brew 'git'
 brew 'git-filter-repo'		# Quickly rewrite git repository history
 brew 'gnupg'			# GNU Privacy Guard to encrypt data (used in tlmgr)
@@ -19,20 +19,19 @@ brew 'mas' 			# Mac App Store CLI
 brew 'openconnect'		# Open client for Cisco AnyConnect VPN
 brew 'pkg-config'		# Helper tool to compile applications and libraries
 brew 'pyenv'
-# brew 'stripe/stripe-cli/stripe'
-# brew 'stripe/stripe-mock/stripe-mock'
-brew 'svn' 			# Needed to install fonts
+#brew 'svn' 			# Needed to install fonts
 
 # Apps
 cask 'adobe-acrobat-reader'	
 cask 'basictex'
-cask 'caffeine'
+#cask 'caffeine'
 cask 'clion'
 cask 'discord'
 # cask 'docker'			-- Software for isolating applications in containers
 cask 'flutter'
-cask 'github'
+#cask 'github'
 cask 'google-chrome'
+cask 'inkscape'
 # cask 'insomnia'		-- Design, debug, and test APIs locally or in the cloud
 cask 'intellij-idea'
 cask 'microsoft-excel'
@@ -44,7 +43,6 @@ cask 'pycharm'
 cask 'spotify'
 cask 'texshop'
 # cask 'tuple'			-- Remote pair programming app
-# cask 'visual-studio-code'	-- Editor by Microsoft
 cask 'whatsapp'
 cask 'zoom'
 

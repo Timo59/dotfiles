@@ -3,7 +3,7 @@
 echo "Setting up your Mac..."
 
 # Check whether .oh-my-zsh file is in home directory and install otherwise.
-# Do not run zsh when installation has finished - https://github.com/ohmyzsh/ohmyzsh#unattended-install
+# Do not run zsh when installation has finished
 if ! [ -e $HOME/.oh-my-zsh ]; then
   /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/HEAD/tools/install.sh)" bash --unattended
 else
@@ -38,13 +38,19 @@ eval "$(/usr/libexec/path_helper)"
 sudo tlmgr update --self
 sudo tlmgr install $(tail -n +2 Texfile | tr "\n" " ")
 
+# Copy and activatev local texmf
+./tex.sh
+
 source $HOME/.zshrc
 
 # Install the relevant python versions and set the global
 if ! [ -e $PYENV_ROOT/versions/3.9* ]; then
   pyenv install 3.9
-  pyenv global 3.9
 fi
+if ! [ -e $PYENV_ROOT/versions/3.12* ]; then
+  pyenv install 3.12
+fi
+pyenv global 3.12
 pip install --upgrade pip 
 
 # Install all requirements from a pip requirement.txt file - https://pip.pypa.io/en/stable/reference/requirements-file-format/
@@ -54,12 +60,13 @@ pip install --requirement Pyfile
 if ! [ -e $HOME/Code ]; then
   mkdir $HOME/Code
 fi
-if ! [ -e $HOME/Private ]; then
-  mkdir $HOME/Private
-fi
 
 # Clone Github repositories
 ./clone.sh
+
+if ! [ -e $HOME/Private ]; then
+  mkdir $HOME/Private
+fi
 
 # Symlink the Mackup config file to the home directory
 # ln -s ./.mackup.cfg $HOME/.mackup.cfg
