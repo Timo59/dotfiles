@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 echo "Setting up your Mac..."
 
@@ -36,9 +36,9 @@ eval "$(/usr/libexec/path_helper)"
 
 # Install all LaTex dependencies using tlmgr from newline delimited list Texfile
 sudo tlmgr update --self
-sudo tlmgr install $(tail -n +2 Texfile | tr "\n" " ")
+sudo tlmgr install $(grep -v '^\s*#' Texfile | sed 's/#.*//' | tr -s '' | tr "\n" " ")
 
-# Copy and activatev local texmf
+# Copy and activate local texmf
 ./tex.sh
 
 source $HOME/.zshrc
