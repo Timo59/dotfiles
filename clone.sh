@@ -1,33 +1,31 @@
-#!/bin/sh
+#!/bin/bash
 
-REPO_URL=git@github.com:Timo59/QonvexOptimization.git
-TARGET_DIR=$HOME/Code/QonvexOptimization
+CODE_DIR="$HOME/Code"
 
-if [ ! -d $TARGET_DIR ]; then
-  echo "Cloning GitHub repositories..."
-  # Clone the main repository Qonvex Optimization with its submodules
-  git clone --recurse-submodules $REPO_URL $TARGET_DIR
+# Associative array of REPO_URL to TARGET_DIR
+declare -A REPOS
+REPOS=(
+  [git@github.com:Timo59/HamSim.git]="$CODE_DIR/HamSim" 
+  [git@github.com:Timo59/optlib.git]="$CODE_DIR/optlib" 
+  [git@github.com:Timo59/qlib.git]="$CODE_DIR/qlib" 
+  [git@github.com:Timo59/QonvexOptimization.git]="$CODE_DIR/QonvexOptimization" 
+  [git@github.com:Timo59/TensorNetworks.git]="$CODE_DIR/TensorNetworks"
+)
 
-  # Copy to execute this file to .zprofile
-  echo '$HOME/.dotfiles/clone.sh' >> $HOME/.zprofile
-fi
 
-# Pull all changes from the remote repository
-cd $TARGET_DIR
-echo "Updating main repository..."
-git pull origin $(git symbolic-ref --short HEAD)
-git submodule update --init --recursive
+# Loop over the associative array and clone/update each repository
+for REPO_URL in "${!REPOS[@]}"; do
+  TARGET_DIR="${REPOS[$REPO_URL]}"
 
-# Update each submodule
-git submodule foreach '
-  echo "Updating $name..."
-  BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  if [ ! -d $TARGET_DIR ]; then
+    echo "Cloning $REPO_URL..."
+    # Clone the main repository Qonvex Optimization with its submodules
+    git clone --recurse-submodules $REPO_URL $TARGET_DIR
 
-   if [ -z "$BRANCH" ] || [ "$BRANCH" == "HEAD" ]; then
-     # Resolve to default branch if in a detached state or HEAD is not a symbolic ref
-     BRANCH=$(git config -f $toplevel/.gitmodules submodule.$name.branch || echo "main")
+  else
+    echo "Updating $TARGET_DIR..."
+    cd "$TARGET_DIR" || continue
+    git pull origin "$(git rev-parse --abbrev-ref HEAD)"
+
   fi
-  git fetch --all
-  git checkout $BRANCH
-  git pull origin $BRANCH
-'
+done

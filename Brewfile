@@ -35,8 +35,10 @@ cask 'intellij-idea'
 cask 'microsoft-excel'
 cask 'microsoft-powerpoint'
 cask 'microsoft-word'
+cask 'miniconda'
 cask 'onedrive'
 cask 'pycharm'
+cask 'raspberry-pi-imager'	-- Imaging utility to install operating systems to a microSD card
 # cask 'slack'			-- Team communication and collaboration software
 cask 'spotify'
 cask 'texshop'

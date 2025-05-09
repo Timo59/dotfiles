@@ -62,7 +62,10 @@ ENABLE_CORRECTION="true"
 # "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
-HIST_STAMPS="dd/mm/yyyy"
+export HIST_STAMPS="dd/mm/yyyy"
+
+# Commands preceded by a space are prevent from being logged
+setopt HIST_IGNORE_SPACE
 
 source $ZSH/oh-my-zsh.sh
 

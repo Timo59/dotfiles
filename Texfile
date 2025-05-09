@@ -2,7 +2,7 @@
 #bbm-macros
 bm		# Bold symbols in math mode
 #biber		# BibTex replacement for BibLaTeX
-#biblatex	# Sophisticated bibliographies in LaTeX
+biblatex	# Sophisticated bibliographies in LaTeX
 #cancel
 #csquotes	# Quotation package
 comment		# Include/exclude portions of text	

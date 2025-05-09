@@ -66,13 +66,16 @@ fi
 # Clone Github repositories
 ./clone.sh
 
+# Add clone.sh to .zprofile to update repositories at startup
+echo 'bash $HOME/.dotfiles/clone.sh' >> $HOME/.zprofile
+
 if ! [ -e $HOME/Private ]; then
   mkdir $HOME/Private
 fi
 
 # Copy vpn scripts to usr/local/bin
 echo 'Copying vpn scripts...'
-sudo cp vpn-LUH.sh usr/local/bin
+sudo cp vpn-LUH.sh /usr/local/bin/vpn-LUH.sh
 
 # Symlink the Mackup config file to the home directory
 # ln -s ./.mackup.cfg $HOME/.mackup.cfg
