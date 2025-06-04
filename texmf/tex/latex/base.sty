@@ -1,13 +1,13 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{thesis}[2022/02/02 LaTeX package for PhD work]
+\ProvidesPackage{base}[2025/05/25 LaTeX package for basic needed packages and commands]
 
 \RequirePackage{amsmath}	% Mathematical environments
 \RequirePackage{amssymb}	% Mathematical symbols
 \RequirePackage{amsthm}	% Enhancing theorem-style environments
 \RequirePackage{bm}		% Bold math symbols
 \RequirePackage{mathtools} 	% Mathematical typesetting; \DeclarePairedDelimiter
-\RequirePackage{parskip}
-\RequirePackage{setspace}
+\RequirePackage{parskip}		% Paragraph layout
+\RequirePackage{setspace}	% Provides double and one-and-a-half spacing based on font size
 \onehalfspacing
 
 \RequirePackage[a4paper, margin=1.5cm]{geometry}
@@ -18,11 +18,8 @@
 		{\renewcommand{\thesection}{\Roman{section}}%
 		}%
 
-\RequirePackage[backend=bibtex]{biblatex}
-	\addbibresource{thesis}
 
 %%%%%% MACROS
-
 	
 %%%%%% SETS
 	%%% BASIC

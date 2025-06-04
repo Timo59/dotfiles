@@ -1,28 +1,14 @@
 #!/bin/bash
 
 TEXMF_DIR=$HOME/Library/texmf
-BIB_DIR=$TEXMF_DIR/bibtex/bib
-STYLE_DIR=$TEXMF_DIR/tex/latex
+DOTFILES_DIR=$HOME/.dotfiles
 
-if [ ! -d "$BIB_DIR" ]; then
-  if [ ! -d "$STYLE_DIR" ]; then
-    echo "tex: Creating directories..."
-    mkdir -p "$BIB_DIR"
-    mkdir -p "$STYLE_DIR"
-
-    echo "tex:Changing ownership..."
-    chown -R $(whoami) "$TEX_MF"
-  fi
+#Create a symbolic from $HOME/Library/texmf to the texmf file provided in the dotfiles
+if [ ! -L "$TEXMF_DIR" ]; then
+  echo "Creating symbolic link from $TEXMF_DIR ..."
+  ln -s $DOTFILES_DIR/texmf $TEXMF_DIR
 else
-  echo "tex: Directories already exist"
+  echo "Symbolic link from $TEXMF_DIR already exists"
 fi
-
-echo "tex: Copying .bib files to $BIB_DIR..."
-cp -f texmf/*.bib "$BIB_DIR"
-echo "tex: Copying .sty files to $STYLE_DIR..."
-cp -f texmf/*.sty "$STYLE_DIR"
-
-echo "Updating TeX database..."
-sudo mktexlsr
 
 echo "TeX Setup complete"

@@ -1,0 +1,61 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{base}[2025/05/25 LaTeX package for tensor networks]
+
+\RequirePackage{base}
+
+
+\RenewDocumentCommand{\tensor}{%
+	s	% If star is not present return tensor elements
+	m	% Label for the tensor
+	m	% Tensor index
+	m	% Label for the physical system
+	o	% Label for ancillary system
+	o	% Ingoing bond index
+	o	% Outgoing bond index
+}{%
+	\IfBooleanTF{#1}{	% If star is present
+		\IfNoValueTF{#5}{		% If no label for ancillary system is provided
+			#2_{#3}^{#4_{#3}}		% Return a simple tensor with one physical index
+		}{%				% Else,
+			#2_{#3}^{#4_{#3}, #5_{#3}}	% Return a tensor including the ancillary index
+		}
+	}{%				% Otherwise, if no star is present
+		\IfNoValueTF{#5}{		% If no label for ancillary system is provided
+			[ #2_{#3}^{#4} ]_{#6, #7}	% Return the matrix element of the tensor with one physical index
+		}{%
+			[ #2_{#3}^{#4_{#3}, #5_{#3}} ]_{#6, #7}
+		}
+	}
+}
+
+\NewDocumentCommand{\mps}{%
+	s	% If star is not present trace is written out as a sum
+	m 	% Number of tensors in the network
+	m 	% Label for the tensors
+	m	% Label for the physical system
+}{%
+	\IfBooleanTF{#1}{								% If star is present
+		\sum_{#4_{1}, \dots, #4_{#2}}						% Sum over physical indices
+		\tr \left[ \tensor*{#3}{1}{#4} \cdots \tensor*{#3}{#2}{#4}\right]	% Trace over bonds
+		\ket{ #4_{1}, \dots, #4_{#2} }					% Vector
+	}{												% Else
+		\sum_{#4_{1}, \dots, #4_{#2}}						% Sum over physical indices
+		\sum_{j_{1}^{}, \dots, j_{#2}^{}}							% Sum over bond indices
+		\tensor{#3}{1}{#4} [j_{#2}^{}][][j_{1}^{}] \cdots \tensor{#3}{1}{#4}[][j_{#2 - 1}^{}][j_{#2}^{}]
+		\ket{ #4_{1}, \dots, #4_{#2}}						% Vector
+	}
+}
+
+\NewDocumentCommand{\mpo}{%
+	s	% If star is not present, trace is written out as a sum
+	m	% Number of tensors in the network
+	m	% Label for the tensors
+	m 	% Label for the physical system
+	m	% Label for the ancillary system
+}{%
+	\IfBooleanTF{#1}{% If star is present
+		\sum_{#4_{1}, #4_{1}^{\prime}, \dots, #4_{#2}, #4_{#2}^{\prime}}	% Sum over physical indices
+		\tr \left[ \tensor*{#3}{1}{#4}[#5] \cdot \tensor*{#3}{#2}{#4}[#5] \right]		% Trace over bonds
+		\ketbra{#4_{1}, \dots, #4_{#2}}{#5_{1}, \dots, #5_{#2}}
+	}
+}
