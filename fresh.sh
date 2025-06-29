@@ -36,11 +36,7 @@ brew bundle --file ./Brewfile
 # Add MacTex CLI to the path and manpath
 eval "$(/usr/libexec/path_helper)"
 
-# Install all LaTex dependencies using tlmgr from newline delimited list Texfile
-sudo tlmgr update --self
-sudo tlmgr install $(grep -v '^\s*#' Texfile | sed 's/#.*//' | tr -s '' | tr "\n" " ")
-
-# Copy and activate local texmf
+# # Install LaTex dependencies and link texmf
 ./tex.sh
 
 source $HOME/.zshrc

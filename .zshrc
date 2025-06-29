@@ -100,3 +100,13 @@ export LANG=en_US.UTF-8
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export "PATH=$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+
+# If command not found search in the current directory for an executable with the same name and execute this instead
+command_not_found_handler() {
+   if [[ -x "./$1" ]]; then
+       ./"$@"
+   else
+       echo "zsh: command not found: $1"
+       return 127
+   fi
+}

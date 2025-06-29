@@ -7,6 +7,7 @@ extarrows	# Special arrows
 mathtools	# Mathematical typesetting; 
 pgfplots	# Plotting in LaTeX
 preview		# Allow dsiplaying only small sections of LaTeX code
-#qcircuit	# Typesetting quantum circuits
+qcircuit	# Typesetting quantum circuits
 subfiles	# Individual typesetting of subfiles of a main document
 standalone	# Compile TeX pictures stand-alone
+xypic		# Typesetting a variety of graphs and diagrams
