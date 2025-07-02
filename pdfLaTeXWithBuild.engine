@@ -1,0 +1,27 @@
+#!/bin/bash
+# Custom pdfTeX engine to output build files into ./build
+
+# Extract the filename without path and extension
+filename="$(basename "$1" .tex)"
+
+# Extract the directory containing the .tex file
+dirname="$(dirname "$1")"
+
+# Create the path to and the build directory if it does not already exist
+builddir="${dirname}/build"
+mkdir -p "$builddir"
+
+# Compile the .tex file and write all output to the ./build directory (writes .aux to build/)
+pdflatex -output-directory="$builddir" "$1"
+
+# Run BibTeX on the -aux file in the build folder
+bibtex "$outdir/$filename"
+
+# Compile the .tex file for a second time (to resolve citations)
+pdflatex -output-directory="$builddir" "$1"
+
+# Compile the .tex file for a third time (to resolve references)
+pdflatex -output-directory="$builddir" "$1"
+
+# Move PDF back to the source folder
+mv "$builddir/${filename}.pdf" "$dirname/"

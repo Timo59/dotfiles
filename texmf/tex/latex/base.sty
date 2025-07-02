@@ -18,7 +18,6 @@
 		{\renewcommand{\thesection}{\Roman{section}}%
 		}%
 
-
 %%%%%% MACROS
 	
 %%%%%% SETS
@@ -126,3 +125,7 @@
 		\let\oldmatrixel\matrixel
 		\def\matrixel{\@ifstar{\oldmatrixel}{\oldmatrixel}}
 		\makeatother
+		
+%%%%%% ENVIRONMENTS
+		\newtheorem{theorem}{Theorem}[section]
+		\newtheorem{lemma}[theorem]{Lemma}
