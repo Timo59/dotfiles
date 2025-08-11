@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/opt/homebrew/bin/bash
+
+# Add timestamp to all output
+exec > >(while IFS= read -r line; do echo "$(date '+%Y-%m-%d %H:%M:%S'): $line"; done) 2>&1
 
 CODE_DIR="$HOME/Code"
 
@@ -20,12 +23,12 @@ for REPO_URL in "${!REPOS[@]}"; do
   if [ ! -d $TARGET_DIR ]; then
     echo "Cloning $REPO_URL..."
     # Clone the main repository Qonvex Optimization with its submodules
-    git clone --recurse-submodules $REPO_URL $TARGET_DIR
+    /opt/homebrew/bin/git clone --recurse-submodules $REPO_URL $TARGET_DIR
 
   else
     echo "Updating $TARGET_DIR..."
     cd "$TARGET_DIR" || continue
-    git pull origin "$(git rev-parse --abbrev-ref HEAD)"
+    /opt/homebrew/bin/git pull origin "$(/opt/homebrew/bin/git rev-parse --abbrev-ref HEAD)"
 
   fi
 done
