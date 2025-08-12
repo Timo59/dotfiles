@@ -62,8 +62,9 @@ fi
 # Clone Github repositories
 ./clone.sh
 
-# Add clone.sh to .zprofile to update repositories at startup
-echo 'bash $HOME/.dotfiles/clone.sh' >> $HOME/.zprofile
+# Add gitupdate, which calls clone.sh to LaunchAgents and load it
+cp com.user.gitupdate.plist ~/Library/LaunchAgents/com.user.gitupdate.plist
+launchctl load ~/Library/LaunchAgents/com.user.gitupdate.plist
 
 if ! [ -e $HOME/Private ]; then
   mkdir $HOME/Private
