@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{thesis}[2022/02/02 LaTeX package for PhD work]
+\ProvidesPackage{summary}[2025/08/27 LaTeX package for paper summaries]
 
 \RequirePackage{amsmath}	% Mathematical environments
 \RequirePackage{amssymb}	% Mathematical symbols
@@ -10,7 +10,7 @@
 \RequirePackage[pdfnewwindow=true, breaklinks=true]{hyperref}
 	\hypersetup{%
 		colorlinks=true,
-		linkcolor=darkblue,
+		linkcolor=blue,
 		citecolor=black,
 	}%
 \RequirePackage{mathtools} 	% Mathematical typesetting; \DeclarePairedDelimiter
@@ -48,6 +48,8 @@
 
 %%%%%% OPERATIONS
 	%%% UNARY
+		\DeclareMathOperator{\rk}{rk}					% Operator rank
+		%
 		\DeclarePairedDelimiter\abs{\lvert}{\rvert}			% Absolute value
 		\makeatletter								% Swap the definition of \abs* and \abs, 
 		\let\oldabs\abs								% so that \abs resizes the size of the brackets,

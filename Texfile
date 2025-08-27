@@ -15,9 +15,13 @@ pgfplots	# Plotting in LaTeX
 physics		# Simple and flexible macros for typesetting equations in the languages of vector calculus and linear algebra, using Dirac notation
 preview		# Allow dsiplaying only small sections of LaTeX code
 qcircuit	# Typesetting quantum circuits
-silence		The package allows the user to filter out unwanted warnings and error messages issued by LATEX
+quantikz	# Extend TikZ with the functionality for drawing quantum circuit diagrams
+silence		# The package allows the user to filter out unwanted warnings and error messages issued by LATEX
 spath3		# The spath3 library provides methods for manipulating the “soft paths” of TikZ/PGF
 subfiles	# Individual typesetting of subfiles of a main document
 standalone	# Compile TeX pictures stand-alone
 thmtools	# The bundle provides several packages for commonly-needed support for typesetting theorems
+tikz-cd		# Create commutative diagrams with TikZ
+xargs		# Define commands with many optional arguments
+xstring		# String manipulation for LaTeX
 xypic		# Typesetting a variety of graphs and diagrams

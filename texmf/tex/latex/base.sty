@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{base}[2025/05/25 LaTeX package for basic needed packages and commands]
+\ProvidesPackage{base}[2025/05/25 LaTeX package for basic packages and commands]
 
 \RequirePackage{amsmath}	% Mathematical environments
 \RequirePackage{amssymb}	% Mathematical symbols
@@ -34,9 +34,15 @@
 		\newcommand*{\bounded}[1]{\mathcal{B}(#1)} 		% Bounded linear operators
 		\newcommand*{\trclass}[1]{\mathcal{B}_{1}(#1)} 	% Trace class operators
 		\DeclareMathOperator{\Mat}{Mat} 				% Matrices
+		\DeclareMathOperator{\Herm}{Herm}
+		\newcommand*{\herm}[1]{\Herm_{#1}}			% Hermitian matrices
+		\DeclareMathOperator{\PSD}{PSD}
+		\newcommand*{\psd}[1]{\PSD_{#1}}				% Positive semidefinite matrices
 
 %%%%%% OPERATIONS
 	%%% UNARY
+		\DeclareMathOperator{\rk}{rk}					% Operator rank
+		%
 		\DeclarePairedDelimiter\abs{\lvert}{\rvert}			% Absolute value
 		\makeatletter								% Swap the definition of \abs* and \abs, 
 		\let\oldabs\abs								% so that \abs resizes the size of the brackets,

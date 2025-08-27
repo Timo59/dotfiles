@@ -54,20 +54,11 @@ pip install --upgrade pip
 # Install all requirements from a pip requirement.txt file - https://pip.pypa.io/en/stable/reference/requirements-file-format/
 pip install --requirement Pyfile
 
-# Create a projects directories
-if ! [ -e $HOME/Code ]; then
-  mkdir $HOME/Code
-fi
+# Create directories
+./dirs.sh
 
 # Clone Github repositories
 ./clone.sh
-
-# Add clone.sh to .zprofile to update repositories at startup
-echo 'bash $HOME/.dotfiles/clone.sh' >> $HOME/.zprofile
-
-if ! [ -e $HOME/Private ]; then
-  mkdir $HOME/Private
-fi
 
 # Copy vpn scripts to usr/local/bin
 echo 'Copying vpn scripts...'
