@@ -60,6 +60,10 @@ pip install --requirement Pyfile
 # Clone Github repositories
 ./clone.sh
 
+# Add gitupdate, which calls clone.sh to LaunchAgents and load it
+cp com.user.gitupdate.plist ~/Library/LaunchAgents/com.user.gitupdate.plist
+launchctl load ~/Library/LaunchAgents/com.user.gitupdate.plist
+
 # Copy vpn scripts to usr/local/bin
 echo 'Copying vpn scripts...'
 sudo cp vpn-LUH.sh /usr/local/bin/vpn-LUH.sh
