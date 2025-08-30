@@ -96,11 +96,6 @@ export LANG=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Set up shell environment for pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export "PATH=$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
 # If command not found search in the current directory for an executable with the same name and execute this instead
 command_not_found_handler() {
    if [[ -x "./$1" ]]; then
@@ -112,4 +107,6 @@ command_not_found_handler() {
 }
 
 # direnv hook
-eval "$(direnv hook zsh)"
+if command -v direnv >/dev/null 2>&1; then
+    eval "$(direnv hook zsh)"
+fi

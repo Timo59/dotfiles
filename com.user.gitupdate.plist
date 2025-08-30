@@ -12,5 +12,12 @@
     <string>/tmp/gitupdate.log</string>
     <key>StandardErrorPath</key>
     <string>/tmp/gitupdate.error.log</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>SHELL</key>
+        <string>/bin/zsh</string>
+    </dict>
 </dict>
 </plist>

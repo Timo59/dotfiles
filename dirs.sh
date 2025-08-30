@@ -1,38 +1,39 @@
 #!/bin/zsh
 
-# Array of directories to create
-directories=("Conferences:Seminars" "LUH" "PhD" "Projects")
+# Associative array of directories to create (path: description)
+declare -A directories
+directories=(
+    ["$HOME/Documents/Conferences:Seminars"]="Conferences:Seminars"
+    ["$HOME/Documents/LUH"]="LUH"
+    ["$HOME/Documents/PhD"]="PhD"
+    ["$HOME/Documents/Projects"]="Projects"
+    ["$HOME/Code"]="Code"
+)
 
-# Array of base paths
-base_path="$HOME/Documents"
+echo "Setting up directory structure..."
 
-# Function to create directory with progress output
+# Function to create directory
 create_directory() {
     local full_path="$1"
     local dir_name="$2"
     
-    echo "Creating $dir_name directory..."
-    
-    if ! [ -e "$full_path" ]; then
-        mkdir -p "$full_path"
-        echo -e "\033[1A\033[K[DONE] Creating $dir_name directory"
+    if [ ! -d "$full_path" ]; then
+        # Try multiple approaches to mkdir
+        if command -v mkdir >/dev/null 2>&1; then
+            mkdir -p "$full_path" && echo "[DONE] Created $dir_name"
+        elif [ -x "/bin/mkdir" ]; then
+            /bin/mkdir -p "$full_path" && echo "[DONE] Created $dir_name"
+        else
+            echo "[ERROR] Could not find mkdir anywhere, $dir_name was not created"
+        fi
     else
-        echo -e "\033[1A\033[K[EXISTS] $dir_name directory already exists"
+        echo "[EXISTS] $dir_name"
     fi
 }
 
-echo "Setting up directories in $base_path"
-
-for dir in "${directories[@]}"; do
-    full_path="$base_path/$dir"
-    create_directory "$full_path" "$dir"
+# Create all directories
+for path in "${(@k)directories}"; do
+    create_directory "$path" "${directories[$path]}"
 done
-    
-echo "Creating Code directory..."
 
-if ! [ -e "$HOME/Code" ]; then
-    mkdir -p "$HOME/Code"
-    echo -e "\033[1A\033[K[DONE] Creating Code directory"
-else
-    echo -e "\033[1A\033[K[EXISTS] Code directory already exists"
-fi
+echo "[DONE] Set up directory structure."
