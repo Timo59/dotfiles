@@ -22,6 +22,7 @@ subfiles	# Individual typesetting of subfiles of a main document
 standalone	# Compile TeX pictures stand-alone
 thmtools	# The bundle provides several packages for commonly-needed support for typesetting theorems
 tikz-cd		# Create commutative diagrams with TikZ
+varwidth	# A variable-width minipage
 xargs		# Define commands with many optional arguments
 xstring		# String manipulation for LaTeX
 xypic		# Typesetting a variety of graphs and diagrams

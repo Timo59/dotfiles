@@ -119,6 +119,16 @@ else
   echo "[WARNING] No vpn scripts found in $(pwd), skipping vpn initialization"
 fi
 
+# Install MOSEK SDK
+if [ -f ./install_mosek.sh ]; then
+  echo "Installing MOSEK to $HOME/mosek..."
+  chmod +x ./install_mosek.sh
+  .install_mosek.sh
+else
+  echo "[WARNING] install_mosek.sh not found in $(pwd), skipping initialization"
+fi
+  
+
 # Symlink the Mackup config file to the home directory
 # ln -s ./.mackup.cfg $HOME/.mackup.cfg
 
