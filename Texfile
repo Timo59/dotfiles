@@ -3,6 +3,7 @@ bbm		# Blackboard variants of Computer Modern fonts
 #biber		# BibTex replacement for BibLaTeX
 braket		# Provides macros to typeset bra-ket notation
 biblatex	# Sophisticated bibliographies in LaTeX
+changes		# Manual change markup
 comment		# Include/exclude portions of text
 doublestroke	# A font based on Computer Modern Roman useful for typesetting the mathematical symbols for the natural numbers (N), whole numbers (Z), rational numbers (Q), real numbers (R) and complex numbers (C)	
 enumitem	# Layout for itemize, enumerate
@@ -22,6 +23,8 @@ subfiles	# Individual typesetting of subfiles of a main document
 standalone	# Compile TeX pictures stand-alone
 thmtools	# The bundle provides several packages for commonly-needed support for typesetting theorems
 tikz-cd		# Create commutative diagrams with TikZ
+todonotes       # Marking things to do in a LATEX document
+truncate        # Truncate text to a specified width
 varwidth	# A variable-width minipage
 xargs		# Define commands with many optional arguments
 xstring		# String manipulation for LaTeX
