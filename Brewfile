@@ -14,6 +14,7 @@ brew 'libomp'			# LLVM's OpenMP runtime library
 brew 'mackup'			# Backup App preferences to a cloud storage
 brew 'mas' 			# Mac App Store CLI
 brew 'openconnect'		# Open client for Cisco AnyConnect VPN
+brew 'parallel'			# Shell command parallelization utility
 brew 'pkg-config'		# Helper tool to compile applications and libraries
 brew 'pyenv'
 # brew 'svn' 			# Needed to install fonts
