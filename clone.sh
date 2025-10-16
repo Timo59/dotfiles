@@ -8,6 +8,7 @@ CODE_DIR="$HOME/Code"
 # Associative array of REPO_URL to TARGET_DIR
 declare -A REPOS
 REPOS=(
+  [git@github.com:Timo59/dotfiles.git]="$HOME/.dotfiles"
   [git@github.com:Timo59/HamSim.git]="$CODE_DIR/HamSim" 
   [git@github.com:Timo59/optlib.git]="$CODE_DIR/optlib" 
   [git@github.com:Timo59/qlib.git]="$CODE_DIR/qlib" 
