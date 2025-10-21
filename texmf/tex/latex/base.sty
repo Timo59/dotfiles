@@ -26,6 +26,10 @@
 		\newcommand*{\Q}{\mathbb{Q}}				% Rational numbers
 		\newcommand*{\R}{\mathbb{R}}				% Real numbers
 		\newcommand*{\C}{\mathbb{C}}				% Complex numbers
+		\let\Re\relax
+		\DeclareMathOperator{\Re}{Re}				% Real part of a complex number
+		\let\Im\relax
+		\DeclareMathOperator{\Im}{Im}					% Imaginary part of a complex number
 		\newcommand*{\hil}{\mathcal{H}} 				% Hilbert space
 		\newcommand*{\id}{I} 						% Identity operator
 		\newcommand*{\linear}[1]{\mathcal{L}(#1)}		% Linear operators
@@ -67,7 +71,7 @@
 		%
 		\DeclareMathOperator{\tr}{tr} 					% Trace
 		\newcommand{\adj}[1]{#1^\dag}				% Adjoint
-		\newcommand{\cc}[1]{#1^*}					% Complex conjugate
+		\newcommand{\cc}[1]{\overline{#1}}			% Complex conjugate
 		
 	%%% BINARY
 		\makeatletter

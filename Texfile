@@ -1,4 +1,5 @@
 # Packages from CTAN
+algorithm2e	# Floating algorithm environment with algorithmic keywords
 bbm		# Blackboard variants of Computer Modern fonts
 #biber		# BibTex replacement for BibLaTeX
 braket		# Provides macros to typeset bra-ket notation
@@ -11,12 +12,14 @@ environ		# The package provides the \collect@body command (as in amsmath), as we
 extarrows	# Special arrows
 hobby		# This package defines a path generation function for PGF/TikZ which implements Hobby’s algorithm for a path built out of Bezier curves which passes through a given set of points
 ieeetran	# Enables authors to produce officially-correct output for the Institute of Electrical and Electronics Engineers
+ifoddpage	# Determine if the current page is odd or even
 mathtools	# Mathematical typesetting; 
 pgfplots	# Plotting in LaTeX
 physics		# Simple and flexible macros for typesetting equations in the languages of vector calculus and linear algebra, using Dirac notation
 preview		# Allow dsiplaying only small sections of LaTeX code
 qcircuit	# Typesetting quantum circuits
 quantikz	# Extend TikZ with the functionality for drawing quantum circuit diagrams
+relsize		# Set the font size relative to the current font size
 silence		# The package allows the user to filter out unwanted warnings and error messages issued by LATEX
 spath3		# The spath3 library provides methods for manipulating the “soft paths” of TikZ/PGF
 subfiles	# Individual typesetting of subfiles of a main document
