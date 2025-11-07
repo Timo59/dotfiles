@@ -4,6 +4,7 @@
 \RequirePackage{amsmath}	% Mathematical environments
 \RequirePackage{amssymb}	% Mathematical symbols
 \RequirePackage{amsthm}	% Enhancing theorem-style environments
+\RequirePackage{base}
 \RequirePackage{bm}		% Bold math symbols
 \RequirePackage{enumitem}
 \SetLabelAlign{LeftAlignFullWidth}{\makebox[\dimexpr\linewidth+\labelwidth\relax][l]{#1}}
@@ -28,113 +29,5 @@
 	}%
 	
 	
-%%%%%% MACROS
-
-	
-%%%%%% SETS
-	%%% BASIC
-		\newcommand*{\N}{\mathbb{N}} 				% Natural numbers (without 0)
-		\newcommand*{\Nn}{\mathbb{N}_{0}} 			% Natural numbers with 0
-		\newcommand*{\Z}{\mathbb{Z}} 				% Integer numbers
-		\newcommand*{\Q}{\mathbb{Q}}				% Rational numbers
-		\newcommand*{\R}{\mathbb{R}}				% Real numbers
-		\newcommand*{\C}{\mathbb{C}}				% Complex numbers
-		\newcommand*{\hil}{\mathcal{H}} 				% Hilbert space
-		\newcommand*{\id}{I} 						% Identity operator
-		\newcommand*{\linear}[1]{\mathcal{L}(#1)}		% Linear operators
-		\newcommand*{\bounded}[1]{\mathcal{B}(#1)} 		% Bounded linear operators
-		\newcommand*{\trclass}[1]{\mathcal{B}_{1}(#1)} 	% Trace class operators
-		\DeclareMathOperator{\Mat}{Mat} 				% Matrices
-
-%%%%%% OPERATIONS
-	%%% UNARY
-		\DeclareMathOperator{\rk}{rk}					% Operator rank
-		%
-		\DeclarePairedDelimiter\abs{\lvert}{\rvert}			% Absolute value
-		\makeatletter								% Swap the definition of \abs* and \abs, 
-		\let\oldabs\abs								% so that \abs resizes the size of the brackets,
-		\def\abs{\@ifstar{\oldabs}{\oldabs*}}				% and the starred version does not.
-		\makeatother
-		%
-		\DeclarePairedDelimiter\norm{\lVert}{\rVert}		% Norm
-		\makeatletter
-		\let\oldnorm\norm
-		\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
-		\makeatother
-		%
-		\DeclarePairedDelimiter\bra{\langle}{\rvert}		% Bra
-		\makeatletter
-		\let\oldbra\bra
-		\def\bra{\@ifstar{\oldbra}{\oldbra*}}
-		\makeatother
-		%
-		\DeclarePairedDelimiter\ket{\lvert}{\rangle}		% Ket
-		\makeatletter
-		\let\oldket\ket
-		\def\ket{\@ifstar{\oldket}{\oldket}}
-		\makeatother
-		%
-		\DeclareMathOperator{\tr}{tr} 					% Trace
-		\newcommand{\adj}[1]{#1^\dag}				% Adjoint
-		\newcommand{\cc}[1]{#1^*}					% Complex conjugate
-		
-	%%% BINARY
-		\makeatletter
-		\newcommand{\braket}[2][\@nil]{%				% If braket is given only one input,
-			\ifx#1\@nil							% the input will fill both arguments
-				\braketInternal{#2}{#2}
-			\else
-				\braketInternal{#1}{#2}
-			\fi
-		}
-		\makeatother
-		%
-		\makeatletter
-		\newcommand{\inner}[2][\@nil]{%				% If inner is given only one input,
-			\ifx#1\@nil							% the input will fill both arguments
-				\innerInternal{#2}{#2}
-			\else
-				\innerInternal{#1}{#2}
-			\fi
-		}
-		\makeatother
-		%
-		\makeatletter
-		\newcommand{\ketbra}[2][\@nil]{%				% If ketbra is given only one input,
-			\ifx#1\@nil							% the input will fill both arguments
-				\ketbraInternal{#2}{#2}
-			\else
-				\ketbraInternal{#1}{#2}
-			\fi
-		}
-		\makeatother
-		%
-		\DeclarePairedDelimiterX\braketInternal[2]{\langle}{\rangle}{#1 \lvert #2}					% Braket
-		\makeatletter
-		\let\oldbraketInternal\braketInternal
-		\def\braketInternal{\@ifstar{\oldbraketInternal}{\oldbraketInternal}}
-		\makeatother
-		%
-		\DeclarePairedDelimiterX\expval[2]{\langle}{\rangle}{#2 \lvert #1 \rvert #2}					% Expectation value
-		\makeatletter
-		\let\oldexpval\expval
-		\def\expval{\@ifstar{\oldexpval}{\oldexpval}}
-		\makeatother
-		%
-		\DeclarePairedDelimiterX\innerInternal[2]{\langle}{\rangle}{#1, #2}						% Inner product
-		\makeatletter
-		\let\oldinner\inner
-		\def\inner{\@ifstar{\oldinner}{\oldinner}}
-		\makeatother
-		%
-		\DeclarePairedDelimiterX\ketbraInternal[2]{\lvert}{\rvert}{#1 \rangle \hspace{-3pt} \langle #2}	% Ketbra
-		\makeatletter
-		\let\oldketbraInternal\ketbraInternal
-		\def\ketbraInternal{\@ifstar{\oldketbraInternal}{\oldketbraInternal}}
-		\makeatother
-		%
-		\DeclarePairedDelimiterX\matrixel[3]{\langle}{\rangle}{#1 \lvert #2 \rvert #3}				% Matrix element
-		\makeatletter
-		\let\oldmatrixel\matrixel
-		\def\matrixel{\@ifstar{\oldmatrixel}{\oldmatrixel}}
-		\makeatother
+%%% MACROS
+	\newcommand{\RN}[1]{\uppercase\expandafter{\romannumeral #1\relax}}	% Roman numerals
