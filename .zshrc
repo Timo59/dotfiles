@@ -113,3 +113,6 @@ command_not_found_handler() {
 
 # direnv hook
 eval "$(direnv hook zsh)"
+
+# Disable command spelling correction
+unsetopt correctall

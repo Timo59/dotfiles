@@ -11,9 +11,10 @@ REPOS=(
   [git@github.com:Timo59/dotfiles.git]="$HOME/.dotfiles"
   [git@github.com:Timo59/HamSim.git]="$CODE_DIR/HamSim" 
   [git@github.com:Timo59/optlib.git]="$CODE_DIR/optlib" 
-  [git@github.com:Timo59/qlib.git]="$CODE_DIR/qlib" 
+  [git@gitlab.uni-hannover.de:timo.ziegler/qsim.git]="$CODE_DIR/qlib" 
   [git@github.com:Timo59/QonvexOptimization.git]="$CODE_DIR/QonvexOptimization" 
   [git@github.com:Timo59/TensorNetworks.git]="$CODE_DIR/TensorNetworks"
+  [git@gitlab.uni-hannover.de:timo.ziegler/QCP_braket.git]="$CODE_DIR/QCP_braket"
 )
 
 
