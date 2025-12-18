@@ -106,9 +106,3 @@ command_not_found_handler() {
    fi
 }
 
-# direnv hook
-<<<<<<< HEAD
-if command -v direnv >/dev/null 2>&1; then
-    eval "$(direnv hook zsh)"
-fi
-

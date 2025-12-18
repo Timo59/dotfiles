@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-# Check if script is run from the .dotfiles directory
+# Check if script runs from the .dotfiles directory
 if [[ ! "$(basename "$PWD")" == ".dotfiles" ]]; then
   echo "[ERROR] This script must be run from inside the .dotfiles directory"
   exit 1
@@ -110,7 +110,7 @@ if [ -f "./vpn-LUH.sh" ]; then
       sudo mkdir -p /usr/local/bin
     fi
 
-    sudo ln -s ./vpn-LUH.sh /usr/local/bin/vpn-LUH.sh
+    sudo ln -sf "$PWD/vpn-LUH.sh" /usr/local/bin/vpn-LUH.sh
     echo "[DONE] Symlinked vpn-LUH to /usr/local/bin"
   else
     echo "[EXISTS] Symlink vpn-LUH to /usr/local/bin"
