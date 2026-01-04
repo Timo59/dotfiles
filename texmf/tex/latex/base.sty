@@ -50,33 +50,45 @@
 
 %%%%%% OPERATIONS
 	%%% UNARY
-		\DeclarePairedDelimiter\abs{\lvert}{\rvert}				% Absolute value
+		\DeclarePairedDelimiter\abs{\lvert}{\rvert}%					% Absolute value
 		\makeatletter		% Swap the definition of \abs* and \abs, 
 		\let\oldabs\abs	% so that \abs resizes the size of the brackets,
 		\def\abs{\@ifstar{\oldabs}{\oldabs*}}	% and the starred version does not.
 		\makeatother
 		%
-		\DeclarePairedDelimiter\norm{\lVert}{\rVert}			% Norm
+		\DeclarePairedDelimiter\norm{\lVert}{\rVert}%				% Norm
 		\makeatletter
 		\let\oldnorm\norm
 		\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
 		\makeatother
 		%
-		\DeclarePairedDelimiter\bra{\langle}{\rvert}			% Bra
+		\DeclarePairedDelimiter\rspan{\langle}{\rangle_{\R}}%	%Linear span over the real numbers
+		\makeatletter
+		\let\oldrspan\rspan
+		\def\rspan{\@ifstar{\oldrspan}{\oldrspan*}}
+		\makeatother
+		%
+		\DeclarePairedDelimiter\cspan{\langle}{\rangle_{\C}}%	%Linear span over the complex numbers
+		\makeatletter
+		\let\oldcspan\cspan
+		\def\cspan{\@ifstar{\oldcspan}{\oldcspan*}}
+		\makeatother
+		%
+		\DeclarePairedDelimiter\bra{\langle}{\rvert}%					% Bra
 		\makeatletter
 		\let\oldbra\bra
 		\def\bra{\@ifstar{\oldbra}{\oldbra*}}
 		\makeatother
 		%
-		\DeclarePairedDelimiter\ket{\lvert}{\rangle}			% Ket
+		\DeclarePairedDelimiter\ket{\lvert}{\rangle}%					% Ket
 		\makeatletter
 		\let\oldket\ket
 		\def\ket{\@ifstar{\oldket}{\oldket}}
 		\makeatother
 		%
-		\DeclareMathOperator{\tr}{tr} 								% Trace
-		\newcommand{\adj}[1]{#1^\dag}							% Adjoint
-		\newcommand{\cc}[1]{\overline{#1}}						% Complex conjugate
+		\DeclareMathOperator{\tr}{tr}	%										% Trace
+		\newcommand{\adj}[1]{#1^\dag}%									% Adjoint
+		\newcommand{\cc}[1]{\overline{#1}}%							% Complex conjugate
 		
 	%%% BINARY
 		\makeatletter
