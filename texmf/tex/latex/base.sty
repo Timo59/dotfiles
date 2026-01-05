@@ -95,13 +95,13 @@
 		\newcommand{\braket}{\@ifstar\braket@star\braket@nostar}	% Braket
 		\newcommand{\braket@nostar}[1]{%	% Auto-sized by default
 			\@ifnextchar\bgroup
-				{\braketInternal*{#1}}%
-				{\braketInternal*{#1}{#1}}%	% If given only one argument, this will fill both places
+				{\braketInternalAuto*{#1}}%
+				{\braketInternalAuto*{#1}{#1}}%	% If given only one argument, this will fill both places
 		}
 		\newcommand{\braket@star}[1]{%		% Normal-sized when starred
 			\@ifnextchar\bgroup
-				{\braketInternal{#1}}%		
-				{\braketInternal{#1}{#1}}%
+				{\braketInternalFixed{#1}}%		
+				{\braketInternalFixed{#1}{#1}}%
 		}
 		\makeatother
 		%
@@ -133,7 +133,10 @@
 		}
 		\makeatother
 		%
-		\DeclarePairedDelimiterX\braketInternal[2]{\langle}{\rangle}{#1 \,\middle\vert\, #2}	% Braket
+		% Auto-sized version (uses \middle)
+  		\DeclarePairedDelimiterX\braketInternalAuto[2]{\langle}{\rangle}{#1 \,\middle\vert\, #2}
+  		% Fixed-size version (no \middle)
+  		\DeclarePairedDelimiterX\braketInternalFixed[2]{\langle}{\rangle}{#1 \vert #2}
 		\DeclarePairedDelimiterX\innerInternal[2]{\langle}{\rangle}{#1, #2}	% Inner product
 		\DeclarePairedDelimiterX\ketbraInternal[2]{\lvert}{\rvert}{#1 \rangle \! \langle #2}	% Ketbra
 		\DeclarePairedDelimiterX\expval[2]{\langle}{\rangle}{#2 \lvert #1 \rvert #2}					% Expectation value
