@@ -11,17 +11,43 @@ dirname="$(dirname "$1")"
 builddir="${dirname}/build"
 mkdir -p "$builddir"
 
-# Compile the .tex file and write all output to the ./build directory (writes .aux to build/)
-pdflatex -output-directory="$builddir" "$1"
+# Function to check if PDF was generated (indicates successful compilation)
+check_compilation() {
+    if [ ! -f "$builddir/${filename}.pdf" ]; then
+        echo "ERROR: PDF was not generated. Cleaning auxiliary files..."
+        rm -f "$builddir/$filename.aux" \
+              "$builddir/$filename.out" \
+              "$builddir/$filename.toc" \
+              "$builddir/$filename.lof" \
+              "$builddir/$filename.lot" \
+              "$builddir/$filename.loc" \
+              "$builddir/$filename.soc"
+        exit 1
+    fi
+}
 
-# Run BibTeX on the -aux file in the build folder
-bibtex "$outdir/$filename"
+# Compile the .tex file and write all output to the ./build directory (writes .aux to build/)
+pdflatex -interaction=nonstopmode -output-directory="$builddir" "$1"
+check_compilation
+
+# Run BibTeX on the -aux file in the build folder (ignore errors as .bib might not exist)
+bibtex "$builddir/$filename" 2>/dev/null || true
 
 # Compile the .tex file for a second time (to resolve citations)
-pdflatex -output-directory="$builddir" "$1"
+pdflatex -interaction=nonstopmode -output-directory="$builddir" "$1"
 
 # Compile the .tex file for a third time (to resolve references)
-pdflatex -output-directory="$builddir" "$1"
+pdflatex -interaction=nonstopmode -output-directory="$builddir" "$1"
 
 # Move PDF back to the source folder
 mv "$builddir/${filename}.pdf" "$dirname/"
+
+# Also clean any auxiliary files that might have been created in the main directory
+rm -f "$dirname/$filename.aux" \
+      "$dirname/$filename.out" \
+      "$dirname/$filename.log" \
+      "$dirname/$filename.toc" \
+      "$dirname/$filename.lof" \
+      "$dirname/$filename.lot" \
+      "$dirname/$filename.loc" \
+      "$dirname/$filename.soc" 2>/dev/null || true
