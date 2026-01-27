@@ -1,5 +1,14 @@
 %%% ARTICLES
 
+@article{Bottomly2004_UnderstandingCaching,
+	title	= {Understanding caching},
+	author	= {James Bottomly},
+	journal	= {LINUX journal},
+	year	= {2004},
+	month	= {jan},
+	url		= {https://www.linuxjournal.com/article/7105}
+}
+
 @article{DeRaedt2007_MassivelyParallelQuantumComputerSimulator,
 	title			= {Massively parallel quantum computer simulator},
 	author		= {De Raedt, K. and Michielsen, K. and De Raedt, H. and Trieu, B. and Arnold, G. and Richter, M. and Lippert, Th. and Watanabe, H. and Ito, N.},
@@ -15,16 +24,90 @@
 	pages		= {121–136}
 }
 
+@article{DeRaedt2019_MassivelyParallelQuantumComputerSimulator,
+	title		= {Massively parallel quantum computer simulator, eleven years later},
+	journal		= {Computer Physics Communications},
+	volume		= {237},
+	pages		= {47-61},
+	year		= {2019},
+	issn		= {0010-4655},
+	doi			= {https://doi.org/10.1016/j.cpc.2018.11.005},
+	url			= {https://www.sciencedirect.com/science/article/pii/S0010465518303977},
+	author		= {Hans {De Raedt} and Fengping Jin and Dennis Willsch and Madita Willsch and Naoki Yoshioka and Nobuyasu Ito and Shengjun Yuan and Kristel Michielsen},
+	keywords	= {Quantum computation, Computer simulation, High performance computing, Parallelization, Benchmarking},
+	abstract	= {A revised version of the massively parallel simulator of a universal quantum computer, described in this journal eleven years ago, is used to benchmark various gate-based quantum algorithms on some of the most powerful supercomputers that exist today. Adaptive encoding of the wave function reduces the memory requirement by a factor of eight, making it possible to simulate universal quantum computers with up to 48 qubits on the Sunway TaihuLight and on the K computer. The simulator exhibits close-to-ideal weak-scaling behavior on the Sunway TaihuLight, on the K computer, on an IBM Blue Gene/Q, and on Intel Xeon based clusters, implying that the combination of parallelization and hardware can track the exponential scaling due to the increasing number of qubits. Results of executing simple quantum circuits and Shor’s factorization algorithm on quantum computers containing up to 48 qubits are presented.}
+}
+
+@article{Deutsch1985_QuantumTheoryTheChurchTuringPrincipleAndTheUniversalQuantumComputer,
+    author 	= {Deutsch, David},
+    title 	= {Quantum theory, the Church–Turing principle and the universal quantum computer},
+    journal	= {Proceedings of the Royal Society of London. A. Mathematical and Physical Sciences},
+    volume 	= {400},
+    number 	= {1818},
+    pages 	= {97-117},
+    year 	= {1985},
+    month 	= {07},
+    issn 	= {0080-4630},
+    doi 	= {10.1098/rspa.1985.0070},
+    url 	= {https://doi.org/10.1098/rspa.1985.0070},
+    eprint 	= {https://royalsocietypublishing.org/rspa/article-pdf/400/1818/97/65933/rspa.1985.0070.pdf},
+}
+
+@article{Deutsch1989_QuantumComputationalNetworks,
+    author	= {Deutsch, David Elieser},
+    title	= {Quantum computational networks},
+    journal	= {Proceedings of the Royal Society of London. A. Mathematical and Physical Sciences},
+    volume	= {425},
+    number	= {1868},
+    pages	= {73-90},
+    year	= {1989},
+    month	= {09},
+    issn	= {0080-4630},
+    doi		= {10.1098/rspa.1989.0099},
+    url		= {https://doi.org/10.1098/rspa.1989.0099},
+    eprint	= {https://royalsocietypublishing.org/rspa/article-pdf/425/1868/73/67392/rspa.1989.0099.pdf},
+}
+
+@article{Guerreschi2020_IntelQuantumSimulator,
+	doi			= {10.1088/2058-9565/ab8505},
+	url			= {https://doi.org/10.1088/2058-9565/ab8505},
+	year		= {2020},
+	month		= {May},
+	publisher	= {IOP Publishing},
+	volume		= {5},
+	number		= {3},
+	pages		= {034007},
+	autho		= {Guerreschi, Gian Giacomo and Hogaboam, Justin and Baruffa, Fabio and Sawaya, Nicolas P D},
+	title		= {Intel Quantum Simulator: a cloud-ready high-performance simulator of quantum circuits},
+	journal		= {Quantum Science and Technology},
+	abstract	= {Classical simulation of quantum computers will continue to play an essential role in the progress of quantum information science, both for numerical studies of quantum algorithms and for modeling noise and errors. Here we introduce the latest release of Intel Quantum Simulator (IQS), formerly known as qHiPSTER. The high-performance computing (HPC) capability of the software allows users to leverage the available hardware resources provided by supercomputers, as well as available public cloud computing infrastructure. To take advantage of the latter platform, together with the distributed simulation of each separate quantum state, IQS allows to subdivide the computational resources to simulate a pool of related circuits in parallel. We highlight the technical implementation of the distributed algorithm and details about the new pool functionality. We also include some basic benchmarks (up to 42 qubits) and performance results obtained using HPC infrastructure. Finally, we use IQS to emulate a scenario in which many quantum devices are running in parallel to implement the quantum approximate optimization algorithm, using particle swarm optimization as the classical subroutine. The results demonstrate that the hyperparameters of this classical optimization algorithm depends on the total number of quantum circuit simulations one has the bandwidth to perform. Intel Quantum Simulator has been released open-source with permissive licensing and is designed to simulate a large number of qubits, to emulate multiple quantum devices running in parallel, and/or to study the effects of decoherence and other hardware errors on calculation results.}
+}
+
+@article{Jin2022_QPayer,
+	author		= {Jin, Ki-Sung and Cha, Gyu-Il},
+	title		= {QPlayer: Lightweight, scalable, and fast quantum simulator},
+	journal		= {ETRI Journal},
+	volume		= {45},
+	number		= {2},
+	pages		= {304-317},
+	keywords	= {quantum computing, quantum information processing, quantum simulator},
+	doi			= {https://doi.org/10.4218/etrij.2021-0442},
+	url			= {https://onlinelibrary.wiley.com/doi/abs/10.4218/etrij.2021-0442},
+	eprint		= {https://onlinelibrary.wiley.com/doi/pdf/10.4218/etrij.2021-0442},
+	abstract	= {Abstract With the rapid evolution of quantum computing, digital quantum simulations are essential for quantum algorithm verification, quantum error analysis, and new quantum applications. However, the exponential increase in memory overhead and operation time is challenging issues that have not been solved for years. We propose a novel approach that provides more qubits and faster quantum operations with smaller memory than before. Our method selectively tracks realized quantum states using a reduced quantum state representation scheme instead of loading the entire quantum states into memory. This method dramatically reduces memory space ensuring fast quantum computations without compromising the global quantum states. Furthermore, our empirical evaluation reveals that our proposed idea outperforms traditional methods for various algorithms. We verified that the Grover algorithm supports up to 55 qubits and the surface code algorithm supports up to 85 qubits in 512 GB memory on a single computational node, which is against the previous studies that support only between 35 qubits and 49 qubits.},
+year = {2023}
+}
+
 @article{Jones2019_QuESTandHighPerformanceSimulationOfQuantumComputers,
-    title			= {{QuEST} and high performance simulation of quantum computers},
+    title		= {{QuEST} and high performance simulation of quantum computers},
     author		= {Jones, Tyson and Brown, Anna and Bush, Ian and Benjamin, Simon C},
     journal		= {Scientific Reports},
     volume		= {9},
     number		= {1},
     pages		= {10736},
-    year 			= {2019},
+    year 		= {2019},
     publisher	= {Nature Publishing Group},
-    doi          	= {10.1038/s41598-019-47174-9}
+    doi         = {10.1038/s41598-019-47174-9}
 }
 
 @article{Niwa2002_GeneralPurposeParallelSimulatorForQuantumComputing,
@@ -41,9 +124,23 @@
 	month		= {dec}
 }
 
+@article{Suzuki2021_Qulacs,
+	doi 		= {10.22331/q-2021-10-06-559},
+	url 		= {https://doi.org/10.22331/q-2021-10-06-559},
+	title 		= {Qulacs: a fast and versatile quantum circuit simulator for research purpose},
+	author 		= {Suzuki, Yasunari and Kawase, Yoshiaki and Masumura, Yuya and Hiraga, Yuria and Nakadai, Masahiro and Chen, Jiabao and Nakanishi, Ken M. and Mitarai, Kosuke and Imai, Ryosuke and Tamiya, Shiro and Yamamoto, Takahiro and Yan, Tennin and Kawakubo, Toru and Nakagawa, Yuya O. and Ibe, Yohei and Zhang, Youyuan and Yamashita, Hirotsugu and Yoshimura, Hikaru and Hayashi, Akihiro and Fujii, Keisuke},
+	journal 	= {{Quantum}},
+	issn 		= {2521-327X},
+	publisher	= {{Verein zur F{\"{o}}rderung des Open Access Publizierens in den Quantenwissenschaften}},
+	volume 		= {5},
+	pages 		= {559},
+	month 		= {October},
+	year 		= {2021}
+}
+
 %%% BOOK
 
-@inbook{DeRaedt2006_ComputationalMethodsForSimulatingQuantumComputers
+@inbook{DeRaedt2006_ComputationalMethodsForSimulatingQuantumComputers,
 	title 		= "Computational Methods for Simulating Quantum Computers",
 	abstract 	= "This review gives a survey of numerical algorithms and software to simulate quantum computers. It covers the basic concepts of quantum computation and quantum algorithms and includes a few examples that illustrate the use of simulation software for ideal and physical models of quantum computers.",
 	author 		= "Raedt, \{H. De\} and K. Michielsen",
@@ -52,6 +149,74 @@
 	language 	= "English",
 	booktitle 	= "Host Publication",
 	publisher	= "American Scientific Publishers",
+}
+
+@book{Nemirovsky2013_MultithreadingArchitectures,
+	author		= {Mario Nemirovsky and Dean M. Tullsen},
+	title		= {Multithreading Architecture},
+	series		= {Synthesis Lectures on Computer Architecture},
+	publisher	= {Morgan {\&} Claypool Publishers},
+	year		= {2013},
+	url			= {https://doi.org/10.2200/S00458ED1V01Y201212CAC021},
+	doi			= {10.2200/S00458ED1V01Y201212CAC021},
+	isbn		= {9781608458554},
+}
+
+%%% INPROCEEDINGS
+
+@inproceedings{Bolosky1993_FalseSharingAndItsEffectonSharedMemoryPerformance,
+	author		= {William J. Bolosky and Michael L. Scott},
+	title 		= {False Sharing and its Effect on Shared Memory Performance},
+	booktitle	= {USENIX Experiences with Distributed and Multiprocessor Systems (SEDMS IV)},
+	year 		= {1993},
+	address 	= {San Diego, CA},
+	url 		= {https://www.usenix.org/conference/sedms-iv/false-sharing-and-its-effect-shared-memory-performance},
+	publisher 	= {USENIX Association},
+	month 		= September
+}
+
+@inproceedings{Larsen2000_ExploitingSuperwordLevelParallelismWithMultimediaInstructionSet,
+	author		= {Larsen, Samuel and Amarasinghe, Saman},
+	title 		= {Exploiting superword level parallelism with multimedia instruction sets},
+	year 		= {2000},
+	isbn 		= {1581131992},
+	publisher	= {Association for Computing Machinery},
+	address 	= {New York, NY, USA},
+	url 		= {https://doi.org/10.1145/349299.349320},
+	doi 		= {10.1145/349299.349320}
+}
+
+@inrpoceedings{Monil2020_UnderstandingTheImpactOfMemoryAccessPatternsInIntelProcessors,
+	author 		= { Monil, Mohammad Alaul Haque and Lee, Seyong and Vetter, Jeffrey S. and Malony, Allen D. },
+	booktitle 	= { 2020 IEEE/ACM Workshop on Memory Centric High Performance Computing (MCHPC) },
+	title 		= {{ Understanding the Impact of Memory Access Patterns in Intel Processors }},
+	year 		= {2020},
+	pages 		= {52-61},
+	keywords 	= {Program processors;Random access memory;Prefetching;Memory management;Lakes;Predictive models;Hardware},
+	doi 		= {10.1109/MCHPC51950.2020.00012},
+	url 		= {https://doi.ieeecomputersociety.org/10.1109/MCHPC51950.2020.00012},
+	publisher	= {IEEE Computer Society},
+	address 	= {Los Alamitos, CA, USA},
+	month 		= {Nov}
+}
+
+@inproceedings{Shin2005_SuperwordLevelParallelismInThePresenceOfControlFlow,
+	author		= {Shin, Jaewook and Hall, Mary and Chame, Jacqueline},
+	title 		= {Superword-Level Parallelism in the Presence of Control Flow},
+	year 		= {2005},
+	isbn 		= {076952298X},
+	publisher	= {IEEE Computer Society},
+	address 	= {USA},
+	url 		= {https://doi.org/10.1109/CGO.2005.33},
+	doi 		= {10.1109/CGO.2005.33}
+}
+
+@inproceedings{Yao1993_QuantumCircuitComplexity,
+	title		= {Quantum Circuit Complexity},
+	author		= {Andrew Chi-Chih Yao},
+	booktitle	= {IEEE Annual Symposium on Foundations of Computer Science},
+	year		= {1993},
+	url			= {https://api.semanticscholar.org/CorpusID:2870099}
 }
 
 %%% MANUAL
@@ -93,4 +258,24 @@
 	archivePrefix	= {arXiv},
 	primaryClass	= {quant-ph},
 	url				= {https://arxiv.org/abs/quant-ph/9804039}, 
+}
+
+@misc{Wang2024_Queen,
+	title			= {Queen: A quick, scalable, and comprehensive quantum circuit simulation for supercomputing}, 
+	author			= {Chuan-Chi Wang and Yu-Cheng Lin and Yan-Jie Wang and Chia-Heng Tu and Shih-Hao Hung},
+	year			= {2024},
+	eprint			= {2406.14084},
+	archivePrefix	= {arXiv},
+	primaryClass	= {quant-ph},
+	url				= {https://arxiv.org/abs/2406.14084}, 
+}
+
+@misc{Young2023_SimulatingQuantumComputationsOnClassicalMachines,
+	title			= {Simulating Quantum Computations on Classical Machines: A Survey}, 
+	author			= {Kieran Young and Marcus Scese and Ali Ebnenasir},
+	year			= {2023},
+	eprint			= {2311.16505},
+	archivePrefix	= {arXiv},
+	primaryClass	= {quant-ph},
+	url				= {https://arxiv.org/abs/2311.16505}, 
 }
