@@ -1,4 +1,23 @@
 #!/bin/zsh
+# =============================================================================
+# setup.sh - Main dotfiles installation script
+# =============================================================================
+# Primary script to set up a fresh macOS installation. Installs all required
+# software, creates symlinks, and configures the development environment.
+#
+# Usage: Run from inside the .dotfiles directory
+#   cd ~/.dotfiles && ./setup.sh
+#
+# What this script does:
+#   1. Installs Oh-My-Zsh and Homebrew
+#   2. Symlinks .zshrc to home directory
+#   3. Installs Homebrew packages from Brewfile
+#   4. Sets up LaTeX environment (packages, texmf, TeXShop engine)
+#   5. Creates standard directory structure
+#   6. Clones Git repositories
+#   7. Sets up LaunchAgent for auto-updating repositories
+#   8. Symlinks VPN scripts and installs MOSEK SDK
+# =============================================================================
 
 # Check if script runs from the .dotfiles directory
 if [[ ! "$(basename "$PWD")" == ".dotfiles" ]]; then
@@ -33,6 +52,67 @@ if [ -f ".zshrc" ]; then
   echo "[DONE] Linked .zshrc"
 else
   echo "[WARNING] .zshrc not found in $(pwd)"
+fi
+
+# Symlink neovim config
+if [ -d "./nvim" ]; then
+  mkdir -p $HOME/.config
+  if [ ! -L "$HOME/.config/nvim" ]; then
+    rm -rf "$HOME/.config/nvim"
+    ln -s "$PWD/nvim" "$HOME/.config/nvim"
+    echo "[DONE] Linked nvim config"
+  else
+    echo "[EXISTS] nvim config symlink"
+  fi
+else
+  echo "[WARNING] nvim directory not found in $(pwd)"
+fi
+
+# Symlink tmux config
+if [ -f "./tmux.conf" ]; then
+  if [ ! -L "$HOME/.tmux.conf" ]; then
+    rm -rf "$HOME/.tmux.conf"
+    ln -s "$PWD/tmux.conf" "$HOME/.tmux.conf"
+    echo "[DONE] Linked tmux.conf"
+  else
+    echo "[EXISTS] tmux.conf symlink"
+  fi
+else
+  echo "[WARNING] tmux.conf not found in $(pwd)"
+fi
+
+# Symlink latexmkrc (LaTeX build configuration)
+if [ -f "./latexmkrc" ]; then
+  if [ ! -L "$HOME/.latexmkrc" ]; then
+    rm -rf "$HOME/.latexmkrc"
+    ln -s "$PWD/latexmkrc" "$HOME/.latexmkrc"
+    echo "[DONE] Linked latexmkrc"
+  else
+    echo "[EXISTS] latexmkrc symlink"
+  fi
+else
+  echo "[WARNING] latexmkrc not found in $(pwd)"
+fi
+
+# Symlink Claude Code config (settings + custom agents)
+if [ -d "./claude" ]; then
+  mkdir -p "$HOME/.claude"
+  if [ ! -L "$HOME/.claude/settings.json" ]; then
+    rm -f "$HOME/.claude/settings.json"
+    ln -s "$PWD/claude/settings.json" "$HOME/.claude/settings.json"
+    echo "[DONE] Linked claude/settings.json"
+  else
+    echo "[EXISTS] claude/settings.json symlink"
+  fi
+  if [ ! -L "$HOME/.claude/agents" ]; then
+    rm -rf "$HOME/.claude/agents"
+    ln -s "$PWD/claude/agents" "$HOME/.claude/agents"
+    echo "[DONE] Linked claude/agents"
+  else
+    echo "[EXISTS] claude/agents symlink"
+  fi
+else
+  echo "[WARNING] claude directory not found in $(pwd)"
 fi
 
 # Update Homebrew recipes
