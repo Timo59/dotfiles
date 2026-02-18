@@ -8,15 +8,17 @@ Personal macOS dotfiles for automated setup. See README.md for file descriptions
 
 ## Architecture
 
-**Setup flow**: `setup.sh` orchestrates everything by calling subsidiary scripts in sequence: Oh-My-Zsh → Homebrew → .zshrc symlink → Brewfile packages → tex.sh → dirs.sh → clone.sh → LaunchAgent → VPN symlink → MOSEK.
+**Setup flow**: `setup.sh` orchestrates everything by calling subsidiary scripts in sequence: Oh-My-Zsh → Homebrew → symlinks (zshrc, nvim, tmux, latexmkrc, claude) → Brewfile packages → MacTeX path → tex.sh → source .zshrc → dirs.sh → clone.sh → LaunchAgent → VPN symlink → MOSEK.
 
 **Shell configuration**: Oh-My-Zsh loads `.zshrc`, which sets `ZSH_CUSTOM=$DOTFILES`. This causes Oh-My-Zsh to automatically source all `*.zsh` files in this directory (aliases.zsh, path.zsh).
 
-**LaTeX setup**: tex.sh installs packages from `Texfile`, symlinks `texmf/` to `~/Library/texmf` (making custom .sty files available system-wide), and symlinks the TeXShop engine.
+**LaTeX setup**: tex.sh installs packages from `Texfile`, symlinks `texmf/` to `~/Library/texmf` (making custom .sty files available system-wide), and symlinks the TeXShop engine. setup.sh calls `/usr/libexec/path_helper` before tex.sh to ensure MacTeX CLI tools are on `$PATH`.
 
 **Neovim + tmux**: setup.sh symlinks `nvim/` to `~/.config/nvim` and `tmux.conf` to `~/.tmux.conf`. The neovim config uses VimTeX for LaTeX editing with Skim as PDF viewer. Both TeXShop and neovim use `latex-compile.sh` (or equivalent logic) which puts auxiliary files in `.build/` subdirectory.
 
 **Repository auto-sync**: `com.user.gitupdate.plist` is a LaunchAgent that runs `clone.sh` at startup, keeping all repositories in the `REPOS` array synchronized.
+
+**Known bug**: Line 206 of `setup.sh` calls `.install_mosek.sh` (dot-prefixed, not `./install_mosek.sh`), so MOSEK installation is silently skipped even when the file is present.
 
 ## Repository Structure
 
@@ -41,21 +43,23 @@ Personal macOS dotfiles for automated setup. See README.md for file descriptions
 
 ## Setup Sequence (`setup.sh`)
 
-1. Install Oh-My-Zsh
-2. Install Homebrew
-3. Symlink `.zshrc` → `~/.zshrc`
-4. Symlink `nvim/` → `~/.config/nvim`
-5. Symlink `tmux.conf` → `~/.tmux.conf`
-6. Symlink `latexmkrc` → `~/.latexmkrc`
-7. Symlink `claude/settings.json` → `~/.claude/settings.json` and `claude/agents` → `~/.claude/agents`
-8. `brew bundle` from `Brewfile`
-9. Run `tex.sh`
-10. Source `~/.zshrc`
-11. Run `dirs.sh`
-12. Run `clone.sh`
-13. Symlink + load `com.user.gitupdate.plist` → `~/Library/LaunchAgents/`
-14. Symlink `vpn-LUH.sh` → `/usr/local/bin/vpn-LUH.sh`
-15. Run `install_mosek.sh`
+1. Guard: exit if not run from inside `.dotfiles/`
+2. Install Oh-My-Zsh (idempotent — skips if `~/.oh-my-zsh` exists)
+3. Install Homebrew (idempotent — skips if `brew` is on `$PATH`); appends shellenv to `~/.zprofile`
+4. Symlink `.zshrc` → `~/.zshrc` (**destructive**: removes existing file unconditionally)
+5. Symlink `nvim/` → `~/.config/nvim` (idempotent)
+6. Symlink `tmux.conf` → `~/.tmux.conf` (idempotent)
+7. Symlink `latexmkrc` → `~/.latexmkrc` (idempotent)
+8. Symlink `claude/settings.json` → `~/.claude/settings.json` and `claude/agents` → `~/.claude/agents` (idempotent)
+9. `brew update` + `brew bundle` from `Brewfile`
+10. `/usr/libexec/path_helper` — injects MacTeX CLI tools into `$PATH`
+11. Run `tex.sh`
+12. Source `~/.zshrc` — activates new shell config for remaining steps
+13. Run `dirs.sh`
+14. Run `clone.sh`
+15. Symlink + `launchctl load` `com.user.gitupdate.plist` → `~/Library/LaunchAgents/` (idempotent)
+16. `chmod +x` + `sudo` symlink `vpn-LUH.sh` → `/usr/local/bin/vpn-LUH.sh` (idempotent)
+17. Run `install_mosek.sh` (**currently broken**: called as `.install_mosek.sh` — missing `./`)
 
 ## Symlink Map
 
