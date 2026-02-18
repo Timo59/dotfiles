@@ -1,3 +1,9 @@
+# =============================================================================
+# .zshrc - Zsh shell configuration
+# =============================================================================
+# Sets up Oh-My-Zsh with plugins and custom settings. Symlinked to ~/.zshrc.
+# =============================================================================
+
 # Path to dotfiles.
 export DOTFILES=$HOME/.dotfiles
 

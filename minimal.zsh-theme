@@ -1,3 +1,10 @@
+# =============================================================================
+# minimal.zsh-theme - Minimal Zsh prompt theme
+# =============================================================================
+# Customizable minimal theme with git status, SSH/virtualenv indicators,
+# vim mode display, and "magic enter" feature for directory info.
+# =============================================================================
+
 # Global settings
 MNML_OK_COLOR="${MNML_OK_COLOR:-2}"
 MNML_ERR_COLOR="${MNML_ERR_COLOR:-1}"

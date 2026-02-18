@@ -1,5 +1,10 @@
 #!/bin/bash
-# Custom pdfTeX engine to output build files into ./build
+# =============================================================================
+# pdfLaTeXWithBuild.engine - Custom TeXShop compilation engine
+# =============================================================================
+# Compiles LaTeX with auxiliary files in ./build directory, keeping source
+# folder clean. Runs pdflatex 3x for references, includes BibTeX support.
+# =============================================================================
 
 # Extract the filename without path and extension
 filename="$(basename "$1" .tex)"
@@ -8,7 +13,7 @@ filename="$(basename "$1" .tex)"
 dirname="$(dirname "$1")"
 
 # Create the path to and the build directory if it does not already exist
-builddir="${dirname}/build"
+builddir="${dirname}/.build"
 mkdir -p "$builddir"
 
 # Function to check if PDF was generated (indicates successful compilation)

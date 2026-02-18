@@ -1,4 +1,15 @@
 #!/bin/bash
+# =============================================================================
+# tex.sh - LaTeX environment setup script
+# =============================================================================
+# Configures the LaTeX environment for academic writing.
+#
+# What this script does:
+#   1. Installs LaTeX packages from Texfile using tlmgr
+#   2. Symlinks custom TeXShop engine (pdfLaTeXWithBuild.engine)
+#   3. Symlinks texmf directory with custom packages and bibliographies
+#   4. Updates the TeX file database (mktexlsr)
+# =============================================================================
 
 DOTFILES_DIR=$HOME/.dotfiles
 ENGINE_DIR=$HOME/Library/TeXShop/Engines

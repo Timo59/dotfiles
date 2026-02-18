@@ -1,7 +1,12 @@
 #!/bin/zsh
-
-# SSH Key Generation Script for GitHub
-# Usage: ./ssh-setup.sh
+# =============================================================================
+# ssh-setup.sh - SSH key generation for GitHub
+# =============================================================================
+# Generates an ed25519 SSH key for GitHub authentication and configures the
+# SSH client. Adds key to ssh-agent and macOS Keychain for convenience.
+#
+# After running, add the public key (copied to clipboard) to GitHub Settings.
+# =============================================================================
 
 SSH_KEY_PATH="$HOME/.ssh/id_github"
 

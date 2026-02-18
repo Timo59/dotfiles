@@ -39,4 +39,8 @@ Thumbs.db
 .vscode
 .vagrant/
 
+# LaTeX build directory #
+#########################
+.build/
+
 .lock.jsoon

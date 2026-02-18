@@ -1,4 +1,17 @@
 #!/bin/zsh
+# =============================================================================
+# clone.sh - Git repository management script
+# =============================================================================
+# Clones and updates multiple Git repositories from GitHub and GitLab.
+# Called during initial setup and automatically at startup via LaunchAgent.
+#
+# Features:
+#   - Clones repositories if they don't exist
+#   - Pulls latest changes for existing repositories
+#   - Handles submodules automatically
+#   - Skips repositories in detached HEAD state
+#   - Timestamps all output for logging
+# =============================================================================
 
 # Add timestamp to all output
 # exec > >(while IFS= read -r line; do echo "$(date '+%Y-%m-%d %H:%M:%S'): $line"; done) 2>&1

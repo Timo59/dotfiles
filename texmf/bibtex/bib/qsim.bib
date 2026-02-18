@@ -231,6 +231,16 @@ year = {2023}
 
 %%% MISCELLANEOUS
 
+@misc{Imamura2022_mpiQulacs,
+	title			= {mpiQulacs: A Distributed Quantum Computer Simulator for A64FX-based Cluster Systems}, 
+	author			= {Satoshi Imamura and Masafumi Yamazaki and Takumi Honda and Akihiko Kasagi and Akihiro Tabuchi and Hiroshi Nakao and Naoto Fukumoto and Kohta Nakashima},
+	year			= {2022},
+	eprint			= {2203.16044},
+	archivePrefix	= {arXiv},
+	primaryClass	= {cs.DC},
+	url				= {https://arxiv.org/abs/2203.16044}, 
+}
+
 @misc{Jones2023_DistributedSimulationOfStatevectorsAndDensityMatrices,
 	title			= {Distributed Simulation of Statevectors and Density Matrices}, 
 	author			= {Tyson Jones and Bálint Koczor and Simon C. Benjamin},
@@ -240,6 +250,7 @@ year = {2023}
 	primaryClass	= {quant-ph},
 	url				= {https://arxiv.org/abs/2311.01512}, 
 }
+
 @misc{Smelyanskiy2016_qhipsterTheQuantumHighPerformanceSoftwareTestingEnvironment,
 	title			= {qHiPSTER: The Quantum High Performance Software Testing Environment}, 
   	author			= {Mikhail Smelyanskiy and Nicolas P. D. Sawaya and Alán Aspuru-Guzik},
@@ -278,4 +289,28 @@ year = {2023}
 	archivePrefix	= {arXiv},
 	primaryClass	= {quant-ph},
 	url				= {https://arxiv.org/abs/2311.16505}, 
+}
+
+%%% PHD THESIS
+
+@PHDTHESIS{Trieu2009_LargeScaleSimulationsOfErrorProneQuantumComputationDevices,
+	author		= {Trieu, Doan Binh},
+	title		= {{L}arge-{S}cale {S}imulations of {E}rror-{P}rone {Q}uantum {C}omputation {D}evices},
+	volume		= {2},
+	school		= {Universität Wuppertal},
+	type		= {Dr. (Univ.)},
+	address		= {Jülich},
+	publisher	= {Forschungszentrum Jülich GmbH Zentralbibliothek, Verlag},
+	reportid	= {PreJuSER-7578, WUB-DIS 2009-06},
+	isbn		= {978-3-89336-601-9},
+	series		= {Schriften des Forschungszentrums Jülich : IAS Series},
+	year		= {2009},
+	note		= {Record converted from VDB: 12.11.2012; Universität Wuppertal, Diss., 2009},
+	abstract	= {The theoretical concepts of quantum computation in the idealized and undisturbed case are well understood. However, in practice, all quantum computation devices do suffer from decoherence effects as well as from operational imprecisions. This work assesses the power of error-prone quantum computation devices using largescale numerical simulations on parallel supercomputers. We present the $\textit{Juelich Massively Parallel Ideal Quantum Computer Simulator (JUMPIQCS)}$, that simulates a generic quantum computer on gate level. It comprises an error model for decoherence and operational errors. The robustness of various algorithms in the presence of noise has been analyzed. The simulation results show that for large system sizes and long computations it is imperative to actively correct errors by means of quantum error correction. We implemented the 5-, 7-, and 9-qubit quantum error correction codes. Our simulations confirm that using error-prone correction circuits with non-fault-tolerant quantum error correction will always fail, because more errors are introduced than being corrected. Fault-tolerant methods can overcome this problem, provided that the single qubit error rate is below a certain threshold. We incorporated fault-tolerant quantum error correction techniques into JUMPIQCS using Steane’s 7-qubit code and determined this threshold numerically. Using the depolarizing channel as the source of decoherence, we find a threshold error rate of (5.2 ± 0.2) · 10$^{−6}$. For Gaussian distributed operational over-rotations the threshold lies at a standard deviation of 0.0431 ± 0.0002. We can conclude that quantum error correction is especially well suited for the correction of operational imprecisions and systematic over-rotations. For realistic simulations of specific quantum computation devices we need to extend the generic model to dynamic simulations, i.e. time-dependent Hamiltonian simulations of realistic hardware models. We focus on today’s most advanced technology, i.e. ion trap quantum computation. We developed the $\textit{Dynamic Quantum Computer Simulator for Ion Traps (DyQCSI)}$. Starting from a microscopic Hamiltonian, it does not rely on approximations that are usually necessary for an analytical approach. We show that the effects due to these approximations are significant. We present several ways for the visualization of the state of the system during its time evolution and demonstrated the benefit of the simulation approach for parameter optimizations.},
+	cin			= {JSC},
+	cid			= {I:(DE-Juel1)JSC-20090406},
+	pnm			= {Scientific Computing},
+	pid			= {G:(DE-Juel1)FUEK411},
+	typ			= {PUB:(DE-HGF)11 / PUB:(DE-HGF)3},
+	url         = {https://juser.fz-juelich.de/record/7578},
 }

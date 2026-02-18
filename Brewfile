@@ -17,6 +17,8 @@ brew 'openconnect'		# Open client for Cisco AnyConnect VPN
 brew 'parallel'			# Shell command parallelization utility
 brew 'pkg-config'		# Helper tool to compile applications and libraries
 brew 'pyenv'
+brew 'neovim'			# Modern vim for terminal editing
+brew 'tmux'			# Terminal multiplexer
 # brew 'svn' 			# Needed to install fonts
 
 # Apps
@@ -41,6 +43,7 @@ cask 'pycharm'
 # cask 'raspberry-pi-imager'	-- Imaging utility to install operating systems to a microSD card
 # cask 'slack'			-- Team communication and collaboration software
 # cask 'spotify'
+cask 'skim'			# PDF viewer with SyncTeX support for neovim
 cask 'texshop'
 # cask 'tuple'			-- Remote pair programming app
 # cask 'whatsapp'

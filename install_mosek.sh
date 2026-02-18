@@ -1,4 +1,12 @@
 #!/bin/bash
+# =============================================================================
+# install_mosek.sh - MOSEK optimization SDK installer
+# =============================================================================
+# Downloads and installs MOSEK for convex optimization. Verifies checksum,
+# extracts to ~/mosek, and runs Python installer.
+#
+# Note: Academic licenses are free. Place license at ~/mosek/mosek.lic
+# =============================================================================
 
 MOSEK_VERSION="11.0.28"
 MOSEK_ARCHIVE="mosektoolsosxaarch64.tar.bz2"

@@ -1,4 +1,13 @@
 #!/bin/zsh
+# =============================================================================
+# dirs.sh - Directory structure creation script
+# =============================================================================
+# Creates the standard directory structure for organizing documents and code.
+#
+# Created directories:
+#   ~/Documents/Conferences:Seminars, ~/Documents/LUH, ~/Documents/PhD,
+#   ~/Documents/Projects, ~/Code
+# =============================================================================
 
 # Associative array of directories to create (path: description)
 declare -A directories

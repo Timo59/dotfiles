@@ -1,89 +1,210 @@
-<p align="center"><img src="art/banner-2x.png"></p>
+# Dotfiles
 
-## Introduction
+Personal macOS dotfiles for automated setup and configuration of development environments. Based on [Dries Vints' dotfiles](https://github.com/driesvints/dotfiles).
 
-This repository serves as my way to help me setup and maintain my Mac. It takes the effort out of installing everything manually. Everything needed to install my preferred setup of macOS is detailed in this readme. Feel free to explore, learn and copy parts for your own dotfiles. Enjoy!
-
-📖 - [Read the blog post](https://driesvints.com/blog/getting-started-with-dotfiles)  
-📺 - [Watch the screencast on Laracasts](https://laracasts.com/series/guest-spotlight/episodes/1)  
-💡 - [Learn how to build your own dotfiles](https://github.com/driesvints/dotfiles#your-own-dotfiles)
-
-If you find this repo useful, [consider sponsoring me](https://github.com/sponsors/driesvints) (a little bit)! ❤️ 
-
-## A Fresh macOS Setup
-
-These instructions are for setting up new Mac devices. Instead, if you want to get started building your own dotfiles, you can [find those instructions below](#your-own-dotfiles).
-
-### Backup your data
-
-If you're migrating from an existing Mac, you should first make sure to backup all of your existing data. Go through the checklist below to make sure you didn't forget anything before you migrate.
-
-- Did you commit and push any changes/branches to your git repositories?
-- Did you remember to save all important documents from non-iCloud directories?
-- Did you save all of your work from apps which aren't synced through iCloud?
-- Did you remember to export important data from your local database?
-- Did you update [mackup](https://github.com/lra/mackup) to the latest version and ran `mackup backup`?
-
-### Setting up your Mac
-
-After backing up your old Mac you may now follow these install instructions to setup a new one.
-
-1. Update macOS to the latest version through system preferences
-2. [Generate a new public and private SSH key](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) by running:
-
-   ```zsh
-   curl https://raw.githubusercontent.com/driesvints/dotfiles/HEAD/ssh.sh | sh -s "<your-email-address>"
-   ```
-
-3. Clone this repo to `~/.dotfiles` with:
-
-    ```zsh
-    git clone --recursive git@github.com:driesvints/dotfiles.git ~/.dotfiles
-    ```
-
-4. Run the installation with:
-
-    ```zsh
-    cd ~/.dotfiles && ./fresh.sh
-    ```
-
-5. Start `Herd.app` and run its install process
-6. After mackup is synced with your cloud storage, restore preferences by running `mackup restore`
-7. Restart your computer to finalize the process
-
-Your Mac is now ready to use!
-
-> 💡 You can use a different location than `~/.dotfiles` if you want. Make sure you also update the reference in the [`.zshrc`](./.zshrc#L2) file.
-
-### Cleaning your old Mac (optionally)
-
-After you've set up your new Mac you may want to wipe and clean install your old Mac. Follow [this article](https://support.apple.com/guide/mac-help/erase-and-reinstall-macos-mh27903/mac) to do that. Remember to [backup your data](#backup-your-data) first!
-
-## Your Own Dotfiles
-
-**Please note that the instructions below assume you already have set up Oh My Zsh so make sure to first [install Oh My Zsh](https://github.com/robbyrussell/oh-my-zsh#getting-started) before you continue.**
-
-If you want to start with your own dotfiles from this setup, it's pretty easy to do so. First of all you'll need to fork this repo. After that you can tweak it the way you want.
-
-Go through the [`.macos`](./.macos) file and adjust the settings to your liking. You can find much more settings at [the original script by Mathias Bynens](https://github.com/mathiasbynens/dotfiles/blob/master/.macos) and [Kevin Suttle's macOS Defaults project](https://github.com/kevinSuttle/MacOS-Defaults).
-
-Check out the [`Brewfile`](./Brewfile) file and adjust the apps you want to install for your machine. Use [their search page](https://formulae.brew.sh/cask/) to check if the app you want to install is available.
-
-Check out the [`aliases.zsh`](./aliases.zsh) file and add your own aliases. If you need to tweak your `$PATH` check out the [`path.zsh`](./path.zsh) file. These files get loaded in because the `$ZSH_CUSTOM` setting points to the `.dotfiles` directory. You can adjust the [`.zshrc`](./.zshrc) file to your liking to tweak your Oh My Zsh setup. More info about how to customize Oh My Zsh can be found [here](https://github.com/robbyrussell/oh-my-zsh/wiki/Customization).
-
-When installing these dotfiles for the first time you'll need to backup all of your settings with Mackup. Install Mackup and backup your settings with the commands below. Your settings will be synced to iCloud so you can use them to sync between computers and reinstall them when reinstalling your Mac. If you want to save your settings to a different directory or different storage than iCloud, [checkout the documentation](https://github.com/lra/mackup/blob/master/doc/README.md#storage). Also make sure your `.zshrc` file is symlinked from your dotfiles repo to your home directory. 
+## Quick Start
 
 ```zsh
-brew install mackup
-mackup backup
+# 1. Generate SSH key for GitHub
+./ssh-setup.sh
+
+# 2. Clone this repository
+git clone --recursive git@github.com:Timo59/dotfiles.git ~/.dotfiles
+
+# 3. Run the setup script
+cd ~/.dotfiles && ./setup.sh
+
+# 4. (Optional) Apply macOS preferences
+source ./.macos
 ```
 
-You can tweak the shell theme, the Oh My Zsh settings and much more. Go through the files in this repo and tweak everything to your liking.
+## What Gets Installed
 
-Enjoy your own Dotfiles!
+The setup script installs and configures:
 
-## Thanks To...
+- **Oh-My-Zsh** - Shell framework with plugins and themes
+- **Homebrew** - Package manager with all dependencies from Brewfile
+- **Neovim + tmux** - Terminal-based editor and multiplexer for LaTeX writing
+- **LaTeX** - BasicTeX with custom packages for academic writing
+- **Skim** - PDF viewer with SyncTeX support for neovim
+- **Git Repositories** - Auto-cloned from GitHub and GitLab
+- **MOSEK** - Optimization SDK for convex optimization
+- **LaunchAgent** - Background service to keep repositories updated
 
-I first got the idea for starting this project by visiting the [GitHub does dotfiles](https://dotfiles.github.io/) project. Both [Zach Holman](https://github.com/holman/dotfiles) and [Mathias Bynens](https://github.com/mathiasbynens/dotfiles) were great sources of inspiration. [Sourabh Bajaj](https://twitter.com/sb2nov/)'s [Mac OS X Setup Guide](http://sourabhbajaj.com/mac-setup/) proved to be invaluable. Thanks to [@subnixr](https://github.com/subnixr) for [his awesome Zsh theme](https://github.com/subnixr/minimal)! Thanks to [Caneco](https://twitter.com/caneco) for the header in this readme. And lastly, I'd like to thank [Emma Fabre](https://twitter.com/anahkiasen) for [her excellent presentation on Homebrew](https://speakerdeck.com/anahkiasen/a-storm-homebrewin) which made me migrate a lot to a [`Brewfile`](./Brewfile) and [Mackup](https://github.com/lra/mackup).
+## File Overview
 
-In general, I'd like to thank every single one who open-sources their dotfiles for their effort to contribute something to the open-source community.
+### Installation Scripts
+
+| File | Description |
+|------|-------------|
+| `setup.sh` | Main installation script that orchestrates the entire setup process. |
+| `ssh-setup.sh` | Generates ed25519 SSH key for GitHub and configures ssh-agent with Keychain. |
+| `clone.sh` | Clones and updates Git repositories from GitHub and GitLab Uni Hannover. |
+| `dirs.sh` | Creates standard directory structure (Documents/*, Code). |
+| `tex.sh` | Installs LaTeX packages and symlinks custom texmf directory and TeXShop engine. |
+| `install_mosek.sh` | Downloads and installs the MOSEK optimization toolkit with checksum verification. |
+| `vpn-LUH.sh` | Connects to University of Hannover VPN using OpenConnect. |
+
+### Shell Configuration
+
+| File | Description |
+|------|-------------|
+| `.zshrc` | Main Zsh configuration with Oh-My-Zsh setup, plugins, and shell options. |
+| `aliases.zsh` | Custom shell aliases (copyssh, reloadshell, reloaddns, dotfiles). |
+| `path.zsh` | PATH environment variable configuration. |
+| `minimal.zsh-theme` | Minimal Zsh theme with git status, SSH indicator, and vim mode display. |
+
+### Package Lists
+
+| File | Description |
+|------|-------------|
+| `Brewfile` | Homebrew packages and cask applications (git, pyenv, CLion, PyCharm, etc.). |
+| `Texfile` | LaTeX packages to install via tlmgr (algorithm2e, tikz, biblatex, etc.). |
+| `Pyfile` | Python packages for pip installation (currently minimal). |
+
+### Configuration Files
+
+| File | Description |
+|------|-------------|
+| `.macos` | macOS system preferences script (Dock, Finder, keyboard, energy settings). |
+| `.mackup.cfg` | Mackup configuration for backing up app preferences to iCloud. |
+| `.gitignore_global` | Global Git ignore patterns for compiled files, OS artifacts, and IDE folders. |
+| `com.user.gitupdate.plist` | LaunchAgent that runs clone.sh at system startup to sync repositories. |
+
+### LaTeX Compilation
+
+| File | Description |
+|------|-------------|
+| `pdfLaTeXWithBuild.engine` | Custom TeXShop engine that outputs build files to ./.build directory. |
+| `latex-compile.sh` | Neovim/VimTeX compilation script (same behavior as TeXShop engine). |
+
+### Neovim + tmux
+
+| File | Description |
+|------|-------------|
+| `nvim/init.lua` | Neovim configuration with VimTeX, Telescope, Treesitter, and LaTeX workflow. |
+| `tmux.conf` | tmux configuration with vim-like keybindings and LaTeX-focused layouts. |
+| `TUTORIAL.md` | Step-by-step guide for using the neovim + tmux LaTeX workflow. |
+
+### Custom LaTeX Packages (texmf/)
+
+| File | Description |
+|------|-------------|
+| `texmf/tex/latex/base.sty` | Foundation package with math macros (sets, operators, Dirac notation, theorems). |
+| `texmf/tex/latex/exercise.sty` | Exercise sheet package with numbered exercises and remarks. |
+| `texmf/tex/latex/summary.sty` | Paper summary package with compact A4 layout. |
+| `texmf/tex/latex/tn.sty` | Tensor network notation macros (MPS, MPO expansions). |
+
+### Bibliography Files (texmf/bibtex/bib/)
+
+| File | Description |
+|------|-------------|
+| `qsim.bib` | References for simulation methods. |
+| `tn.bib` | Tensor network literature. |
+| `qcp.bib` | Computing papers. |
+| `qaoa.bib` | Optimization algorithm references. |
+| `qaa.bib` | Algorithm references. |
+| `classical.bib` | Classical computing and optimization. |
+| `thesis.bib` | Thesis-specific references. |
+
+## Directory Structure Created
+
+```
+~/
+├── .dotfiles/          # This repository
+├── .zshrc              # Symlink to .dotfiles/.zshrc
+├── .tmux.conf          # Symlink to .dotfiles/tmux.conf
+├── .config/
+│   └── nvim/           # Symlink to .dotfiles/nvim
+├── Code/               # Source code repositories
+├── Documents/
+│   ├── Conferences:Seminars/
+│   ├── LUH/
+│   ├── PhD/
+│   └── Projects/
+├── Library/
+│   ├── TeXShop/Engines/    # Symlink to custom engine
+│   └── texmf/              # Symlink to custom LaTeX packages
+└── mosek/              # MOSEK installation
+```
+
+## Customization
+
+### Adding Homebrew Packages
+
+Edit `Brewfile` and add packages:
+```ruby
+brew 'package-name'      # CLI tools
+cask 'app-name'          # GUI applications
+mas 'App Name', id: 123  # Mac App Store apps
+```
+
+### Adding LaTeX Packages
+
+Edit `Texfile` and add package names (one per line).
+
+### Adding Shell Aliases
+
+Edit `aliases.zsh` to add custom aliases.
+
+### Adding Git Repositories
+
+Edit the `REPOS` array in `clone.sh`.
+
+## macOS Preferences
+
+The `.macos` script configures system preferences. Run it manually after setup:
+
+```zsh
+source ~/.dotfiles/.macos
+```
+
+Key settings include:
+- Dock: Auto-hide, no animation, show only open apps
+- Finder: Show path bar, list view, folders first
+- Keyboard: Disable smart quotes/dashes, enable full keyboard access
+- Energy: Custom sleep settings, disable hibernation
+- Security: Require password immediately after sleep
+
+## LaTeX Workflow with Neovim
+
+The dotfiles include a complete terminal-based LaTeX writing environment. See `TUTORIAL.md` for detailed instructions.
+
+### Quick Start
+
+```zsh
+# Start tmux session
+tmux new -s thesis
+
+# Open a .tex file in neovim
+nvim ~/path/to/thesis.tex
+
+# Inside neovim:
+# ,ll  - Compile LaTeX
+# ,lv  - View PDF in Skim
+# ,lt  - Toggle table of contents
+```
+
+### Key Features
+
+- **VimTeX** plugin for LaTeX editing with syntax highlighting and completion
+- **Skim** PDF viewer with forward/inverse search (SyncTeX)
+- **Custom compile script** that mirrors TeXShop behavior (aux files in `.build/`)
+- **tmux** for split terminal windows and persistent sessions
+
+### Build Directory
+
+Both TeXShop and neovim use `.build/` for auxiliary files, keeping source directories clean. The PDF is placed in the source directory.
+
+## Backup with Mackup
+
+Mackup backs up application preferences to iCloud:
+
+```zsh
+mackup backup   # Backup preferences
+mackup restore  # Restore on new machine
+```
+
+## Credits
+
+Based on [Dries Vints' dotfiles](https://github.com/driesvints/dotfiles). Zsh theme by [subnixr](https://github.com/subnixr/minimal).
