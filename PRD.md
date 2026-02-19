@@ -97,28 +97,33 @@ A new `macos.sh` script captures system preferences as `defaults write` commands
 
 **Tooling note**: capture current state with `defaults read > defaults-snapshot.txt` before writing the script, to avoid guessing key names.
 
-### 4. Per-Project Nix Shells
+### 4. Per-Project Nix Shells (C/CMake projects only)
 
-System-wide installation of project-specific dependencies (MOSEK, specialised C libraries, Python packages) is replaced by per-project `flake.nix` files.
+Nix is adopted specifically to solve recurring RPATH and library path failures when moving C/MOSEK projects between the two macOS machines and Linux compute servers. This is a structural fix — the same `flake.nix` works on macOS and Linux without modification.
+
+**Scope**: C/CMake projects with native dependencies (MOSEK, system libraries). Python projects remain on conda; they work and are not migrated.
 
 **For C/CMake projects:**
 ```nix
 # flake.nix (sketch)
 devShells.default = pkgs.mkShell {
-  packages = [ pkgs.cmake pkgs.gcc pkgs.pkg-config ];
-  shellHook = ''
-    [ ! -f ~/.mosek/mosek.lic ] && bash ${./scripts/install_mosek.sh}
-  '';
+  packages = [ pkgs.cmake pkgs.gcc pkgs.pkg-config pkgs.mosek ];
 };
 ```
-`nix develop` drops into a shell with all dependencies present. `install_mosek.sh` lives inside the project repo and is called once on first use. CMake finds MOSEK via the path set in `shellHook`.
+`nix develop` drops into a reproducible shell with all dependencies present and paths resolved by Nix — no manual RPATH configuration. Works identically on macOS and Linux servers.
 
-**For Python projects:**
-Nix shell manages both the interpreter and system-level deps. `uv` or `pip` with a `requirements.txt` / `pyproject.toml` handles pure-Python packages inside the shell. Virtual environments are not needed separately.
+**Colleague workflow**: `nix develop` is the only setup step. No manual MOSEK installation, no path debugging.
 
-**Migration path**: existing projects add a `flake.nix` incrementally. Nothing in the dotfiles changes; this is a per-repo concern.
+**Migration path**: existing C/CMake repos add a `flake.nix` one at a time. Nothing in the dotfiles changes; this is a per-repo concern.
 
-**Nix installation**: add `nix` to `Brewfile` (via the Determinate Systems installer or Homebrew). Both machines get it via the base Brewfile.
+**Nix installation**: via the Determinate Systems installer — not Homebrew. The installer handles the macOS-specific APFS volume at `/nix` and SIP correctly, and ships a clean uninstaller. Flakes are enabled via `~/.config/nix/nix.conf`. A conditional install block is added to `setup.sh` analogous to the Oh-My-Zsh and Homebrew blocks:
+```zsh
+if ! command -v nix &>/dev/null; then
+  curl -fsSL https://install.determinate.systems/nix | sh -s -- install
+fi
+```
+
+**Nix and Homebrew coexist** in separate lanes: Nix for per-project C dependencies, Homebrew for system-wide GUI apps and CLI tools.
 
 ### 5. VPN Credentials in Keychain
 
@@ -159,8 +164,8 @@ Credentials never appear in the repository. The manual Keychain setup step is do
 | 2 | `Brewfile.macbook` + `Brewfile.desktop` | **Pending** | Audit current packages on both machines first |
 | 3 | Machine-aware `brew bundle` in `setup.sh` | **Pending** | Hostname detection; apply `--no-upgrade` to both files |
 | 4 | `macos.sh` | **Pending** | Capture current preferred state from the primary machine |
-| 5 | Nix installed via Brewfile | **Pending** | Prerequisite for per-project shells |
-| 6 | Example `flake.nix` for a C/CMake project | **Pending** | Template others can copy |
+| 5 | Nix install block in `setup.sh` | **Pending** | Determinate Systems installer; not Homebrew; flakes enabled in `~/.config/nix/nix.conf` |
+| 6 | Example `flake.nix` for a C/CMake project | **Pending** | Template for MOSEK projects; must work on macOS and Linux |
 | 7 | Keychain integration in `vpn-LUH.sh` | **Pending** | |
 | 8 | Update `README.md` | **Pending** | Document local-only setup steps and apply workflow |
 
@@ -170,4 +175,4 @@ Credentials never appear in the repository. The manual Keychain setup step is do
 
 - ~~**Hostname values**~~ — **Resolved**: MacBook → `prometheus`, desktop → `lucifer`. All three `scutil` fields (`ComputerName`, `HostName`, `LocalHostName`) are set on each machine, so `hostname -s` reliably returns the short name. Override files are named `Brewfile.prometheus`, `Brewfile.lucifer`, `macos.prometheus.sh`, etc.
 - **Office/OneDrive divergence**: are there specific OneDrive folder structures or symlinks that have drifted and need to be re-aligned as part of this work?
-- **Nix install method**: Determinate Systems installer (`nix-installer`) is more reliable on macOS than the official installer. Preference?
+- ~~**Nix install method**~~ — **Resolved**: Determinate Systems installer, scoped to C/CMake projects only. Python projects stay on conda. Justified by recurring RPATH failures when moving MOSEK projects between macOS machines and Linux servers.
