@@ -40,10 +40,14 @@ macos.desktop.sh          # desktop-specific defaults (if needed)
 make change on machine A
     → edit dotfiles file (Brewfile, macos.sh, etc.)
     → git commit + push
-    → on machine B: git pull + run setup.sh
+    → on machine B: LaunchAgent pulls at next boot → notification fires → run setup.sh
 ```
 
-No automation beyond the existing LaunchAgent that already pulls git repos at startup. The user is responsible for committing changes; `setup.sh` is responsible for applying them.
+The LaunchAgent handles the pull half automatically. The user is responsible for committing changes; `setup.sh` is responsible for applying them and must be run manually after the notification.
+
+**LaunchAgent behaviour** (`clone.sh`):
+- Waits up to 60 s for `github.com:22` to be reachable before attempting any git operations, so offline boots or restricted networks exit cleanly without hanging.
+- After pulling `.dotfiles`, compares the commit hash before and after. If they differ, logs a reminder to `/tmp/gitupdate.log` and fires a macOS notification prompting the user to run `setup.sh`.
 
 ---
 
@@ -69,9 +73,11 @@ Current `Brewfile` becomes the shared base. Two override files are added:
 
 `setup.sh` runs:
 ```zsh
-brew bundle --file=Brewfile
-brew bundle --file="Brewfile.$(hostname -s)" 2>/dev/null || true
+brew bundle --file=Brewfile --no-upgrade
+brew bundle --file="Brewfile.$(hostname -s)" --no-upgrade 2>/dev/null || true
 ```
+
+`--no-upgrade` limits each run to installing missing packages only; explicit upgrades remain a deliberate `brew upgrade` or Brewfile version bump.
 
 **Invariant**: every package ever installed via `brew install` on either machine must be reflected in one of these files before the next `setup.sh` run.
 
@@ -144,16 +150,19 @@ Credentials never appear in the repository. The manual Keychain setup step is do
 
 ## Deliverables
 
-| # | Deliverable | Notes |
-|---|---|---|
-| 1 | Harden `setup.sh` | Idempotent symlink creation; fix MOSEK bug |
-| 2 | `Brewfile.macbook` + `Brewfile.desktop` | Audit current packages on both machines first |
-| 3 | Machine-aware `brew bundle` in `setup.sh` | Hostname detection |
-| 4 | `macos.sh` | Capture current preferred state from the primary machine |
-| 5 | Nix installed via Brewfile | Prerequisite for per-project shells |
-| 6 | Example `flake.nix` for a C/CMake project | Template others can copy |
-| 7 | Keychain integration in `vpn-LUH.sh` | |
-| 8 | Update `README.md` | Document local-only setup steps and apply workflow |
+| # | Deliverable | Status | Notes |
+|---|---|---|---|
+| — | `clone.sh`: wait for `github.com:22` before git ops | **Done** | 60 s timeout; exits cleanly if offline |
+| — | `clone.sh`: notify when `.dotfiles` updated | **Done** | macOS notification + log line |
+| — | `setup.sh`: `--no-upgrade` for `brew bundle` | **Done** | Prevents slow/unintended upgrades on re-runs |
+| 1 | Harden `setup.sh` | **Pending** | Fix destructive `.zshrc` symlink; fix MOSEK bug (`.install_mosek.sh` → `./install_mosek.sh`) |
+| 2 | `Brewfile.macbook` + `Brewfile.desktop` | **Pending** | Audit current packages on both machines first |
+| 3 | Machine-aware `brew bundle` in `setup.sh` | **Pending** | Hostname detection; apply `--no-upgrade` to both files |
+| 4 | `macos.sh` | **Pending** | Capture current preferred state from the primary machine |
+| 5 | Nix installed via Brewfile | **Pending** | Prerequisite for per-project shells |
+| 6 | Example `flake.nix` for a C/CMake project | **Pending** | Template others can copy |
+| 7 | Keychain integration in `vpn-LUH.sh` | **Pending** | |
+| 8 | Update `README.md` | **Pending** | Document local-only setup steps and apply workflow |
 
 ---
 
