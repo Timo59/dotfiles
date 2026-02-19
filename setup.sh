@@ -45,11 +45,32 @@ if test ! $(command -v brew); then
 fi
 echo "[DONE] Homebrew installed."
 
-# Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
+# Install Nix via Determinate Systems (not Homebrew)
+if ! command -v nix &>/dev/null; then
+  echo 'Installing Nix via Determinate Systems...'
+  curl -fsSL https://install.determinate.systems/nix | sh -s -- install
+fi
+echo "[DONE] Nix available."
+
+# Enable Nix flakes
+if [ ! -f "$HOME/.config/nix/nix.conf" ]; then
+  mkdir -p "$HOME/.config/nix"
+  echo "experimental-features = nix-command flakes" > "$HOME/.config/nix/nix.conf"
+  echo "[DONE] Nix flakes enabled in ~/.config/nix/nix.conf"
+else
+  echo "[EXISTS] ~/.config/nix/nix.conf"
+fi
+
+# Symlink .zshrc (idempotent — only re-links if missing or pointing to wrong target)
 if [ -f ".zshrc" ]; then
-  rm -rf $HOME/.zshrc
-  ln -s "$PWD/.zshrc" "$HOME/.zshrc"
-  echo "[DONE] Linked .zshrc"
+  ZSHRC_TARGET="$PWD/.zshrc"
+  if [ ! -L "$HOME/.zshrc" ] || [ "$(readlink "$HOME/.zshrc")" != "$ZSHRC_TARGET" ]; then
+    rm -f "$HOME/.zshrc"
+    ln -s "$ZSHRC_TARGET" "$HOME/.zshrc"
+    echo "[DONE] Linked .zshrc"
+  else
+    echo "[EXISTS] .zshrc symlink"
+  fi
 else
   echo "[WARNING] .zshrc not found in $(pwd)"
 fi
@@ -125,6 +146,15 @@ if [ -f "./Brewfile" ]; then
   echo "[DONE] Installed Homebrew dependencies"
 else
   echo "[WARNING] Brewfile not found at $(pwd), skipping Homebrew dependency installation."
+fi
+
+# Install machine-specific packages
+MACHINE_BREWFILE="./Brewfile.$(hostname -s)"
+if [ -f "$MACHINE_BREWFILE" ]; then
+  brew bundle --file="$MACHINE_BREWFILE" --no-upgrade
+  echo "[DONE] Installed machine-specific packages from $MACHINE_BREWFILE"
+else
+  echo "[INFO] No machine-specific Brewfile for $(hostname -s), skipping"
 fi
 
 # Add MacTex CLI to the path and manpath
@@ -203,7 +233,7 @@ fi
 if [ -f ./install_mosek.sh ]; then
   echo "Installing MOSEK to $HOME/mosek..."
   chmod +x ./install_mosek.sh
-  .install_mosek.sh
+  ./install_mosek.sh
 else
   echo "[WARNING] install_mosek.sh not found in $(pwd), skipping initialization"
 fi
@@ -212,5 +242,19 @@ fi
 # Symlink the Mackup config file to the home directory
 # ln -s ./.mackup.cfg $HOME/.mackup.cfg
 
-# Set macOS preferences - we will run this last because this will reload the shell
-# source ./.macos
+# Apply macOS system settings
+if [ -f "./macos.sh" ]; then
+  chmod +x "./macos.sh"
+  "./macos.sh"
+  echo "[DONE] Applied macOS system settings"
+else
+  echo "[WARNING] macos.sh not found, skipping"
+fi
+
+# Apply machine-specific macOS overrides
+MACHINE_MACOS="./macos.$(hostname -s).sh"
+if [ -f "$MACHINE_MACOS" ]; then
+  chmod +x "$MACHINE_MACOS"
+  "$MACHINE_MACOS"
+  echo "[DONE] Applied machine-specific macOS settings"
+fi

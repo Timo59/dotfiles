@@ -1,0 +1,11 @@
+# Brewfile.prometheus — MacBook (prometheus) specific packages
+# =============================================================================
+# Packages installed only on the MacBook Pro (hostname: prometheus).
+# Shared packages belong in the root Brewfile.
+# Add entries here as the machines diverge over time.
+# =============================================================================
+
+# (empty — add MacBook-specific formulae and casks below as needed)
+# Example:
+# brew "some-work-tool"
+# cask "faculty-vpn-client"

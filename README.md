@@ -15,8 +15,18 @@ git clone --recursive git@github.com:Timo59/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles && ./setup.sh
 
 # 4. (Optional) Apply macOS preferences
-source ./.macos
+./macos.sh
 ```
+
+## Daily Apply Workflow
+
+The setup script is designed to be re-run at any time to converge the machine to the desired state. After pulling new dotfiles commits, run:
+
+```zsh
+cd ~/.dotfiles && ./setup.sh
+```
+
+All steps are idempotent — existing symlinks, installed packages, and Nix are detected and skipped with `[EXISTS]` or `[DONE]` output. Only missing pieces are installed.
 
 ## What Gets Installed
 
@@ -24,6 +34,7 @@ The setup script installs and configures:
 
 - **Oh-My-Zsh** - Shell framework with plugins and themes
 - **Homebrew** - Package manager with all dependencies from Brewfile
+- **Nix** - Reproducible build tool (Determinate Systems installer, flakes enabled)
 - **Neovim + tmux** - Terminal-based editor and multiplexer for LaTeX writing
 - **LaTeX** - BasicTeX with custom packages for academic writing
 - **Skim** - PDF viewer with SyncTeX support for neovim
@@ -58,7 +69,9 @@ The setup script installs and configures:
 
 | File | Description |
 |------|-------------|
-| `Brewfile` | Homebrew packages and cask applications (git, pyenv, CLion, PyCharm, etc.). |
+| `Brewfile` | Shared Homebrew packages and cask applications (git, pyenv, CLion, PyCharm, etc.). |
+| `Brewfile.prometheus` | MacBook-specific Homebrew packages (hostname: prometheus). |
+| `Brewfile.lucifer` | Desktop-specific Homebrew packages (hostname: lucifer). |
 | `Texfile` | LaTeX packages to install via tlmgr (algorithm2e, tikz, biblatex, etc.). |
 | `Pyfile` | Python packages for pip installation (currently minimal). |
 
@@ -66,10 +79,18 @@ The setup script installs and configures:
 
 | File | Description |
 |------|-------------|
-| `.macos` | macOS system preferences script (Dock, Finder, keyboard, energy settings). |
+| `macos.sh` | macOS system preferences script (Dock, Finder, keyboard, energy settings). Run by `setup.sh`. |
+| `macos.prometheus.sh` | MacBook-specific macOS overrides (computer/host name). |
+| `.macos` | Legacy macOS preferences script — superseded by `macos.sh`, kept for reference. |
 | `.mackup.cfg` | Mackup configuration for backing up app preferences to iCloud. |
 | `.gitignore_global` | Global Git ignore patterns for compiled files, OS artifacts, and IDE folders. |
 | `com.user.gitupdate.plist` | LaunchAgent that runs clone.sh at system startup to sync repositories. |
+
+### Nix
+
+| File | Description |
+|------|-------------|
+| `templates/flake.nix` | Example Nix flake for a C/CMake project with MOSEK. Use as a starting point for per-project dev shells. |
 
 ### LaTeX Compilation
 
@@ -115,7 +136,8 @@ The setup script installs and configures:
 ├── .zshrc              # Symlink to .dotfiles/.zshrc
 ├── .tmux.conf          # Symlink to .dotfiles/tmux.conf
 ├── .config/
-│   └── nvim/           # Symlink to .dotfiles/nvim
+│   ├── nvim/           # Symlink to .dotfiles/nvim
+│   └── nix/nix.conf    # Nix config (flakes enabled), written by setup.sh
 ├── Code/               # Source code repositories
 ├── Documents/
 │   ├── Conferences:Seminars/
@@ -128,15 +150,42 @@ The setup script installs and configures:
 └── mosek/              # MOSEK installation
 ```
 
+## Symlink Map
+
+| Source (in `.dotfiles/`) | Target |
+|---|---|
+| `.zshrc` | `~/.zshrc` |
+| `nvim/` | `~/.config/nvim` |
+| `tmux.conf` | `~/.tmux.conf` |
+| `latexmkrc` | `~/.latexmkrc` |
+| `claude/settings.json` | `~/.claude/settings.json` |
+| `claude/agents` | `~/.claude/agents` |
+| `com.user.gitupdate.plist` | `~/Library/LaunchAgents/com.user.gitupdate.plist` |
+| `vpn-LUH` | `/usr/local/bin/vpn-LUH` |
+
 ## Customization
 
 ### Adding Homebrew Packages
 
-Edit `Brewfile` and add packages:
+Edit `Brewfile` for packages needed on all machines, or the appropriate machine-specific file for packages needed only on one machine:
+
 ```ruby
+# Brewfile          — all machines
+# Brewfile.prometheus — MacBook only
+# Brewfile.lucifer    — desktop only
+
 brew 'package-name'      # CLI tools
 cask 'app-name'          # GUI applications
 mas 'App Name', id: 123  # Mac App Store apps
+```
+
+### Per-machine Brewfiles
+
+`setup.sh` automatically picks up `Brewfile.<hostname>` after installing the shared `Brewfile`. To add a package to only one machine, add it to the matching file:
+
+```zsh
+echo "brew 'htop'" >> ~/.dotfiles/Brewfile.prometheus   # MacBook only
+echo "brew 'ansible'" >> ~/.dotfiles/Brewfile.lucifer   # desktop only
 ```
 
 ### Adding LaTeX Packages
@@ -153,11 +202,13 @@ Edit the `REPOS` array in `clone.sh`.
 
 ## macOS Preferences
 
-The `.macos` script configures system preferences. Run it manually after setup:
+`macos.sh` is called automatically by `setup.sh` and configures system preferences. To apply manually:
 
 ```zsh
-source ~/.dotfiles/.macos
+./macos.sh
 ```
+
+Machine-specific overrides (e.g. computer name) live in `macos.<hostname>.sh` and are also applied automatically by `setup.sh`.
 
 Key settings include:
 - Dock: Auto-hide, no animation, show only open apps
@@ -165,6 +216,32 @@ Key settings include:
 - Keyboard: Disable smart quotes/dashes, enable full keyboard access
 - Energy: Custom sleep settings, disable hibernation
 - Security: Require password immediately after sleep
+
+## Nix
+
+Nix is installed automatically by `setup.sh` via the [Determinate Systems installer](https://github.com/DeterminateSystemsInitiative/nix-installer) with flakes enabled. It is used for per-project development shells (C/CMake projects), not for system package management (that remains Homebrew).
+
+### Dev Shell Template
+
+`templates/flake.nix` provides a starting point for a C/CMake project with MOSEK:
+
+```zsh
+cp ~/.dotfiles/templates/flake.nix ~/Code/my-project/flake.nix
+cd ~/Code/my-project
+nix develop   # enters a shell with cmake, gcc, pkg-config + MOSEK paths set
+```
+
+## Local-only Setup (manual steps)
+
+The following are not managed by `setup.sh` and must be set up manually on each machine:
+
+| Item | Location | How to set up |
+|------|----------|---------------|
+| SSH keys | `~/.ssh/` | Copy from secure backup, or use 1Password SSH agent |
+| GPG keys | `~/.gnupg/` | `gpg --export-secret-keys \| gpg --import` on new machine |
+| MOSEK license | `~/mosek/mosek.lic` | Download from [MOSEK portal](https://www.mosek.com/products/academic-licenses/) |
+| VPN credentials | macOS Keychain | `security add-generic-password -a "uni-id" -s "vpn-server.uni-hannover.de" -w "password" login.keychain` |
+| API tokens | macOS Keychain or `.env` files | Store per-project in `.env` (never committed) |
 
 ## LaTeX Workflow with Neovim
 
