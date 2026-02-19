@@ -168,6 +168,6 @@ Credentials never appear in the repository. The manual Keychain setup step is do
 
 ## Open Questions
 
-- ~~**Hostname values**~~ — **Resolved**: MacBook → `prometheus`, desktop → `lucifer`. Machine identity is read from `~/.machine-id` (a local, unversioned file) rather than `hostname -s`, so dotfiles are stable across future renames. Override files are named `Brewfile.prometheus`, `Brewfile.lucifer`, `macos.prometheus.sh`, etc.
+- ~~**Hostname values**~~ — **Resolved**: MacBook → `prometheus`, desktop → `lucifer`. All three `scutil` fields (`ComputerName`, `HostName`, `LocalHostName`) are set on each machine, so `hostname -s` reliably returns the short name. Override files are named `Brewfile.prometheus`, `Brewfile.lucifer`, `macos.prometheus.sh`, etc.
 - **Office/OneDrive divergence**: are there specific OneDrive folder structures or symlinks that have drifted and need to be re-aligned as part of this work?
 - **Nix install method**: Determinate Systems installer (`nix-installer`) is more reliable on macOS than the official installer. Preference?
