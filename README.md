@@ -43,7 +43,7 @@ The setup script installs and configures:
 | `dirs.sh` | Creates standard directory structure (Documents/*, Code). |
 | `tex.sh` | Installs LaTeX packages and symlinks custom texmf directory and TeXShop engine. |
 | `install_mosek.sh` | Downloads and installs the MOSEK optimization toolkit with checksum verification. |
-| `vpn-LUH.sh` | Connects to University of Hannover VPN using OpenConnect. |
+| `vpn-LUH` | Connects to University of Hannover VPN using OpenConnect. |
 
 ### Shell Configuration
 

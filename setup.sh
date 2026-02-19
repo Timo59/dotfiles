@@ -180,17 +180,17 @@ else
 fi
 
 # Symlink vpn scripts to usr/local/bin
-if [ -f "./vpn-LUH.sh" ]; then
+if [ -f "./vpn-LUH" ]; then
   echo "Symlinking vpn scripts to /usr/local/bin..."
-  chmod +x ./vpn-LUH.sh
-  
-  if [ ! -L /usr/local/bin/vpn-LUH.sh ]; then
+  chmod +x ./vpn-LUH
+
+  if [ ! -L /usr/local/bin/vpn-LUH ]; then
     # Create directory if not present
     if [ ! -d /usr/local/bin ]; then
       sudo mkdir -p /usr/local/bin
     fi
 
-    sudo ln -sf "$PWD/vpn-LUH.sh" /usr/local/bin/vpn-LUH.sh
+    sudo ln -sf "$PWD/vpn-LUH" /usr/local/bin/vpn-LUH
     echo "[DONE] Symlinked vpn-LUH to /usr/local/bin"
   else
     echo "[EXISTS] Symlink vpn-LUH to /usr/local/bin"

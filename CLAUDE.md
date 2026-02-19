@@ -31,7 +31,7 @@ Personal macOS dotfiles for automated setup. See README.md for file descriptions
 ├── dirs.sh                       # Creates standard directory structure
 ├── clone.sh                      # Clones Git repositories (also called by LaunchAgent)
 ├── install_mosek.sh              # Downloads and installs the MOSEK SDK to ~/mosek
-├── vpn-LUH.sh                    # VPN script for LUH network
+├── vpn-LUH                    # VPN script for LUH network
 ├── tmux.conf                     # tmux configuration (symlinked to ~/.tmux.conf)
 ├── latexmkrc                     # LaTeX build config (symlinked to ~/.latexmkrc)
 ├── com.user.gitupdate.plist      # macOS LaunchAgent: runs clone.sh at startup
@@ -58,7 +58,7 @@ Personal macOS dotfiles for automated setup. See README.md for file descriptions
 13. Run `dirs.sh`
 14. Run `clone.sh`
 15. Symlink + `launchctl load` `com.user.gitupdate.plist` → `~/Library/LaunchAgents/` (idempotent)
-16. `chmod +x` + `sudo` symlink `vpn-LUH.sh` → `/usr/local/bin/vpn-LUH.sh` (idempotent)
+16. `chmod +x` + `sudo` symlink `vpn-LUH` → `/usr/local/bin/vpn-LUH` (idempotent)
 17. Run `install_mosek.sh` (**currently broken**: called as `.install_mosek.sh` — missing `./`)
 
 ## Symlink Map
@@ -72,7 +72,7 @@ Personal macOS dotfiles for automated setup. See README.md for file descriptions
 | `claude/settings.json` | `~/.claude/settings.json` |
 | `claude/agents` | `~/.claude/agents` |
 | `com.user.gitupdate.plist` | `~/Library/LaunchAgents/com.user.gitupdate.plist` |
-| `vpn-LUH.sh` | `/usr/local/bin/vpn-LUH.sh` |
+| `vpn-LUH` | `/usr/local/bin/vpn-LUH` |
 
 ## Conventions
 

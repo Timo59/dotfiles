@@ -127,16 +127,16 @@ fi
 
 ### 5. VPN Credentials in Keychain
 
-`vpn-LUH.sh` currently requires interactive username/password entry. Credentials are stored in the **login keychain** (not iCloud Keychain / Passwords app, which is not scriptable via the `security` CLI).
+`vpn-LUH` currently requires interactive username/password entry. Credentials are stored in the **login keychain** (not iCloud Keychain / Passwords app, which is not scriptable via the `security` CLI).
 
 The VPN username is a separate university ID, not `$USER`.
 
 **One-time setup (manual, per machine):**
 ```zsh
-security add-generic-password -a "your-uni-id" -s "vpn-luh" -w "yourpassword" login.keychain
+security add-generic-password -a "your-uni-id" -s "vpn-server.uni-hannover.de" -w "yourpassword" login.keychain
 ```
 
-**`vpn-LUH.sh` retrieves both username and password:**
+**`vpn-LUH` retrieves both username and password:**
 ```zsh
 USERNAME=$(security find-generic-password -s "vpn-luh" 2>/dev/null | awk -F'"' '/"acct"/{print $4}')
 PASSWORD=$(security find-generic-password -s "vpn-luh" -w 2>/dev/null)
@@ -170,7 +170,7 @@ Credentials never appear in the repository. The manual Keychain setup step is do
 | 4 | `macos.sh` | **Pending** | Capture current preferred state from the primary machine |
 | 5 | Nix install block in `setup.sh` | **Pending** | Determinate Systems installer; not Homebrew; flakes enabled in `~/.config/nix/nix.conf` |
 | 6 | Example `flake.nix` for a C/CMake project | **Pending** | Template for MOSEK projects; must work on macOS and Linux |
-| 7 | Keychain integration in `vpn-LUH.sh` | **Done** | Login keychain only; university ID retrieved alongside password |
+| 7 | Keychain integration in `vpn-LUH` | **Done** | Login keychain only; university ID retrieved alongside password |
 | 8 | Update `README.md` | **Pending** | Document local-only setup steps and apply workflow |
 
 ---
