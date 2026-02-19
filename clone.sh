@@ -22,6 +22,20 @@ timestamp() {
   done
 }
 {
+# Wait for SSH connectivity to github.com before attempting any git operations.
+# Times out after 60 s and exits cleanly so a machine that boots offline or on
+# a network that blocks port 22 isn't left hanging.
+WAIT_MAX=60
+WAIT_ELAPSED=0
+until nc -zw2 github.com 22 2>/dev/null; do
+    if (( WAIT_ELAPSED >= WAIT_MAX )); then
+        echo "[WARNING] github.com:22 unreachable after ${WAIT_MAX}s — skipping repository updates"
+        exit 0
+    fi
+    sleep 5
+    (( WAIT_ELAPSED += 5 ))
+done
+
 CODE_DIR="$HOME/Code"
 
 # Check if Code directory exists
@@ -98,14 +112,32 @@ update_repo() {
 }
 
 
-# Loop over the associative array and clone/update each repository
+# Loop over the associative array and clone/update each repository.
+# Track the .dotfiles commit hash before and after to detect upstream changes.
+DOTFILES_BEFORE=""
+DOTFILES_AFTER=""
+
 for repo_url in "${(@k)REPOS}"; do
     target_dir="${REPOS[$repo_url]}"
-    
+
+    if [ "$target_dir" = "$HOME/.dotfiles" ] && [ -d "$target_dir" ]; then
+        DOTFILES_BEFORE=$($GIT_CMD -C "$target_dir" rev-parse HEAD 2>/dev/null)
+    fi
+
     if [ ! -d "$target_dir" ]; then
         clone_repo "$repo_url" "$target_dir"
     else
         update_repo "$target_dir"
     fi
+
+    if [ "$target_dir" = "$HOME/.dotfiles" ] && [ -d "$target_dir" ]; then
+        DOTFILES_AFTER=$($GIT_CMD -C "$target_dir" rev-parse HEAD 2>/dev/null)
+    fi
 done
+
+# Notify if dotfiles were updated so the user knows to run setup.sh
+if [ -n "$DOTFILES_BEFORE" ] && [ "$DOTFILES_BEFORE" != "$DOTFILES_AFTER" ]; then
+    echo "[INFO] dotfiles updated — run: cd ~/.dotfiles && ./setup.sh"
+    osascript -e 'display notification "Run cd ~/.dotfiles && ./setup.sh to apply changes." with title "dotfiles updated"'
+fi
 } | timestamp

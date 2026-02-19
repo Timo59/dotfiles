@@ -121,7 +121,7 @@ brew update
 # Install all dependencies with homebrew/bundle (See Brewfile)
 echo "Install Homebrew dependencies..."
 if [ -f "./Brewfile" ]; then
-  brew bundle --file ./Brewfile
+  brew bundle --file ./Brewfile --no-upgrade
   echo "[DONE] Installed Homebrew dependencies"
 else
   echo "[WARNING] Brewfile not found at $(pwd), skipping Homebrew dependency installation."
