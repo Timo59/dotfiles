@@ -7,4 +7,17 @@
 # =============================================================================
 
 VPN_SERVER="vpn-server.uni-hannover.de"
-sudo openconnect "${VPN_SERVER}"
+
+# Retrieve credentials from the login keychain.
+# One-time setup (run once per machine):
+#   security add-generic-password -a "your-uni-id" -s "vpn-luh" -w "yourpassword" login.keychain
+USERNAME=$(security find-generic-password -s "vpn-luh" 2>/dev/null | awk -F'"' '/"acct"/{print $4}')
+PASSWORD=$(security find-generic-password -s "vpn-luh" -w 2>/dev/null)
+
+if [[ -z "$USERNAME" || -z "$PASSWORD" ]]; then
+    echo "[ERROR] VPN credentials not found in login keychain."
+    echo "Run: security add-generic-password -a \"your-uni-id\" -s \"vpn-luh\" -w \"yourpassword\" login.keychain"
+    exit 1
+fi
+
+echo "$PASSWORD" | sudo openconnect --user="$USERNAME" --passwd-on-stdin "${VPN_SERVER}"
