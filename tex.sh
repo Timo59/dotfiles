@@ -24,7 +24,7 @@ else
   # Update tlmgr first
   sudo tlmgr update --self
 
-  # Install packages from Texfile (filter out commenst and empty lines)
+  # Install packages from Texfile (filter out comments and empty lines)
   PACKAGES=$(grep -v '^\s*#' "$DOTFILES_DIR/Texfile" | sed 's/#.*//' | tr -s ' ' | tr "\n" " " | xargs)
   if [ -n "$PACKAGES" ]; then
     sudo tlmgr install $PACKAGES
@@ -37,21 +37,23 @@ fi
 # Create a symbolic link from pdfLaTeXWithBuild.engine to TeXShop engines
 if [ -f "$DOTFILES_DIR/pdfLaTeXWithBuild.engine" ]; then
   echo "Symlinking TeXShop engine..."
-  chmod +x $DOTFILES_DIR/pdfLaTeXWithBuild.engine
-  mkdir -p $ENGINE_DIR
+  chmod +x "$DOTFILES_DIR/pdfLaTeXWithBuild.engine"
+  mkdir -p "$ENGINE_DIR"
   ln -sf "$DOTFILES_DIR/pdfLaTeXWithBuild.engine" "$ENGINE_DIR/pdfLaTeXWithBuild.engine"
   echo "[DONE] Created symlink to $DOTFILES_DIR/pdfLaTeXWithBuild.engine."
 else
-  echo "[WARNING]: pdfLaTeXWithBuild.engine not found, skipping engine setup"
+  echo "[WARNING] pdfLaTeXWithBuild.engine not found, skipping engine setup"
 fi
 
 # Create a symbolic link from texmf in dotfiles to $HOME/Library/texmf
 if [ -d "$DOTFILES_DIR/texmf" ]; then
   if [ ! -L "$TEXMF_DIR" ]; then
     echo "Symlinking to $DOTFILES_DIR/texmf..."
-    ln -sf $DOTFILES_DIR/texmf $TEXMF_DIR
+    ln -sf "$DOTFILES_DIR/texmf" "$TEXMF_DIR"
+    echo "[DONE] Created symlink to $DOTFILES_DIR/texmf."
+  else
+    echo "[EXISTS] texmf symlink at $TEXMF_DIR"
   fi
-  echo "[DONE] Created symlink to $DOTFILES_DIR/texmf."
 else
   echo "[WARNING] texmf directory not found, skipping texmf setup"
 fi

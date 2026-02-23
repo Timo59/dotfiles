@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# vpn-LUH.sh - University of Hannover VPN connection script
+# vpn-LUH - University of Hannover VPN connection script
 # =============================================================================
 # Connects to the Leibniz University Hannover VPN using OpenConnect.
 # Symlinked to /usr/local/bin for global access.
@@ -10,7 +10,7 @@ VPN_SERVER="vpn-server.uni-hannover.de"
 
 # Retrieve credentials from the login keychain.
 # One-time setup (run once per machine):
-#   security add-generic-password -a "your-uni-id" -s "vpn-luh" -w "yourpassword" login.keychain
+#   security add-generic-password -a "your-uni-id" -s "vpn-server.uni-hannover.de" -w "yourpassword" login.keychain
 USERNAME=$(security find-generic-password -s "vpn-server.uni-hannover.de" 2>/dev/null | awk -F'"' '/"acct"/{print $4}')
 PASSWORD=$(security find-generic-password -s "vpn-server.uni-hannover.de" -w 2>/dev/null)
 

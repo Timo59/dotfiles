@@ -187,26 +187,21 @@ else
   echo "[WARNING] clone.sh not found in $(pwd), skipping git initialization"
 fi
 
-# Add gitupdate, which calls clone.sh to LaunchAgents and load it
-if [ -f ./com.user.gitupdate.plist ]; then
-  echo "Symlinking gitupdate.plist to LaunchAgents"
-  
-  if [ ! -L $HOME/Library/LaunchAgents/com.user.gitupdate.plist ]; then
-    # Create directory for launch agents if if not present
-    if [ ! -d $HOME/Library/LaunchAgents ]; then
-      mkdir $HOME/Library/LaunchAgents
-    fi
+# Generate gitupdate.plist from template (substitutes real dotfiles path) and load it
+if [ -f ./com.user.gitupdate.plist.template ]; then
+  PLIST_DEST="$HOME/Library/LaunchAgents/com.user.gitupdate.plist"
+  mkdir -p "$HOME/Library/LaunchAgents"
 
-    ln -s $PWD/com.user.gitupdate.plist ~/Library/LaunchAgents/com.user.gitupdate.plist
-    echo "[DONE] Symlinked gitupdate.plist to LaunchAgents"
-  else
-    echo "[EXISTS] Symlink gitupdate.plist to LaunchAgents"
-  fi
+  # Remove stale symlink if present (from old setup approach)
+  [ -L "$PLIST_DEST" ] && rm "$PLIST_DEST"
 
-  launchctl load ~/Library/LaunchAgents/com.user.gitupdate.plist
+  # Generate plist with current dotfiles path baked in (launchd has no variable expansion)
+  sed "s|DOTFILES_PATH|$PWD|g" ./com.user.gitupdate.plist.template > "$PLIST_DEST"
+  echo "[DONE] Generated gitupdate.plist in LaunchAgents"
 
+  launchctl load "$PLIST_DEST"
 else
-  echo "[WARNING] com.user.gitupdate.plist not found in $(pwd), skipping gitupdate"
+  echo "[WARNING] com.user.gitupdate.plist.template not found in $(pwd), skipping gitupdate"
 fi
 
 # Symlink vpn scripts to usr/local/bin

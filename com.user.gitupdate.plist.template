@@ -5,7 +5,7 @@
     <key>Label</key>
     <string>com.user.gitupdate</string>
     <key>Program</key>
-    <string>/Users/timo/.dotfiles/clone.sh</string>
+    <string>DOTFILES_PATH/clone.sh</string>
     <key>RunAtLoad</key>
     <true/>
     <key>StandardOutPath</key>
