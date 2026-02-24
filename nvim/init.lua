@@ -186,7 +186,10 @@ opt.hlsearch = true
 opt.incsearch = true
 
 -- UI
-opt.termguicolors = false  -- Terminal.app doesn't support true colors
+-- iTerm2: set termguicolors = true and add a truecolor colorscheme plugin, e.g.:
+--   { "folke/tokyonight.nvim", config = function() vim.cmd.colorscheme("tokyonight") end }
+-- Also remove the colorscheme("slate") line below and the background = "dark" line.
+opt.termguicolors = false  -- Terminal.app: false. iTerm2: flip to true (see note above)
 opt.signcolumn = "yes"
 opt.cursorline = true
 opt.scrolloff = 8

@@ -9,7 +9,10 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachSystem [ "aarch64-darwin" "x86_64-linux" ] (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;  # required for MOSEK
+        };
       in {
         devShells.default = pkgs.mkShell {
           name = "c-cmake-mosek";
@@ -28,26 +31,17 @@
             # Math / linear algebra
             blas
             lapack
+
+            # Optimization (unfree — requires config.allowUnfree = true above)
+            mosek
           ];
 
           shellHook = ''
-            # MOSEK is installed outside Nix (see install_mosek.sh).
-            # Point CMake/pkg-config at it if present.
-            MOSEK_VERSION="11.0"
-            if [ "$(uname -s)" = "Darwin" ]; then
-              MOSEK_PLATFORM="osxaarch64"
-            else
-              MOSEK_PLATFORM="linuxaarch64"  # adjust for x86: linuxx86_64
-            fi
-            MOSEK_DIR="$HOME/mosek/$MOSEK_VERSION/tools/platform/$MOSEK_PLATFORM"
-            if [ -d "$MOSEK_DIR" ]; then
-              export MOSEK_DIR
-              export CMAKE_PREFIX_PATH="$MOSEK_DIR:${CMAKE_PREFIX_PATH:-}"
-              export LD_LIBRARY_PATH="$MOSEK_DIR/bin:${LD_LIBRARY_PATH:-}"
-              export DYLD_LIBRARY_PATH="$MOSEK_DIR/bin:${DYLD_LIBRARY_PATH:-}"
-              echo "MOSEK $MOSEK_VERSION found at $MOSEK_DIR"
-            else
-              echo "Warning: MOSEK not found at $MOSEK_DIR — run install_mosek.sh first"
+            # MOSEK license must be present at ~/mosek/mosek.lic
+            # Download from https://www.mosek.com/products/academic-licenses/
+            if [ ! -f "$HOME/mosek/mosek.lic" ]; then
+              echo "Warning: MOSEK license not found at ~/mosek/mosek.lic"
+              echo "Download from https://www.mosek.com/products/academic-licenses/"
             fi
 
             echo "C/CMake+MOSEK dev shell ready ($(cmake --version | head -1))"

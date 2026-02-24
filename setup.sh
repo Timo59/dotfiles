@@ -75,6 +75,14 @@ else
   echo "[WARNING] .zshrc not found in $(pwd)"
 fi
 
+# Configure global gitignore
+if [ -f ".gitignore_global" ]; then
+  git config --global core.excludesfile "$PWD/.gitignore_global"
+  echo "[DONE] Global gitignore configured"
+else
+  echo "[WARNING] .gitignore_global not found, skipping"
+fi
+
 # Symlink neovim config
 if [ -d "./nvim" ]; then
   mkdir -p $HOME/.config
