@@ -39,7 +39,7 @@ require("lazy").setup({
       -- Use custom compile script (same as TeXShop engine)
       vim.g.vimtex_compiler_method = "generic"
       vim.g.vimtex_compiler_generic = {
-        command = vim.fn.expand("~/.dotfiles/latex-compile.sh"),
+        command = vim.fn.expand("~/.dotfiles/latex-compile.sh") .. " @tex",
       }
 
       -- Quickfix settings
