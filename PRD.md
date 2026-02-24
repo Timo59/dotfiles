@@ -25,11 +25,11 @@ Each machine is identified by its hostname. Machine-specific files are suffixed 
 
 ```
 Brewfile                  # shared base (all machines)
-Brewfile.macbook          # MacBook-only packages
-Brewfile.desktop          # desktop/home lab packages
+Brewfile.prometheus       # MacBook Pro (prometheus) packages
+Brewfile.lucifer          # desktop (lucifer) packages
 macos.sh                  # shared macOS defaults
-macos.macbook.sh          # MacBook-specific defaults (if needed)
-macos.desktop.sh          # desktop-specific defaults (if needed)
+macos.prometheus.sh       # MacBook Pro specific defaults
+macos.lucifer.sh          # desktop specific defaults
 ```
 
 `setup.sh` detects `$(hostname -s)` and applies the matching overrides after the base.
@@ -79,7 +79,7 @@ brew bundle --file="Brewfile.$(hostname -s)" --no-upgrade 2>/dev/null || true
 
 `--no-upgrade` limits each run to installing missing packages only; explicit upgrades remain a deliberate `brew upgrade` or Brewfile version bump.
 
-**Invariant**: every package ever installed via `brew install` on either machine must be reflected in one of these files before the next `setup.sh` run.
+**Invariant**: every package ever installed via `brew install` on either machine must be reflected in one of these files (`Brewfile`, `Brewfile.prometheus`, or `Brewfile.lucifer`) before the next `setup.sh` run.
 
 ### 3. macOS System Settings as Code
 
@@ -164,14 +164,14 @@ Credentials never appear in the repository. The manual Keychain setup step is do
 | — | `clone.sh`: wait for `github.com:22` before git ops | **Done** | 60 s timeout; exits cleanly if offline |
 | — | `clone.sh`: notify when `.dotfiles` updated | **Done** | macOS notification + log line |
 | — | `setup.sh`: `--no-upgrade` for `brew bundle` | **Done** | Prevents slow/unintended upgrades on re-runs |
-| 1 | Harden `setup.sh` | **Pending** | Fix destructive `.zshrc` symlink; fix MOSEK bug (`.install_mosek.sh` → `./install_mosek.sh`) |
-| 2 | `Brewfile.macbook` + `Brewfile.desktop` | **Pending** | Audit current packages on both machines first |
-| 3 | Machine-aware `brew bundle` in `setup.sh` | **Pending** | Hostname detection; apply `--no-upgrade` to both files |
-| 4 | `macos.sh` | **Pending** | Capture current preferred state from the primary machine |
-| 5 | Nix install block in `setup.sh` | **Pending** | Determinate Systems installer; not Homebrew; flakes enabled in `~/.config/nix/nix.conf` |
-| 6 | Example `flake.nix` for a C/CMake project | **Pending** | Template for MOSEK projects; must work on macOS and Linux |
+| 1 | Harden `setup.sh` | **Done** | Idempotent `.zshrc` symlink; MOSEK bug fixed |
+| 2 | `Brewfile.prometheus` + `Brewfile.lucifer` | **Done** | Machine names resolved: prometheus (MacBook Pro), lucifer (desktop) |
+| 3 | Machine-aware `brew bundle` in `setup.sh` | **Done** | Hostname detection; `--no-upgrade` on both files |
+| 4 | `macos.sh` | **Done** | Shared defaults + per-machine overrides via `macos.<hostname>.sh` |
+| 5 | Nix install block in `setup.sh` | **Done** | Determinate Systems installer; flakes enabled via `~/.config/nix/nix.conf` |
+| 6 | Example `flake.nix` for a C/CMake project | **Done** | MOSEK via nixpkgs (`allowUnfree = true`); works on aarch64-darwin and x86_64-linux |
 | 7 | Keychain integration in `vpn-LUH` | **Done** | Login keychain only; university ID retrieved alongside password |
-| 8 | Update `README.md` | **Pending** | Document local-only setup steps and apply workflow |
+| 8 | Update `README.md` | **Done** | Local-only setup steps documented; apply workflow documented |
 
 ---
 

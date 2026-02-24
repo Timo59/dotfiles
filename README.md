@@ -5,17 +5,14 @@ Personal macOS dotfiles for automated setup and configuration of development env
 ## Quick Start
 
 ```zsh
-# 1. Generate SSH key for GitHub
+# 1. Generate SSH key for GitHub (one-time, before cloning)
 ./ssh-setup.sh
 
 # 2. Clone this repository
 git clone --recursive git@github.com:Timo59/dotfiles.git ~/.dotfiles
 
-# 3. Run the setup script
+# 3. Run the setup script (installs everything, including macOS preferences)
 cd ~/.dotfiles && ./setup.sh
-
-# 4. (Optional) Apply macOS preferences
-./macos.sh
 ```
 
 ## Daily Apply Workflow
@@ -53,7 +50,7 @@ The setup script installs and configures:
 | `clone.sh` | Clones and updates Git repositories from GitHub and GitLab Uni Hannover. |
 | `dirs.sh` | Creates standard directory structure (Documents/*, Code). |
 | `tex.sh` | Installs LaTeX packages and symlinks custom texmf directory and TeXShop engine. |
-| `install_mosek.sh` | Downloads and installs the MOSEK optimization toolkit with checksum verification. |
+| `install_mosek.sh` | MOSEK installer kept for reference. MOSEK is now provided via nixpkgs in per-project `flake.nix`. |
 | `vpn-LUH` | Connects to University of Hannover VPN using OpenConnect. |
 
 ### Shell Configuration
@@ -62,8 +59,6 @@ The setup script installs and configures:
 |------|-------------|
 | `.zshrc` | Main Zsh configuration with Oh-My-Zsh setup, plugins, and shell options. |
 | `aliases.zsh` | Custom shell aliases (copyssh, reloadshell, reloaddns, dotfiles). |
-| `path.zsh` | PATH environment variable configuration. |
-| `minimal.zsh-theme` | Minimal Zsh theme with git status, SSH indicator, and vim mode display. |
 
 ### Package Lists
 
@@ -73,18 +68,16 @@ The setup script installs and configures:
 | `Brewfile.prometheus` | MacBook-specific Homebrew packages (hostname: prometheus). |
 | `Brewfile.lucifer` | Desktop-specific Homebrew packages (hostname: lucifer). |
 | `Texfile` | LaTeX packages to install via tlmgr (algorithm2e, tikz, biblatex, etc.). |
-| `Pyfile` | Python packages for pip installation (currently minimal). |
 
 ### Configuration Files
 
 | File | Description |
 |------|-------------|
 | `macos.sh` | macOS system preferences script (Dock, Finder, keyboard, energy settings). Run by `setup.sh`. |
-| `macos.prometheus.sh` | MacBook-specific macOS overrides (computer/host name). |
-| `.macos` | Legacy macOS preferences script — superseded by `macos.sh`, kept for reference. |
-| `.mackup.cfg` | Mackup configuration for backing up app preferences to iCloud. |
-| `.gitignore_global` | Global Git ignore patterns for compiled files, OS artifacts, and IDE folders. |
-| `com.user.gitupdate.plist` | LaunchAgent that runs clone.sh at system startup to sync repositories. |
+| `macos.prometheus.sh` | MacBook Pro specific macOS overrides (hostname, energy). Applied after `macos.sh` on prometheus. |
+| `macos.lucifer.sh` | Desktop specific macOS overrides (hostname, energy). Applied after `macos.sh` on lucifer. |
+| `.gitignore_global` | Global Git ignore patterns for compiled files, OS artifacts, and IDE folders. Registered via `core.excludesfile` by `setup.sh`. |
+| `com.user.gitupdate.plist.template` | LaunchAgent template. `setup.sh` generates the final plist at install time (not symlinked). |
 
 ### Nix
 
@@ -160,7 +153,6 @@ The setup script installs and configures:
 | `latexmkrc` | `~/.latexmkrc` |
 | `claude/settings.json` | `~/.claude/settings.json` |
 | `claude/agents` | `~/.claude/agents` |
-| `com.user.gitupdate.plist` | `~/Library/LaunchAgents/com.user.gitupdate.plist` |
 | `vpn-LUH` | `/usr/local/bin/vpn-LUH` |
 
 ## Customization
@@ -219,17 +211,19 @@ Key settings include:
 
 ## Nix
 
-Nix is installed automatically by `setup.sh` via the [Determinate Systems installer](https://github.com/DeterminateSystemsInitiative/nix-installer) with flakes enabled. It is used for per-project development shells (C/CMake projects), not for system package management (that remains Homebrew).
+Nix is installed automatically by `setup.sh` via the [Determinate Systems installer](https://github.com/DeterminateSystems/nix-installer) with flakes enabled. It is used for per-project development shells (C/CMake projects), not for system package management (that remains Homebrew).
 
 ### Dev Shell Template
 
-`templates/flake.nix` provides a starting point for a C/CMake project with MOSEK:
+`templates/flake.nix` provides a starting point for a C/CMake project with MOSEK pulled from nixpkgs (`allowUnfree = true`). No system-wide MOSEK installation is required — `nix develop` handles everything except the license file.
 
 ```zsh
 cp ~/.dotfiles/templates/flake.nix ~/Code/my-project/flake.nix
 cd ~/Code/my-project
-nix develop   # enters a shell with cmake, gcc, pkg-config + MOSEK paths set
+nix develop   # enters a shell with cmake, gcc, pkg-config, and MOSEK from nixpkgs
 ```
+
+Place the MOSEK license at `~/mosek/mosek.lic` (see Local-only Setup below).
 
 ## Local-only Setup (manual steps)
 
@@ -272,15 +266,6 @@ nvim ~/path/to/thesis.tex
 ### Build Directory
 
 Both TeXShop and neovim use `.build/` for auxiliary files, keeping source directories clean. The PDF is placed in the source directory.
-
-## Backup with Mackup
-
-Mackup backs up application preferences to iCloud:
-
-```zsh
-mackup backup   # Backup preferences
-mackup restore  # Restore on new machine
-```
 
 ## Credits
 
