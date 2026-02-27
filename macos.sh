@@ -107,8 +107,13 @@ defaults write com.apple.dock minimize-to-application -bool true
 # Scale effect for minimize (faster than genie)
 defaults write com.apple.dock mineffect -string "scale"
 
-# Show only open applications (no pinned icons)
-defaults write com.apple.dock static-only -bool true
+# Pin specific applications to the Dock
+dockutil --remove all --no-restart
+dockutil --add /System/Library/CoreServices/Finder.app --no-restart
+dockutil --add /System/Applications/Utilities/Terminal.app --no-restart
+dockutil --add /Applications/Obsidian.app --no-restart
+dockutil --add /Applications/Spotify.app --no-restart
+dockutil --add /Applications/Discord.app --no-restart
 
 # No animation when opening apps from the Dock
 defaults write com.apple.dock launchanim -bool false

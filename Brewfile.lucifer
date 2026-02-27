@@ -5,7 +5,4 @@
 # Add entries here as the machines diverge over time.
 # =============================================================================
 
-# (empty — add desktop-specific formulae and casks below as needed)
-# Example:
-# brew "ansible"
-# brew "nmap"
+cask 'whatsapp'

@@ -11,6 +11,7 @@ brew 'git'
 brew 'git-filter-repo'		# Quickly rewrite git repository history
 brew 'gnupg'			# GNU Privacy Guard to encrypt data (used in tlmgr)
 brew 'libomp'			# LLVM's OpenMP runtime library
+brew 'dockutil'			# Manage macOS Dock items from the command line
 brew 'mackup'			# Backup App preferences to a cloud storage
 brew 'mas' 			# Mac App Store CLI
 brew 'openconnect'		# Open client for Cisco AnyConnect VPN
@@ -27,6 +28,7 @@ cask 'basictex'
 # cask 'caffeine'
 cask 'clion'
 cask 'discord'
+cask 'obsidian'
 # cask 'docker'			-- Software for isolating applications in containers
 # cask 'flutter'
 # cask 'github'
@@ -42,11 +44,10 @@ cask 'onedrive'
 cask 'pycharm'
 # cask 'raspberry-pi-imager'	-- Imaging utility to install operating systems to a microSD card
 # cask 'slack'			-- Team communication and collaboration software
-# cask 'spotify'
+cask 'spotify'
 cask 'skim'			# PDF viewer with SyncTeX support for neovim
 cask 'texshop'
 # cask 'tuple'			-- Remote pair programming app
-# cask 'whatsapp'
 cask 'zoom'
 
 # Mac App Store
