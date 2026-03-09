@@ -8,11 +8,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{summary}[2025/08/27 LaTeX package for paper summaries]
 
-\RequirePackage{amsmath}	% Mathematical environments
-\RequirePackage{amssymb}	% Mathematical symbols
-\RequirePackage{amsthm}	% Enhancing theorem-style environments
 \RequirePackage{base}
-\RequirePackage{bm}		% Bold math symbols
 \RequirePackage{enumitem}
 \SetLabelAlign{LeftAlignFullWidth}{\makebox[\dimexpr\linewidth+\labelwidth\relax][l]{#1}}
 \RequirePackage[pdfnewwindow=true, breaklinks=true]{hyperref}
@@ -21,7 +17,6 @@
 		linkcolor=blue,
 		citecolor=black,
 	}%
-\RequirePackage{mathtools} 	% Mathematical typesetting; \DeclarePairedDelimiter
 \RequirePackage{parskip}
 \RequirePackage{qcircuit}
 \RequirePackage{tikz}
@@ -29,12 +24,7 @@
 
 \RequirePackage[a4paper, margin=1.5cm]{geometry}
 
-\RequirePackage{subfiles}
-	\ifSubfilesClassLoaded{%
-	}{%
-		\renewcommand{\thesection}{\Roman{section}}%
-	}%
-	
-	
+
+
 %%% MACROS
 	\newcommand{\RN}[1]{\uppercase\expandafter{\romannumeral #1\relax}}	% Roman numerals

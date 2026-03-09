@@ -23,13 +23,7 @@
 \RequirePackage{tikz}
 \usetikzlibrary{positioning, decorations.pathreplacing}
 
-\RequirePackage{subfiles}
-	\ifSubfilesClassLoaded{%
-	}{%
-		\renewcommand{\thesection}{\Roman{section}}%
-	}%
 
-		
 %%% SPECIFIC
 	\newcommand*{\zero}{\ket{0}}%				% +1 eigenstate of Pauli-Z
     \newcommand*{\one}{\ket{1}}%				% -1 eigenstate of Pauli-Z
@@ -44,11 +38,9 @@
 
 %%% ENIVRONMENTS
  	\newcounter{Exercise}[section]
-	\counterwithin{Exercise}{section} %connects section counter to exercise counter
 	\def\Exerciseautorefname{Exercise}
 	\newenvironment{exercise}[1]{\refstepcounter{Exercise}\par\medskip \noindent \textbf{Exercise \theExercise:} \textit{#1}\par\medskip}{\medskip}
 
 	\newcounter{Remark}[section]
-	\counterwithin{Remark}{section} %connects section counter to remark counter
 	\def\Remarkautorefname{Remark}
 	\newenvironment{remark}[1]{\refstepcounter{Remark}\par\medskip \noindent \color{gray}\textbf{Remark \theRemark:} \textit{#1}\par\medskip}{\medskip}

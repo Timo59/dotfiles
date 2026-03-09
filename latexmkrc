@@ -30,9 +30,5 @@ $ENV{'TEXINPUTS'} = '.:..::';
 # Run bibtex from the output directory where .aux files are
 $bibtex = 'bibtex %O %B';
 
-# After successful compilation, copy PDF to source directory
-# %D = destination PDF path (.build/foo.pdf)
-$success_cmd = 'cp "%D" .';
-
 # Additional extensions to clean with latexmk -c
 $clean_ext = 'run.xml';

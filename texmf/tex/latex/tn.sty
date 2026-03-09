@@ -50,7 +50,7 @@
 	}{												% Else
 		\sum_{#4_{1}, \dots, #4_{#2}}						% Sum over physical indices
 		\sum_{j_{1}^{}, \dots, j_{#2}^{}}							% Sum over bond indices
-		\tensor{#3}{1}{#4} [j_{#2}^{}][][j_{1}^{}] \cdots \tensor{#3}{1}{#4}[][j_{#2 - 1}^{}][j_{#2}^{}]
+		\tensor{#3}{1}{#4} [j_{#2}^{}][][j_{1}^{}] \cdots \tensor{#3}{#2}{#4}[][j_{#2 - 1}^{}][j_{#2}^{}]
 		\ket{ #4_{1}, \dots, #4_{#2}}						% Vector
 	}
 }
@@ -66,5 +66,8 @@
 		\sum_{#4_{1}, #4_{1}^{\prime}, \dots, #4_{#2}, #4_{#2}^{\prime}}	% Sum over physical indices
 		\tr \left[ \tensor*{#3}{1}{#4}[#5] \cdot \tensor*{#3}{#2}{#4}[#5] \right]		% Trace over bonds
 		\ketbra{#4_{1}, \dots, #4_{#2}}{#5_{1}, \dots, #5_{#2}}
+	}
+	{%             % Unstarred \mpo: not yet implemented
+		\PackageError{tn}{\protect\mpo\space without star is not implemented}{}%
 	}
 }
