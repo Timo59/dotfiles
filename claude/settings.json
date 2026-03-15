@@ -3,6 +3,5 @@
     "ask": [
       "Bash(sudo:*)"
     ]
-  },
-  "model": "sonnet"
+  }
 }
