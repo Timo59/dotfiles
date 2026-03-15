@@ -118,6 +118,12 @@ defaults write com.apple.dock minimize-to-application -bool true
 # Scale effect for minimize (faster than genie)
 defaults write com.apple.dock mineffect -string "scale"
 
+# Disable static-only mode (would hide all pinned apps, showing only running ones)
+defaults write com.apple.dock static-only -bool false
+
+# Do not show recently used apps in the Dock (quit apps are removed immediately)
+defaults write com.apple.dock show-recents -bool false
+
 # No animation when opening apps from the Dock
 defaults write com.apple.dock launchanim -bool false
 
@@ -135,9 +141,12 @@ defaults write com.apple.dock autohide-time-modifier -float 0.5
 DOCK_APPS=(
     "/System/Library/CoreServices/Finder.app"
     "/System/Applications/Utilities/Terminal.app"
+    "/System/Applications/Mail.app"
+    "/Applications/Safari.app"
     "/Applications/Obsidian.app"
     "/Applications/Spotify.app"
     "/Applications/Discord.app"
+    "/System/Applications/Clock.app"
 )
 
 # Machine-specific additions

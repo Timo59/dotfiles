@@ -124,6 +124,23 @@ year = {2023}
 	month		= {dec}
 }
 
+@article{Park2003_TilingBlockDataLayoutAndMemoryHierarchyPerformance,
+  author    = {Park, Neungsoo and Hong, Bo and Prasanna, Viktor K.},
+  title     = {Tiling, Block Data Layout, and Memory Hierarchy Performance},
+  year      = {2003},
+  publisher = {IEEE Press},
+  volume    = {14},
+  number    = {7},
+  issn      = {1045-9219},
+  url       = {https://doi.org/10.1109/TPDS.2003.1214317},
+  doi       = {10.1109/TPDS.2003.1214317},
+  abstract  = {Recently, several experimental studies have been conducted on block data layout in conjunction with tiling as a data transformation technique to improve cache performance. In this paper, we analyze cache and TLB performance of such alternate layouts (including block data layout and Morton layout) when used in conjunction with tiling. We derive a tight lower bound on TLB performance for standard matrix access patterns, and show that block data layout and Morton layout achieve this bound. To improve cache performance, block data layout is used in concert with tiling. Based on the cache and TLB performance analysis, we propose a data block size selection algorithm that finds a tight range for optimal block size. To validate our analysis, we conducted simulations and experiments using tiled matrix multiplication, LU decomposition, and Cholesky factorization. For matrix multiplication, simulation results using UltraSparc II parameters show that tiling and block data layout with a block size given by our block size selection algorithm, reduces up to 93 percent of TLB misses compared with other techniques (copying, padding, etc.). The total miss cost is reduced considerably. Experiments on several platforms (UltraSparc II and III, Alpha, and Pentium III) show that tiling with block data layout achieves up to 50 percent performance improvement over other techniques that use conventional layouts. Morton layout is also analyzed and compared with block data layout. Experimental results show that matrix multiplication using block data layout is up to 15 percent faster than that using Morton data layout.},
+  journal   = {IEEE Trans. Parallel Distrib. Syst.},
+  month     = {jul},
+  pages     = {640–654},
+  keywords  = {tiling, memory hierarchy., cache misses, TLB misses, Block data layout}
+}
+
 @article{Suzuki2021_Qulacs,
 	doi 		= {10.22331/q-2021-10-06-559},
 	url 		= {https://doi.org/10.22331/q-2021-10-06-559},
@@ -143,7 +160,7 @@ year = {2023}
 @inbook{DeRaedt2006_ComputationalMethodsForSimulatingQuantumComputers,
 	title 		= "Computational Methods for Simulating Quantum Computers",
 	abstract 	= "This review gives a survey of numerical algorithms and software to simulate quantum computers. It covers the basic concepts of quantum computation and quantum algorithms and includes a few examples that illustrate the use of simulation software for ideal and physical models of quantum computers.",
-	author 		= "Raedt, \{H. De\} and K. Michielsen",
+	author 		= "Raedt, H. De and K. Michielsen",
 	note 		= "Relation: http://www.rug.nl/zernike/ date\_submitted:2007 Rights: University of Groningen. Zernike Institute for Advanced Materials",
 	year 		= "2006",
 	language 	= "English",
@@ -175,6 +192,18 @@ year = {2023}
 	month 		= September
 }
 
+@inproceedings{Doi2020CacheBlockingTechniqueToLargeScaleQuantumComputingSimulationOnSupercomputers,
+  title     = {Cache Blocking Technique to Large Scale Quantum Computing Simulation on Supercomputers},
+  url       = {http://dx.doi.org/10.1109/QCE49297.2020.00035},
+  DOI       = {10.1109/qce49297.2020.00035},
+  booktitle = {2020 IEEE International Conference on Quantum Computing and Engineering (QCE)},
+  publisher = {IEEE},
+  author    = {Doi, Jun and Horii, Hiroshi},
+  year      = {2020},
+  month     = {oct},
+  pages     = {212–222}
+}
+
 @inproceedings{Larsen2000_ExploitingSuperwordLevelParallelismWithMultimediaInstructionSet,
 	author		= {Larsen, Samuel and Amarasinghe, Saman},
 	title 		= {Exploiting superword level parallelism with multimedia instruction sets},
@@ -186,7 +215,18 @@ year = {2023}
 	doi 		= {10.1145/349299.349320}
 }
 
-@inrpoceedings{Monil2020_UnderstandingTheImpactOfMemoryAccessPatternsInIntelProcessors,
+@inproceedings{Li2020_DensityMatrixQuantumCircuitSimulationViaTheBSPMachineOnModernGPUClusters,
+  author={Li, Ang and Subasi, Omer and Yang, Xiu and Krishnamoorthy, Sriram},
+  booktitle={SC20: International Conference for High Performance Computing, Networking, Storage and Analysis}, 
+  title={Density Matrix Quantum Circuit Simulation via the BSP Machine on Modern GPU Clusters}, 
+  year={2020},
+  volume={},
+  number={},
+  pages={1-15},
+  keywords={Computational modeling;Graphics processing units;Programming;Supercomputers;Integrated circuit modeling;Quantum circuit;Standards},
+  doi={10.1109/SC41405.2020.00017}}
+
+@inproceedings{Monil2020_UnderstandingTheImpactOfMemoryAccessPatternsInIntelProcessors,
 	author 		= { Monil, Mohammad Alaul Haque and Lee, Seyong and Vetter, Jeffrey S. and Malony, Allen D. },
 	booktitle 	= { 2020 IEEE/ACM Workshop on Memory Centric High Performance Computing (MCHPC) },
 	title 		= {{ Understanding the Impact of Memory Access Patterns in Intel Processors }},
@@ -231,64 +271,73 @@ year = {2023}
 
 %%% MISCELLANEOUS
 
+@misc{Gustavson2009RFPFCholeskyAlgorithm,
+  title         = {Rectangular Full Packed Format for Cholesky's Algorithm: Factorization, Solution and Inversion}, 
+  author        = {Fred G. Gustavson and Jerzy Wasniewski and Jack J. Dongarra and Julien Langou},
+  year          = {2009},
+  eprint        = {0901.1696},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.MS},
+  url           = {https://arxiv.org/abs/0901.1696}, 
+}
 @misc{Imamura2022_mpiQulacs,
-	title			= {mpiQulacs: A Distributed Quantum Computer Simulator for A64FX-based Cluster Systems}, 
-	author			= {Satoshi Imamura and Masafumi Yamazaki and Takumi Honda and Akihiko Kasagi and Akihiro Tabuchi and Hiroshi Nakao and Naoto Fukumoto and Kohta Nakashima},
-	year			= {2022},
-	eprint			= {2203.16044},
+	title			    = {mpiQulacs: A Distributed Quantum Computer Simulator for A64FX-based Cluster Systems}, 
+	author			  = {Satoshi Imamura and Masafumi Yamazaki and Takumi Honda and Akihiko Kasagi and Akihiro Tabuchi and Hiroshi Nakao and Naoto Fukumoto and Kohta Nakashima},
+	year			    = {2022},
+	eprint			  = {2203.16044},
 	archivePrefix	= {arXiv},
 	primaryClass	= {cs.DC},
-	url				= {https://arxiv.org/abs/2203.16044}, 
+	url				    = {https://arxiv.org/abs/2203.16044}, 
 }
 
 @misc{Jones2023_DistributedSimulationOfStatevectorsAndDensityMatrices,
-	title			= {Distributed Simulation of Statevectors and Density Matrices}, 
-	author			= {Tyson Jones and Bálint Koczor and Simon C. Benjamin},
-	year			= {2023},
-	eprint			= {2311.01512},
+	title			    = {Distributed Simulation of Statevectors and Density Matrices}, 
+	author			  = {Tyson Jones and Bálint Koczor and Simon C. Benjamin},
+	year			    = {2023},
+	eprint			  = {2311.01512},
 	archivePrefix	= {arXiv},
 	primaryClass	= {quant-ph},
-	url				= {https://arxiv.org/abs/2311.01512}, 
+	url				    = {https://arxiv.org/abs/2311.01512}, 
 }
 
 @misc{Smelyanskiy2016_qhipsterTheQuantumHighPerformanceSoftwareTestingEnvironment,
-	title			= {qHiPSTER: The Quantum High Performance Software Testing Environment}, 
-  	author			= {Mikhail Smelyanskiy and Nicolas P. D. Sawaya and Alán Aspuru-Guzik},
-  	year			= {2016},
-  	eprint			= {1601.07195},
-  	archivePrefix	= {arXiv},
-  	primaryClass	= {quant-ph},
-  	url				= {https://arxiv.org/abs/1601.07195}, 
+	title			    = {qHiPSTER: The Quantum High Performance Software Testing Environment}, 
+  author			  = {Mikhail Smelyanskiy and Nicolas P. D. Sawaya and Alán Aspuru-Guzik},
+  year			    = {2016},
+  eprint			  = {1601.07195},
+  archivePrefix	= {arXiv},
+  primaryClass	= {quant-ph},
+  url				    = {https://arxiv.org/abs/1601.07195}, 
 }
 
 @misc{Obenland1998_AParallelQuantumComputerSimulator,
-	title			= {A Parallel Quantum Computer Simulator}, 
-	author			= {Kevin M. Obenland and Alvin M. Despain},
-	year			= {1998},
-	eprint			= {quant-ph/9804039},
+	title			    = {A Parallel Quantum Computer Simulator}, 
+	author			  = {Kevin M. Obenland and Alvin M. Despain},
+	year			    = {1998},
+	eprint			  = {quant-ph/9804039},
 	archivePrefix	= {arXiv},
 	primaryClass	= {quant-ph},
-	url				= {https://arxiv.org/abs/quant-ph/9804039}, 
+	url				    = {https://arxiv.org/abs/quant-ph/9804039}, 
 }
 
 @misc{Wang2024_Queen,
-	title			= {Queen: A quick, scalable, and comprehensive quantum circuit simulation for supercomputing}, 
-	author			= {Chuan-Chi Wang and Yu-Cheng Lin and Yan-Jie Wang and Chia-Heng Tu and Shih-Hao Hung},
-	year			= {2024},
-	eprint			= {2406.14084},
+	title			    = {Queen: A quick, scalable, and comprehensive quantum circuit simulation for supercomputing}, 
+	author			  = {Chuan-Chi Wang and Yu-Cheng Lin and Yan-Jie Wang and Chia-Heng Tu and Shih-Hao Hung},
+	year			    = {2024},
+	eprint			  = {2406.14084},
 	archivePrefix	= {arXiv},
 	primaryClass	= {quant-ph},
-	url				= {https://arxiv.org/abs/2406.14084}, 
+	url				    = {https://arxiv.org/abs/2406.14084}, 
 }
 
 @misc{Young2023_SimulatingQuantumComputationsOnClassicalMachines,
-	title			= {Simulating Quantum Computations on Classical Machines: A Survey}, 
-	author			= {Kieran Young and Marcus Scese and Ali Ebnenasir},
-	year			= {2023},
-	eprint			= {2311.16505},
+	title			    = {Simulating Quantum Computations on Classical Machines: A Survey}, 
+	author			  = {Kieran Young and Marcus Scese and Ali Ebnenasir},
+	year			    = {2023},
+	eprint			  = {2311.16505},
 	archivePrefix	= {arXiv},
 	primaryClass	= {quant-ph},
-	url				= {https://arxiv.org/abs/2311.16505}, 
+	url				    = {https://arxiv.org/abs/2311.16505}, 
 }
 
 %%% PHD THESIS
