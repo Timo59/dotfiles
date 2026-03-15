@@ -4,8 +4,8 @@
 # =============================================================================
 # Mirrors the behavior of pdfLaTeXWithBuild.engine:
 # - Compiles LaTeX with auxiliary files in ./.build directory
-# - Runs pdflatex 3x for references, includes BibTeX support
-# - Moves PDF back to source folder for clean directory structure
+# - Runs pdflatex 2x for references, includes BibTeX support
+# - PDF stays in .build/ directory
 # =============================================================================
 
 # Note: not using set -e because pdflatex returns non-zero on warnings
@@ -62,41 +62,21 @@ check_compilation() {
 }
 
 # First pass
-echo "--- Pass 1/3: Initial compilation ---"
+echo "--- Pass 1/2: Initial compilation ---"
 pdflatex -interaction=nonstopmode -output-directory="$builddir" "$dirname/$filename.tex"
 check_compilation
 
-# Run BibTeX on the .aux file in the build folder
-echo "--- Running BibTeX ---"
-(cd "$builddir" && bibtex "$filename") || echo "WARNING: BibTeX returned non-zero (may be expected if no citations)"
-
-# Copy bbl file to source dir (needed for some setups)
-if [ -f "$builddir/${filename}.bbl" ]; then
-    cp "$builddir/${filename}.bbl" "$dirname/"
+# Run BibTeX only if the aux file contains \citation commands
+if grep -q '\\citation' "$builddir/$filename.aux" 2>/dev/null; then
+    echo "--- Running BibTeX ---"
+    (cd "$builddir" && bibtex "$filename") || echo "WARNING: BibTeX returned non-zero"
+else
+    echo "--- Skipping BibTeX (no citations) ---"
 fi
 
 # Second pass (resolve citations)
-echo "--- Pass 2/3: Resolving citations ---"
+echo "--- Pass 2/2: Resolving citations ---"
 pdflatex -interaction=nonstopmode -output-directory="$builddir" "$dirname/$filename.tex"
 check_compilation
 
-# Third pass (resolve references)
-echo "--- Pass 3/3: Resolving references ---"
-pdflatex -interaction=nonstopmode -output-directory="$builddir" "$dirname/$filename.tex"
-check_compilation
-
-# Move PDF back to the source folder
-mv "$builddir/${filename}.pdf" "$dirname/"
-
-# Clean any auxiliary files that might have been created in the main directory
-# Note: bbl/blg are kept for reference resolution
-rm -f "$dirname/$filename.aux" \
-      "$dirname/$filename.out" \
-      "$dirname/$filename.log" \
-      "$dirname/$filename.toc" \
-      "$dirname/$filename.lof" \
-      "$dirname/$filename.lot" \
-      "$dirname/$filename.loc" \
-      "$dirname/$filename.soc" 2>/dev/null || true
-
-echo "=== Compilation complete: $dirname/$filename.pdf ==="
+echo "=== Compilation complete: $builddir/$filename.pdf ==="

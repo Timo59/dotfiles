@@ -25,6 +25,23 @@ if [[ ! "$(basename "$PWD")" == ".dotfiles" ]]; then
   exit 1
 fi
 
+# Set hostname on first run (machine-specific configs key off hostname -s)
+CURRENT_HOST="$(hostname -s)"
+if [[ "$CURRENT_HOST" != "prometheus" && "$CURRENT_HOST" != "lucifer" ]]; then
+  echo "Current hostname '$CURRENT_HOST' is not a known machine."
+  echo "Available hostnames: prometheus (MacBook Pro), lucifer (desktop)"
+  printf "Enter hostname for this machine: "
+  read NEW_HOST
+  if [[ -n "$NEW_HOST" ]]; then
+    sudo scutil --set ComputerName "$NEW_HOST"
+    sudo scutil --set HostName "$NEW_HOST"
+    sudo scutil --set LocalHostName "$NEW_HOST"
+    echo "[DONE] Hostname set to '$NEW_HOST'"
+  else
+    echo "[WARNING] No hostname entered, keeping '$CURRENT_HOST'"
+  fi
+fi
+
 echo "Setting up your Mac..."
 
 # Check whether .oh-my-zsh file is in home directory and install otherwise.
@@ -207,9 +224,23 @@ if [ -f ./com.user.gitupdate.plist.template ]; then
   sed "s|DOTFILES_PATH|$PWD|g" ./com.user.gitupdate.plist.template > "$PLIST_DEST"
   echo "[DONE] Generated gitupdate.plist in LaunchAgents"
 
-  launchctl load "$PLIST_DEST"
+  launchctl bootout "gui/$(id -u)" "$PLIST_DEST" 2>/dev/null || true
+  launchctl bootstrap "gui/$(id -u)" "$PLIST_DEST"
 else
   echo "[WARNING] com.user.gitupdate.plist.template not found in $(pwd), skipping gitupdate"
+fi
+
+# Generate dock.plist from template and load it
+if [ -f ./com.user.dock.plist.template ]; then
+  DOCK_PLIST_DEST="$HOME/Library/LaunchAgents/com.user.dock.plist"
+  mkdir -p "$HOME/Library/LaunchAgents"
+
+  [ -L "$DOCK_PLIST_DEST" ] && rm "$DOCK_PLIST_DEST"
+
+  sed "s|DOTFILES_PATH|$PWD|g" ./com.user.dock.plist.template > "$DOCK_PLIST_DEST"
+  echo "[DONE] Generated dock.plist in LaunchAgents (activates at next login)"
+else
+  echo "[WARNING] com.user.dock.plist.template not found in $(pwd), skipping dock LaunchAgent"
 fi
 
 # Symlink vpn scripts to usr/local/bin
@@ -236,19 +267,10 @@ fi
 # Symlink the Mackup config file to the home directory
 # ln -s ./.mackup.cfg $HOME/.mackup.cfg
 
-# Apply macOS system settings
+# Apply macOS system settings, machine-specific overrides, and configure Dock
 if [ -f "./macos.sh" ]; then
   chmod +x "./macos.sh"
   "./macos.sh"
-  echo "[DONE] Applied macOS system settings"
 else
   echo "[WARNING] macos.sh not found, skipping"
-fi
-
-# Apply machine-specific macOS overrides
-MACHINE_MACOS="./macos.$(hostname -s).sh"
-if [ -f "$MACHINE_MACOS" ]; then
-  chmod +x "$MACHINE_MACOS"
-  "$MACHINE_MACOS"
-  echo "[DONE] Applied machine-specific macOS settings"
 fi

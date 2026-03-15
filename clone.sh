@@ -37,6 +37,7 @@ until nc -zw2 github.com 22 2>/dev/null; do
 done
 
 CODE_DIR="$HOME/Code"
+PROJECT_DIR="$HOME/Projects"
 
 # Check if Code directory exists
 if [ ! -d "$CODE_DIR" ]; then
@@ -58,11 +59,12 @@ declare -A REPOS
 REPOS=(
   [git@github.com:Timo59/dotfiles.git]="$HOME/.dotfiles"
   [git@github.com:Timo59/HamSim.git]="$CODE_DIR/HamSim" 
-  [git@github.com:Timo59/optlib.git]="$CODE_DIR/optlib" 
+  [git@gitlab.uni-hannover.de:timo.ziegler/optlib.git]="$CODE_DIR/optlib" 
   [git@gitlab.uni-hannover.de:timo.ziegler/qsim.git]="$CODE_DIR/qlib" 
   [git@github.com:Timo59/QonvexOptimization.git]="$CODE_DIR/QonvexOptimization" 
   [git@github.com:Timo59/TensorNetworks.git]="$CODE_DIR/TensorNetworks"
   [git@gitlab.uni-hannover.de:timo.ziegler/QCP_braket.git]="$CODE_DIR/QCP_braket"
+  [git@gitlab.uni-hannover.de:timo.ziegler/thesis.git]="$PROJECT_DIR/thesis"
 )
 
 # Function to clone repository

@@ -40,6 +40,7 @@ require("lazy").setup({
       vim.g.vimtex_compiler_method = "generic"
       vim.g.vimtex_compiler_generic = {
         command = vim.fn.expand("~/.dotfiles/latex-compile.sh") .. " @tex",
+        out_dir = ".build",
       }
 
       -- Quickfix settings
@@ -88,15 +89,12 @@ require("lazy").setup({
   {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      local telescope = require("telescope")
-      local builtin = require("telescope.builtin")
-
-      vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
-      vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Grep in files" })
-      vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find buffers" })
-      vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Help tags" })
-    end,
+    keys = {
+      { "<leader>ff", function() require("telescope.builtin").find_files() end, desc = "Find files" },
+      { "<leader>fg", function() require("telescope.builtin").live_grep() end, desc = "Grep in files" },
+      { "<leader>fb", function() require("telescope.builtin").buffers() end, desc = "Find buffers" },
+      { "<leader>fh", function() require("telescope.builtin").help_tags() end, desc = "Help tags" },
+    },
   },
 
   -- Auto-pairs for brackets
@@ -109,6 +107,7 @@ require("lazy").setup({
   -- Comment.nvim for easy commenting
   {
     "numToStr/Comment.nvim",
+    event = "VeryLazy",
     config = true,
   },
 
@@ -117,6 +116,7 @@ require("lazy").setup({
   -- Status line
   {
     "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
     config = function()
       require("lualine").setup({
         options = {
@@ -137,6 +137,7 @@ require("lazy").setup({
   -- Git signs in gutter
   {
     "lewis6991/gitsigns.nvim",
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
       require("gitsigns").setup({
         signs = {
@@ -229,10 +230,10 @@ opt.updatetime = 250
 local keymap = vim.keymap.set
 
 -- Better window navigation
-keymap("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
-keymap("n", "<C-j>", "<C-w>j", { desc = "Move to bottom window" })
-keymap("n", "<C-k>", "<C-w>k", { desc = "Move to top window" })
-keymap("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+keymap("n", "<C-h>", "<C-w>h", { desc = "Move to left window", silent = true })
+keymap("n", "<C-j>", "<C-w>j", { desc = "Move to bottom window", silent = true })
+keymap("n", "<C-k>", "<C-w>k", { desc = "Move to top window", silent = true })
+keymap("n", "<C-l>", "<C-w>l", { desc = "Move to right window", silent = true })
 
 -- Buffer navigation
 keymap("n", "<S-h>", ":bprevious<CR>", { desc = "Previous buffer", silent = true })
@@ -250,10 +251,10 @@ keymap("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
 keymap("v", "K", ":m '<-2<CR>gv=gv", { silent = true })
 
 -- Keep cursor centered when scrolling
-keymap("n", "<C-d>", "<C-d>zz")
-keymap("n", "<C-u>", "<C-u>zz")
-keymap("n", "n", "nzzzv")
-keymap("n", "N", "Nzzzv")
+keymap("n", "<C-d>", "<C-d>zz", { silent = true })
+keymap("n", "<C-u>", "<C-u>zz", { silent = true })
+keymap("n", "n", "nzzzv", { silent = true })
+keymap("n", "N", "Nzzzv", { silent = true })
 
 -- Quick save
 keymap("n", "<leader>w", ":w<CR>", { desc = "Save file", silent = true })
@@ -279,16 +280,7 @@ autocmd("FileType", {
   group = latex_group,
   pattern = "tex",
   callback = function()
-    local opts = { buffer = true }
-
-    -- VimTeX commands with localleader
-    keymap("n", "<localleader>ll", "<cmd>VimtexCompile<CR>", vim.tbl_extend("force", opts, { desc = "Compile LaTeX" }))
-    keymap("n", "<localleader>lv", "<cmd>VimtexView<CR>", vim.tbl_extend("force", opts, { desc = "View PDF" }))
-    keymap("n", "<localleader>lt", "<cmd>VimtexTocToggle<CR>", vim.tbl_extend("force", opts, { desc = "Toggle TOC" }))
-    keymap("n", "<localleader>lc", "<cmd>VimtexClean<CR>", vim.tbl_extend("force", opts, { desc = "Clean aux files" }))
-    keymap("n", "<localleader>le", "<cmd>VimtexErrors<CR>", vim.tbl_extend("force", opts, { desc = "Show errors" }))
-    keymap("n", "<localleader>ls", "<cmd>VimtexStop<CR>", vim.tbl_extend("force", opts, { desc = "Stop compiler" }))
-    keymap("n", "<localleader>li", "<cmd>VimtexInfo<CR>", vim.tbl_extend("force", opts, { desc = "VimTeX info" }))
+    keymap("n", "<localleader>ls", "<cmd>VimtexStop<CR>", { buffer = true, desc = "Stop compiler" })
 
     -- Enable spell checking for LaTeX files
     vim.opt_local.spell = true
@@ -308,8 +300,10 @@ autocmd("TextYankPost", {
   end,
 })
 
--- Return to last edit position
+-- Return to last edit position / resize splits
+local misc_group = augroup("MiscSettings", { clear = true })
 autocmd("BufReadPost", {
+  group = misc_group,
   callback = function()
     local mark = vim.api.nvim_buf_get_mark(0, '"')
     local lcount = vim.api.nvim_buf_line_count(0)
@@ -321,6 +315,7 @@ autocmd("BufReadPost", {
 
 -- Resize splits when window is resized
 autocmd("VimResized", {
+  group = misc_group,
   callback = function()
     vim.cmd("tabdo wincmd =")
   end,

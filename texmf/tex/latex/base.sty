@@ -62,47 +62,35 @@
 %%%%%% OPERATIONS
 	%%% UNARY
 		\DeclarePairedDelimiter\abs{\lvert}{\rvert}%					% Absolute value
-		\makeatletter		% Swap the definition of \abs* and \abs, 
+		% Swap the definition of \abs* and \abs,
 		\let\oldabs\abs	% so that \abs resizes the size of the brackets,
 		\def\abs{\@ifstar{\oldabs}{\oldabs*}}	% and the starred version does not.
-		\makeatother
 		%
 		\DeclarePairedDelimiter\norm{\lVert}{\rVert}%				% Norm
-		\makeatletter
 		\let\oldnorm\norm
 		\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
-		\makeatother
 		%
 		\DeclarePairedDelimiter\rspan{\langle}{\rangle_{\R}}%	%Linear span over the real numbers
-		\makeatletter
 		\let\oldrspan\rspan
 		\def\rspan{\@ifstar{\oldrspan}{\oldrspan*}}
-		\makeatother
 		%
 		\DeclarePairedDelimiter\cspan{\langle}{\rangle_{\C}}%	%Linear span over the complex numbers
-		\makeatletter
 		\let\oldcspan\cspan
 		\def\cspan{\@ifstar{\oldcspan}{\oldcspan*}}
-		\makeatother
 		%
 		\DeclarePairedDelimiter\bra{\langle}{\rvert}%					% Bra
-		\makeatletter
 		\let\oldbra\bra
 		\def\bra{\@ifstar{\oldbra}{\oldbra*}}
-		\makeatother
 		%
 		\DeclarePairedDelimiter\ket{\lvert}{\rangle}%					% Ket
-		\makeatletter
 		\let\oldket\ket
-		\def\ket{\@ifstar{\oldket}{\oldket}}
-		\makeatother
+		\def\ket{\@ifstar{\oldket}{\oldket*}}
 		%
 		\DeclareMathOperator{\tr}{tr}	%										% Trace
 		\newcommand{\adj}[1]{{#1}^\dag}%								% Adjoint
 		\newcommand{\cc}[1]{\overline{#1}}%							% Complex conjugate
 		
 	%%% BINARY
-		\makeatletter
 		\newcommand{\braket}{\@ifstar\braket@star\braket@nostar}	% Braket
 		\newcommand{\braket@nostar}[1]{%	% Auto-sized by default
 			\@ifnextchar\bgroup
@@ -111,12 +99,10 @@
 		}
 		\newcommand{\braket@star}[1]{%		% Normal-sized when starred
 			\@ifnextchar\bgroup
-				{\braketInternalFixed{#1}}%		
+				{\braketInternalFixed{#1}}%
 				{\braketInternalFixed{#1}{#1}}%
 		}
-		\makeatother
 		%
-		\makeatletter
 		\newcommand{\inner}{\@ifstar\inner@star\inner@nostar}	% Inner product
 		\newcommand{\inner@nostar}[1]{%	% Auto-sized by default
 			\@ifnextchar\bgroup
@@ -125,12 +111,10 @@
 		}
 		\newcommand{\inner@star}[1]{%		% Normal-sized when starred
 			\@ifnextchar\bgroup
-				{\innerInternal{#1}}%		
+				{\innerInternal{#1}}%
 				{\innerInternal{#1}{#1}}%
 		}
-		\makeatother
 		%
-		\makeatletter
 		\newcommand{\ketbra}{\@ifstar\ketbra@star\ketbra@nostar}	% Ketbra
 		\newcommand{\ketbra@nostar}[1]{%	% Auto-sized by default
 			\@ifnextchar\bgroup
@@ -139,10 +123,9 @@
 		}
 		\newcommand{\ketbra@star}[1]{%		% Normal-sized when starred
 			\@ifnextchar\bgroup
-				{\ketbraInternal{#1}}%		
+				{\ketbraInternal{#1}}%
 				{\ketbraInternal{#1}{#1}}%
 		}
-		\makeatother
 		%
 		% Auto-sized version (uses \middle)
   		\DeclarePairedDelimiterX\braketInternalAuto[2]{\langle}{\rangle}{#1 \,\middle\vert\, #2}
@@ -151,16 +134,12 @@
 		\DeclarePairedDelimiterX\innerInternal[2]{\langle}{\rangle}{#1, #2}	% Inner product
 		\DeclarePairedDelimiterX\ketbraInternal[2]{\lvert}{\rvert}{#1 \rangle \! \langle #2}	% Ketbra
 		\DeclarePairedDelimiterX\expval[2]{\langle}{\rangle}{#2 \lvert #1 \rvert #2}					% Expectation value
-		\makeatletter
 		\let\oldexpval\expval
-		\def\expval{\@ifstar{\oldexpval}{\oldexpval}}
-		\makeatother
+		\def\expval{\@ifstar{\oldexpval}{\oldexpval*}}
 		%
 		\DeclarePairedDelimiterX\matrixel[3]{\langle}{\rangle}{#1 \lvert #2 \rvert #3}				% Matrix element
-		\makeatletter
 		\let\oldmatrixel\matrixel
-		\def\matrixel{\@ifstar{\oldmatrixel}{\oldmatrixel}}
-		\makeatother
+		\def\matrixel{\@ifstar{\oldmatrixel}{\oldmatrixel*}}
 		
 %%%%%% ENVIRONMENTS
 		\newtheorem{definition}{Definition}[section]

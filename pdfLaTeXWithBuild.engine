@@ -2,9 +2,18 @@
 # =============================================================================
 # pdfLaTeXWithBuild.engine - Custom TeXShop compilation engine
 # =============================================================================
-# Compiles LaTeX with auxiliary files in ./build directory, keeping source
-# folder clean. Runs pdflatex 3x for references, includes BibTeX support.
+# Compiles LaTeX with auxiliary files in ./.build directory. All output,
+# including the PDF, stays in .build/. Runs pdflatex 2x with BibTeX support.
 # =============================================================================
+
+if [ -z "$1" ]; then
+    echo "ERROR: No input file provided"
+    exit 1
+fi
+if [ ! -f "$1" ]; then
+    echo "ERROR: File '$1' not found"
+    exit 1
+fi
 
 # Extract the filename without path and extension
 filename="$(basename "$1" .tex)"
@@ -41,18 +50,5 @@ bibtex "$builddir/$filename" 2>/dev/null || true
 # Compile the .tex file for a second time (to resolve citations)
 pdflatex -interaction=nonstopmode -output-directory="$builddir" "$1"
 
-# Compile the .tex file for a third time (to resolve references)
-pdflatex -interaction=nonstopmode -output-directory="$builddir" "$1"
-
-# Move PDF back to the source folder
-mv "$builddir/${filename}.pdf" "$dirname/"
-
-# Also clean any auxiliary files that might have been created in the main directory
-rm -f "$dirname/$filename.aux" \
-      "$dirname/$filename.out" \
-      "$dirname/$filename.log" \
-      "$dirname/$filename.toc" \
-      "$dirname/$filename.lof" \
-      "$dirname/$filename.lot" \
-      "$dirname/$filename.loc" \
-      "$dirname/$filename.soc" 2>/dev/null || true
+# Reload Skim with the compiled PDF
+/Applications/Skim.app/Contents/SharedSupport/displayline -revert -activate 1 "$builddir/$filename.pdf" "$1"

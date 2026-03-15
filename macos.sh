@@ -1,15 +1,26 @@
 #!/bin/bash
 # =============================================================================
-# macos.sh - macOS system preferences
+# macos.sh - macOS system preferences and Dock configuration
 # =============================================================================
-# Applies sensible macOS defaults. Safe to re-run (idempotent defaults write).
-# Machine-specific overrides go in macos.<hostname>.sh.
+# Applies sensible macOS defaults and configures pinned Dock applications.
+# Safe to re-run (idempotent). Also run at login via LaunchAgent.
+# Machine-specific overrides (hostname, energy, sudo) go in macos.<hostname>.sh
+# and are only applied by setup.sh.
 #
 # Based on https://mths.be/macos — trimmed to settings actively used.
 # =============================================================================
 
+# When run from LaunchAgent at login, wait for Dock to be ready
+if ! pgrep -x Dock >/dev/null; then
+    for i in $(seq 1 30); do
+        pgrep -x Dock >/dev/null && break
+        sleep 1
+    done
+    sleep 2  # Settle time: process running != plist fully loaded
+fi
+
 # Close System Settings to prevent it from overriding changes
-osascript -e 'tell application "System Preferences" to quit' 2>/dev/null || true
+osascript -e 'tell application "System Settings" to quit' 2>/dev/null || true
 
 ###############################################################################
 # General UI/UX                                                               #
@@ -98,7 +109,7 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
     Privileges -bool true
 
 ###############################################################################
-# Dock                                                                        #
+# Dock: preferences                                                           #
 ###############################################################################
 
 # Minimize windows into their application's icon
@@ -109,17 +120,6 @@ defaults write com.apple.dock mineffect -string "scale"
 
 # Disable static-only mode (would hide all pinned apps, showing only running ones)
 defaults write com.apple.dock static-only -bool false
-
-# Pin specific applications to the Dock
-dockutil --remove all --no-restart
-dockutil --add /System/Library/CoreServices/Finder.app --no-restart
-dockutil --add /System/Applications/Utilities/Terminal.app --no-restart
-dockutil --add /System/Applications/Mail.app --no-restart
-dockutil --add /Applications/Safari.app --no-restart
-dockutil --add /Applications/Obsidian.app --no-restart
-dockutil --add /Applications/Spotify.app --no-restart
-dockutil --add /Applications/Discord.app --no-restart
-dockutil --add /System/Applications/Clock.app --no-restart
 
 # Do not show recently used apps in the Dock (quit apps are removed immediately)
 defaults write com.apple.dock show-recents -bool false
@@ -135,12 +135,52 @@ defaults write com.apple.dock autohide-delay -float 0
 defaults write com.apple.dock autohide-time-modifier -float 0.5
 
 ###############################################################################
+# Dock: pinned application list                                               #
+###############################################################################
+
+DOCK_APPS=(
+    "/System/Library/CoreServices/Finder.app"
+    "/System/Applications/Utilities/Terminal.app"
+    "/System/Applications/Mail.app"
+    "/Applications/Safari.app"
+    "/Applications/Obsidian.app"
+    "/Applications/Spotify.app"
+    "/Applications/Discord.app"
+    "/System/Applications/Clock.app"
+)
+
+# Machine-specific additions
+case "$(hostname -s)" in
+    lucifer)  DOCK_APPS+=("/Applications/WhatsApp.app") ;;
+esac
+
+dockutil --remove all --no-restart
+
+for app in "${DOCK_APPS[@]}"; do
+    if [ -d "$app" ]; then
+        dockutil --add "$app" --no-restart
+    else
+        echo "[WARNING] app not found, skipping: $app"
+    fi
+done
+
+###############################################################################
+# Machine-specific overrides                                                   #
+###############################################################################
+
+MACHINE_MACOS="$(dirname "$0")/macos.$(hostname -s).sh"
+if [ -f "$MACHINE_MACOS" ]; then
+    source "$MACHINE_MACOS"
+fi
+
+###############################################################################
 # Apply changes                                                               #
 ###############################################################################
 
-# Restart affected applications
-for app in "Finder" "Dock" "SystemUIServer"; do
-    killall "$app" &>/dev/null || true
-done
+# Flush cfprefsd AFTER writes so the Dock can't save stale state on restart
+killall cfprefsd 2>/dev/null || true
+sleep 2
+killall Dock 2>/dev/null || true
+killall Finder &>/dev/null || true
 
-echo "[DONE] macOS system preferences applied"
+echo "[DONE] macOS system preferences and Dock configured"
