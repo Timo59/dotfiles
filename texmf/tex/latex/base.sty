@@ -144,8 +144,14 @@
 %%%%%% ENVIRONMENTS
 		\newtheorem{definition}{Definition}[section]
 		\newtheorem{theorem}{Theorem}[section]
-		\newtheorem{lemma}[theorem]{Lemma}
-		\newtheorem{proposition}[theorem]{Proposition}
-		\newtheorem{corollary}[theorem]{Corollary}
+		\newaliascnt{lemma}{theorem}
+		\newtheorem{lemma}[lemma]{Lemma}
+		\aliascntresetthe{lemma}
+		\newaliascnt{proposition}{theorem}
+		\newtheorem{proposition}[proposition]{Proposition}
+		\aliascntresetthe{proposition}
+		\newaliascnt{corollary}{theorem}
+		\newtheorem{corollary}[corollary]{Corollary}
+		\aliascntresetthe{corollary}
 		\newtheorem{example}{Example}[section]
 		
