@@ -89,10 +89,6 @@
 		\DeclareMathOperator{\tr}{tr}	%										% Trace
 		\newcommand{\adj}[1]{{#1}^\dag}%								% Adjoint
 		\newcommand{\cc}[1]{\overline{#1}}%							% Complex conjugate
-		%
-		\DeclarePairedDelimiter\choiket{\lvert\!\lvert}{\rangle\!\rangle}%					% Ket
-		\let\oldchoiket\choiket
-		\def\choiket{\@ifstar{\oldchoiket}{\oldchoiket*}}
 		
 	%%% BINARY
 		\newcommand{\braket}{\@ifstar\braket@star\braket@nostar}	% Braket
