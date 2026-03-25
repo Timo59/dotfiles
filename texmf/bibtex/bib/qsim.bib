@@ -83,7 +83,25 @@
 	abstract	= {Classical simulation of quantum computers will continue to play an essential role in the progress of quantum information science, both for numerical studies of quantum algorithms and for modeling noise and errors. Here we introduce the latest release of Intel Quantum Simulator (IQS), formerly known as qHiPSTER. The high-performance computing (HPC) capability of the software allows users to leverage the available hardware resources provided by supercomputers, as well as available public cloud computing infrastructure. To take advantage of the latter platform, together with the distributed simulation of each separate quantum state, IQS allows to subdivide the computational resources to simulate a pool of related circuits in parallel. We highlight the technical implementation of the distributed algorithm and details about the new pool functionality. We also include some basic benchmarks (up to 42 qubits) and performance results obtained using HPC infrastructure. Finally, we use IQS to emulate a scenario in which many quantum devices are running in parallel to implement the quantum approximate optimization algorithm, using particle swarm optimization as the classical subroutine. The results demonstrate that the hyperparameters of this classical optimization algorithm depends on the total number of quantum circuit simulations one has the bandwidth to perform. Intel Quantum Simulator has been released open-source with permissive licensing and is designed to simulate a large number of qubits, to emulate multiple quantum devices running in parallel, and/or to study the effects of decoherence and other hardware errors on calculation results.}
 }
 
-@article{Jin2022_QPayer,
+@article{Gustavson2007_Algorithm865,
+author    = {Gustavson, Fred G. and Reid, John K. and Wa\'{s}niewski, Jerzy},
+title     = {Algorithm 865: Fortran 95 subroutines for Cholesky factorization in block hybrid format},
+year      = {2007},
+publisher = {Association for Computing Machinery},
+address   = {New York, NY, USA},
+volume    = {33},
+number    = {1},
+issn      = {0098-3500},
+url       = {https://doi.org/10.1145/1206040.1206048},
+doi       = {10.1145/1206040.1206048},
+abstract  = {We present subroutines for the Cholesky factorization of a positive-definite symmetric matrix and for solving corresponding sets of linear equations. They exploit cache memory by using the block hybrid format proposed by the authors in a companion article. The matrix is packed into n(n + 1)/2 real variables, and the speed is usually better than that of the LAPACK algorithm that uses full storage (n2 variables). Included are subroutines for rearranging a matrix whose upper or lower-triangular part is packed by columns to this format and for the inverse rearrangement. Also included is a kernel subroutine that is used for the Cholesky factorization of the diagonal blocks since it is suitable for any positive-definite symmetric matrix that is small enough to be held in cache. We provide a comprehensive test program and simple example programs.},
+journal   = {ACM Trans. Math. Softw.},
+month     = {mar},
+pages     = {8–es},
+keywords  = {BLAS, Cholesky factorization and solution, Real symmetric matrices, linear systems of equations, novel packed matrix data structures, positive definite matrices, recursive algorithms}
+}
+
+@article{Jin2022_QPlayer,
 	author		= {Jin, Ki-Sung and Cha, Gyu-Il},
 	title		= {QPlayer: Lightweight, scalable, and fast quantum simulator},
 	journal		= {ETRI Journal},
