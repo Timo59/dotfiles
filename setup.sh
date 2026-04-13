@@ -243,6 +243,23 @@ else
   echo "[WARNING] com.user.dock.plist.template not found in $(pwd), skipping dock LaunchAgent"
 fi
 
+# Generate claudecleanup.plist from template and load it
+if [ -f ./com.user.claudecleanup.plist.template ]; then
+  CLAUDE_PLIST_DEST="$HOME/Library/LaunchAgents/com.user.claudecleanup.plist"
+  mkdir -p "$HOME/Library/LaunchAgents"
+
+  [ -L "$CLAUDE_PLIST_DEST" ] && rm "$CLAUDE_PLIST_DEST"
+
+  sed "s|DOTFILES_PATH|$PWD|g" ./com.user.claudecleanup.plist.template > "$CLAUDE_PLIST_DEST"
+  chmod +x ./claude/claude-cleanup.sh
+  echo "[DONE] Generated claudecleanup.plist in LaunchAgents"
+
+  launchctl bootout "gui/$(id -u)" "$CLAUDE_PLIST_DEST" 2>/dev/null || true
+  launchctl bootstrap "gui/$(id -u)" "$CLAUDE_PLIST_DEST"
+else
+  echo "[WARNING] com.user.claudecleanup.plist.template not found in $(pwd), skipping claude cleanup"
+fi
+
 # Symlink vpn scripts to usr/local/bin
 if [ -f "./vpn-LUH" ]; then
   echo "Symlinking vpn scripts to /usr/local/bin..."
