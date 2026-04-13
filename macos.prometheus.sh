@@ -8,12 +8,14 @@
 
 if [ -t 0 ]; then
     # Timezone
-    sudo systemsetup -settimezone "Europe/Berlin" > /dev/null
+    sudo systemsetup -settimezone "Europe/Berlin" &> /dev/null
 
-    # Energy: disable sleep while charging, 10 min on battery
+    # Energy: display sleep must be set before system sleep to avoid
+    # "display sleep should have a lower timeout" warnings from pmset.
+    sudo pmset -c displaysleep 15
     sudo pmset -c sleep 0
+    sudo pmset -b displaysleep 5
     sudo pmset -b sleep 10
-    sudo pmset -a displaysleep 15
 fi
 
 echo "[DONE] prometheus macOS overrides applied"

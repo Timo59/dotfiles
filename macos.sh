@@ -139,7 +139,6 @@ defaults write com.apple.dock autohide-time-modifier -float 0.5
 ###############################################################################
 
 DOCK_APPS=(
-    "/System/Library/CoreServices/Finder.app"
     "/System/Applications/Utilities/Terminal.app"
     "/System/Applications/Mail.app"
     "/Applications/Safari.app"
