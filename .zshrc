@@ -79,6 +79,9 @@ source $ZSH/oh-my-zsh.sh
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
+# LLVM/clangd (Homebrew keg-only, not in PATH by default)
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+
 # You may need to manually set your language environment
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8

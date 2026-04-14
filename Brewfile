@@ -11,6 +11,7 @@ brew 'git'
 brew 'git-filter-repo'		# Quickly rewrite git repository history
 brew 'gnupg'			# GNU Privacy Guard to encrypt data (used in tlmgr)
 brew 'libomp'			# LLVM's OpenMP runtime library
+brew 'llvm'       # LLVM's clangd compiler for LSP integration to neovim and claude code
 brew 'dockutil'			# Manage macOS Dock items from the command line
 brew 'mackup'			# Backup App preferences to a cloud storage
 brew 'mas' 			# Mac App Store CLI
@@ -26,6 +27,7 @@ brew 'tmux'			# Terminal multiplexer
 cask 'adobe-acrobat-reader'	
 cask 'basictex'
 # cask 'caffeine'
+cask 'claude'
 cask 'clion'
 cask 'discord'
 cask 'obsidian'

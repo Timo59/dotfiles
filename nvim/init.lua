@@ -163,7 +163,18 @@ require("lazy").setup({
       })
     end,
   },
+
 })
+
+-- =============================================================================
+-- LSP Configuration (native vim.lsp API for Neovim 0.11+)
+-- =============================================================================
+vim.lsp.config("clangd", {
+  cmd = { "clangd" },
+  filetypes = { "c", "cpp" },
+  root_markers = { "compile_commands.json", ".clangd", ".git" },
+})
+vim.lsp.enable("clangd")
 
 -- =============================================================================
 -- General Settings

@@ -1,14 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-
-  "autoMemoryEnabled": false,
-  "model": "opus",
   "cleanupPeriodDays": 5,
-
   "env": {
+    "ENABLE_LSP_TOOL": 1,
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
   },
-
   "permissions": {
     "deny": [
       "Read(**/.env)",
@@ -24,10 +20,12 @@
       "Bash(git reset --hard *)"
     ]
   },
-
+  "model": "claude-opus-4-5-20251101",
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
-    "context7@claude-plugins-official": true
-  }
+    "context7@claude-plugins-official": true,
+    "clangd-lsp@claude-plugins-official": true
+  },
+  "autoMemoryEnabled": false
 }
