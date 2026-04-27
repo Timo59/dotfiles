@@ -10,6 +10,14 @@
 
 # Note: not using set -e because pdflatex returns non-zero on warnings
 
+# Make bibtex/pdflatex find .bib/.bst/.tex files in the source directory and its
+# parent when invoked from inside .build/. Trailing "::" keeps the default
+# kpathsea search path (incl. ~/Library/texmf), so projects that rely on the
+# global texmf tree are unaffected. Mirrors ~/.latexmkrc.
+export BIBINPUTS=".:..::"
+export BSTINPUTS=".:..::"
+export TEXINPUTS=".:..::"
+
 # Check if file argument provided
 if [ -z "$1" ]; then
     echo "Usage: latex-compile.sh <file.tex>"

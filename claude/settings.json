@@ -26,6 +26,6 @@
     "context7@claude-plugins-official": true,
     "clangd-lsp@claude-plugins-official": true
   },
-  "effortLevel": "medium",
+  "effortLevel": "high",
   "autoMemoryEnabled": false
 }
