@@ -60,7 +60,7 @@ REPOS=(
   [git@github.com:Timo59/dotfiles.git]="$HOME/.dotfiles"
   [git@github.com:Timo59/HamSim.git]="$CODE_DIR/HamSim" 
   [git@gitlab.uni-hannover.de:timo.ziegler/optlib.git]="$CODE_DIR/optlib" 
-  [git@gitlab.uni-hannover.de:timo.ziegler/qsim.git]="$CODE_DIR/qlib" 
+  [git@github.com:Timo59/orkan.git]="$CODE_DIR/orkan"
   [git@github.com:Timo59/QonvexOptimization.git]="$CODE_DIR/QonvexOptimization" 
   [git@github.com:Timo59/TensorNetworks.git]="$CODE_DIR/TensorNetworks"
   [git@gitlab.uni-hannover.de:timo.ziegler/QCP_braket.git]="$CODE_DIR/QCP_braket"
@@ -113,6 +113,48 @@ update_repo() {
     fi
 }
 
+# Function to apply Orkan-specific git configuration (dual-remote push
+# routing + project-tracked hooks). Detected by the presence of
+# tools/hooks/pre-push, which only exists in the Orkan repo. Idempotent:
+# safe to re-run on an already-configured clone.
+configure_orkan() {
+    local target_dir="$1"
+
+    echo "Applying Orkan git configuration in $target_dir..."
+    cd "$target_dir" || return 1
+
+    # Reset existing origin push URLs so re-running doesn't duplicate them.
+    # Errors are ignored — they just mean nothing matched yet.
+    $GIT_CMD remote set-url --delete --push origin '.*github\.com.*' 2>/dev/null
+    $GIT_CMD remote set-url --delete --push origin '.*gitlab.*'      2>/dev/null
+
+    # Origin push URLs: GitHub primary + GitLab secondary.
+    $GIT_CMD remote set-url --add --push origin git@github.com:Timo59/orkan.git \
+        || echo "[WARNING] Failed to add GitHub push URL on origin"
+    $GIT_CMD remote set-url --add --push origin git@gitlab.uni-hannover.de:timo.ziegler/orkan.git \
+        || echo "[WARNING] Failed to add GitLab push URL on origin"
+
+    # Separate gitlab remote for fetching dev branches that live only there.
+    if $GIT_CMD remote get-url gitlab &>/dev/null; then
+        $GIT_CMD remote set-url gitlab git@gitlab.uni-hannover.de:timo.ziegler/orkan.git
+    else
+        $GIT_CMD remote add gitlab git@gitlab.uni-hannover.de:timo.ziegler/orkan.git \
+            || echo "[WARNING] Failed to add gitlab remote"
+    fi
+
+    # Per-branch push routing: main → origin (dual URLs), everything else → gitlab.
+    $GIT_CMD config remote.pushDefault gitlab
+    $GIT_CMD config branch.main.pushRemote origin
+
+    # Activate project-tracked git hooks (refuses dev branches on GitHub).
+    $GIT_CMD config core.hooksPath tools/hooks
+
+    # Ensure pre-push hook is executable.
+    chmod +x tools/hooks/pre-push 2>/dev/null || true
+
+    echo "[DONE] Orkan configuration applied"
+}
+
 
 # Loop over the associative array and clone/update each repository.
 # Track the .dotfiles commit hash before and after to detect upstream changes.
@@ -130,6 +172,11 @@ for repo_url in "${(@k)REPOS}"; do
         clone_repo "$repo_url" "$target_dir"
     else
         update_repo "$target_dir"
+    fi
+
+    # Apply Orkan-specific configuration when the marker file is present.
+    if [ -f "$target_dir/tools/hooks/pre-push" ]; then
+        configure_orkan "$target_dir" || echo "[WARNING] Orkan configuration failed (continuing)"
     fi
 
     if [ "$target_dir" = "$HOME/.dotfiles" ] && [ -d "$target_dir" ]; then
