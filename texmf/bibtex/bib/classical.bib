@@ -123,6 +123,22 @@
                 approximation analysis.},
 }
 
+@article{Khot2007_OptimalInapproximabilityResultsForMAXCUT,
+  author    = {Khot, Subhash and Kindler, Guy and Mossel, Elchanan and O'Donnell, Ryan},
+  title     = {Optimal Inapproximability Results for {MAX-CUT} and Other 2-Variable {CSPs}?},
+  journal   = {SIAM Journal on Computing},
+  volume    = {37},
+  number    = {1},
+  pages     = {319--357},
+  year      = {2007},
+  doi       = {10.1137/S0097539705447372},
+  annote    = {Under the Unique Games Conjecture, the Goemans-Williamson
+                0.878 ratio is optimal for MAXCUT. Higher Lasserre levels
+                cannot improve it (under UGC). Cite alongside Lasserre 2001
+                to explain why the hierarchy does not yield better
+                MAXCUT algorithms in practice.},
+}
+
 @article{Lasserre2001_GlobalOptimizationWithPolynomials,
 	author 	  = {Lasserre, Jean B.},
 	title 		= {Global Optimization with Polynomials and the Problem of Moments},
@@ -138,6 +154,30 @@
     We consider the problem of finding the unconstrained global minimum of a real-valued polynomial p(x): {\mathbb{R}}^n\to {\mathbb{R}}\$, as well as the global minimum of p(x), in a compact set K defined by polynomial inequalities. It is shown that this problem reduces to solving an (often finite)
     sequence of convex linear matrix inequality (LMI) problems. A notion of Karush--Kuhn--Tucker polynomials is introduced in a global optimality condition. Some illustrative examples are provided.
     }
+  annote    = {Introduces the Lasserre hierarchy of SDP relaxations for
+                polynomial optimisation. Captures GW (level 1 for MAXCUT)
+                and most known SDP-based approximation algorithms at higher
+                levels. Cite for the framing paragraph; do not develop
+                formally in Ch. 2.},
+}
+
+@article{Lasserre2016_MAXCUTFormulationOf01Programs,
+  title     = {A MAX-CUT formulation of 0/1 programs},
+  journal   = {Operations Research Letters},
+  volume    = {44},
+  number    = {2},
+  pages     = {158-164},
+  year      = {2016},
+  issn      = {0167-6377},
+  doi       = {https://doi.org/10.1016/j.orl.2015.12.014},
+  url       = {https://www.sciencedirect.com/science/article/pii/S016763771500173X},
+  author    = {Jean B. Lasserre},
+  keywords  = {Linear and quadratic 0/1 programs, MAX-CUT problem, LP- and semidefinite relaxations},
+  abstract  = {
+              We show that the linear or quadratic 0/1 program P:min{cTx+xTFx:Ax=b;x∈{0,1}n}, can be formulated as a MAX-CUT problem whose associated graph is simply related to the matrices F and ATA.
+              Hence the whole arsenal of approximation techniques for MAX-CUT can be applied.
+              We also compare the lower bound of the resulting semidefinite (or Shor) relaxation with that of the standard LP-relaxation and the first semidefinite relaxations associated with the Lasserre hierarchy and the copositive formulations of P.
+        }
 }
 
 @article{Poloczek2017_GreedyAlgorithmsForTheMAXSAT,
