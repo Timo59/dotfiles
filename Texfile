@@ -1,7 +1,7 @@
 # Packages from CTAN
 algorithm2e	# Floating algorithm environment with algorithmic keywords
 bbm		# Blackboard variants of Computer Modern fonts
-# biber		# BibTex replacement for BibLaTeX
+biber		# BibTex replacement for BibLaTeX
 braket		# Provides macros to typeset bra-ket notation
 biblatex	# Sophisticated bibliographies in LaTeX
 changes		# Manual change markup

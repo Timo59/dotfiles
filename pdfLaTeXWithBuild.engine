@@ -44,10 +44,15 @@ check_compilation() {
 pdflatex -interaction=nonstopmode -output-directory="$builddir" "$1"
 check_compilation
 
-# Run BibTeX on the -aux file in the build folder (ignore errors as .bib might not exist)
-bibtex "$builddir/$filename" 2>/dev/null || true
+# Dispatch: biber if biblatex (.bcf present), bibtex otherwise.
+if [ -f "$builddir/$filename.bcf" ]; then
+    (cd "$builddir" && biber "$filename") 2>/dev/null || true
+else
+    bibtex "$builddir/$filename" 2>/dev/null || true
+fi
 
-# Compile the .tex file for a second time (to resolve citations)
+# Compile twice more to resolve citations and settle labels/back-references
+pdflatex -interaction=nonstopmode -output-directory="$builddir" "$1"
 pdflatex -interaction=nonstopmode -output-directory="$builddir" "$1"
 
 # Reload Skim with the compiled PDF

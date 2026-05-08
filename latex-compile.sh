@@ -70,20 +70,30 @@ check_compilation() {
 }
 
 # First pass
-echo "--- Pass 1/2: Initial compilation ---"
+echo "--- Pass 1/3: Initial compilation ---"
 pdflatex -interaction=nonstopmode -output-directory="$builddir" "$dirname/$filename.tex"
 check_compilation
 
-# Run BibTeX only if the aux file contains \citation commands
-if grep -q '\\citation' "$builddir/$filename.aux" 2>/dev/null; then
+# Dispatch by file detection: biblatex writes a .bcf during pass 1; classic
+# BibTeX projects emit \citation into the .aux. Either branch keeps existing
+# projects working without requiring per-project configuration.
+if [ -f "$builddir/$filename.bcf" ]; then
+    echo "--- Running biber ---"
+    (cd "$builddir" && biber "$filename") || echo "WARNING: biber returned non-zero"
+elif grep -q '\\citation' "$builddir/$filename.aux" 2>/dev/null; then
     echo "--- Running BibTeX ---"
     (cd "$builddir" && bibtex "$filename") || echo "WARNING: BibTeX returned non-zero"
 else
-    echo "--- Skipping BibTeX (no citations) ---"
+    echo "--- Skipping bibliography (no citations) ---"
 fi
 
-# Second pass (resolve citations)
-echo "--- Pass 2/2: Resolving citations ---"
+# Second pass (pull in .bbl, resolve citations)
+echo "--- Pass 2/3: Resolving citations ---"
+pdflatex -interaction=nonstopmode -output-directory="$builddir" "$dirname/$filename.tex"
+check_compilation
+
+# Third pass (settle numeric labels and back-references)
+echo "--- Pass 3/3: Settling labels ---"
 pdflatex -interaction=nonstopmode -output-directory="$builddir" "$dirname/$filename.tex"
 check_compilation
 

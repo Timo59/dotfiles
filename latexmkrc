@@ -30,5 +30,8 @@ $ENV{'TEXINPUTS'} = '.:..::';
 # Run bibtex from the output directory where .aux files are
 $bibtex = 'bibtex %O %B';
 
+# Same for biber — invoked automatically by latexmk when a .bcf exists.
+$biber = 'biber %O %B';
+
 # Additional extensions to clean with latexmk -c
 $clean_ext = 'run.xml';
