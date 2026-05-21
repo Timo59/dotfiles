@@ -12,52 +12,50 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{base}[2025/05/25 LaTeX package for basic packages and commands]
 
-\RequirePackage{amsmath}	% Mathematical environments
-\RequirePackage{amssymb}	% Mathematical symbols
-\RequirePackage{amsthm}	% Enhancing theorem-style environments
-\RequirePackage{bm}		% Bold math symbols
+\RequirePackage{amsmath}    % Mathematical environments
+\RequirePackage{amssymb}	  % Mathematical symbols
+\RequirePackage{amsthm}	    % Enhancing theorem-style environments
+\RequirePackage{bm}		      % Bold math symbols
 \RequirePackage{mathtools} 	% Mathematical typesetting; \DeclarePairedDelimiter
 %\RequirePackage{parskip}		% Paragraph layout
-\RequirePackage{setspace}	% Provides double and one-and-a-half spacing based on font size
+\RequirePackage{setspace}	  % Provides double and one-and-a-half spacing based on font size
 \onehalfspacing
 
-\RequirePackage{subfiles}
-	\ifSubfilesClassLoaded{%
-		}%
-		{\renewcommand{\thesection}{\Roman{section}}%
-		}%
-
-%%%%%% MACROS
+%%% MACROS
 	
-%%%%%% SETS
-	%%% BASIC
-		\newcommand*{\N}{\mathbb{N}} 							% Natural numbers (without 0)
-		\newcommand*{\Nn}{\mathbb{N}_{0}} 				% Natural numbers with 0
-		\newcommand*{\Z}{\mathbb{Z}} 							% Integer numbers
-		\newcommand*{\Q}{\mathbb{Q}}							% Rational numbers
-		\newcommand*{\R}{\mathbb{R}}							% Real numbers
-		\newcommand*{\C}{\mathbb{C}}							% Complex numbers
-		\newcommand*{\F}{\mathbb{F}}								% Field
-		\let\Re\relax
-		\DeclareMathOperator{\Re}{Re}							% Real part of a complex number
-		\let\Im\relax
-		\DeclareMathOperator{\Im}{Im}								% Imaginary part of a complex number
-		\newcommand*{\hil}{\mathcal{H}} 							% Hilbert space
-		\newcommand*{\id}{I} 											% Identity operator
-		\newcommand*{\linear}[1]{\mathcal{L}(#1)}			% Linear operators
-		\newcommand*{\bounded}[1]{\mathcal{B}(#1)} 		% Bounded linear operators
-		\newcommand*{\trclass}[1]{\mathcal{B}_{1}(#1)} 	% Trace class operators
-		\DeclareMathOperator{\Mat}{Mat} 							% Matrices
-		\DeclareMathOperator{\Herm}{Herm}
-		\newcommand*{\herm}[1]{\Herm_{#1}}					% Hermitian matrices
-		\DeclareMathOperator{\PSD}{PSD}
-		\newcommand*{\psd}[1]{\PSD_{#1}}						% Positive semidefinite matrices
-		\DeclareMathOperator*{\rk}{rk}								% Operator rank
-		\DeclareMathOperator*{\sign}{sign}						% Sign of a number
-		\DeclareMathOperator*{\argmax}{arg\,max}			% Argument of the function's maxima
-		\DeclareMathOperator*{\argmin}{arg\,min}				% Argument of the function's minima
-		\DeclareMathOperator*{\st}{subject\ to}					% Constraint introducer
-		\newcommand{\bigO}{\mathcal{O}}						% Big-O notation
+  %%% SETS
+  \newcommand*{\N}{\mathbb{N}}      % Natural numbers (without 0)
+  \newcommand*{\Nn}{\mathbb{N}_{0}} % Natural numbers with 0
+  \newcommand*{\Z}{\mathbb{Z}} 		  % Integer numbers
+  \newcommand*{\Q}{\mathbb{Q}}			% Rational numbers
+  \newcommand*{\R}{\mathbb{R}}			% Real numbers
+  \newcommand*{\C}{\mathbb{C}}			% Complex numbers
+  \newcommand*{\F}{\mathbb{F}}		  % Field
+
+  \newcommand*{\hil}{\mathcal{H}}               % Hilbert space
+  \newcommand*{\states}[1]{\mathfrak{S}(#1)}    % State space 
+  \newcommand*{\linear}[1]{\mathcal{L}(#1)}			% Linear operators
+  \newcommand*{\bounded}[1]{\mathcal{B}(#1)} 		% Bounded linear operators
+	\DeclareMathOperator{\Mat}{Mat} 							% Matrices
+  \newcommand{\mat}[2]{\Mat_{#1}(#2)}           % #1- matrices over a filed #2
+
+  %%% SYMBOLS
+  \newcommand*{\id}{I} 						          % Identity operator
+  \let\Re\relax
+  \DeclareMathOperator{\Re}{Re}							% Real part of a complex number
+  \let\Im\relax
+  \DeclareMathOperator{\Im}{Im}							% Imaginary part of a complex number
+  \DeclareMathOperator{\rk}{rk}							% Operator rank
+  \DeclareMathOperator{\sign}{sign}					% Sign of a number
+  \DeclareMathOperator*{\argmax}{arg\,max}  % Argument of the function's maxima
+  \DeclareMathOperator*{\argmin}{arg\,min}	% Argument of the function's minima
+  \DeclareMathOperator{\st}{subject\ to}		% Constraint introducer
+  \newcommand{\bigO}{\mathcal{O}}						% Big-O notation
+
+  \DeclareMathOperator{\Herm}{Herm}
+  \newcommand*{\herm}[1]{\Herm_{#1}}					% Hermitian matrices
+  \DeclareMathOperator{\PSD}{PSD}
+  \newcommand*{\psd}[1]{\PSD_{#1}}						% Positive semidefinite matrices
 
 %%%%%% OPERATIONS
 	%%% UNARY
