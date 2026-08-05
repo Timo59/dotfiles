@@ -26,6 +26,13 @@
 *.sql
 *.sqlite
 
+# Secrets #
+###########
+# Private keys must never be committed. Public certificates (*.crt) are fine.
+*.key
+*.pem
+*.p12
+
 # OS generated files #
 ######################
 **/.DS_Store

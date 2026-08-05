@@ -17,6 +17,7 @@
 #   6. Clones Git repositories
 #   7. Sets up LaunchAgent for auto-updating repositories
 #   8. Symlinks VPN scripts and installs MOSEK SDK
+#   9. Sets up the Paperbase client (see paperbase.sh)
 # =============================================================================
 
 # Check if script runs from the .dotfiles directory
@@ -280,6 +281,17 @@ if [ -f "./vpn-LUH" ]; then
   fi
 else
   echo "[WARNING] No vpn scripts found in $(pwd), skipping vpn initialization"
+fi
+
+# Set up the Paperbase client (CA cert, pipx install, MCP registration).
+# --trust-ca adds the private CA to the System keychain; it needs sudo, which
+# this script already requires elsewhere. Run ./paperbase.sh on its own to do
+# everything except the keychain step.
+if [ -f "./paperbase.sh" ]; then
+  chmod +x "./paperbase.sh"
+  ./paperbase.sh --trust-ca
+else
+  echo "[WARNING] paperbase.sh not found in $(pwd), skipping Paperbase setup"
 fi
 
 
