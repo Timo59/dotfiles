@@ -51,7 +51,6 @@ The setup script installs and configures:
 | `dirs.sh` | Creates standard directory structure (Documents/*, Code). |
 | `tex.sh` | Installs LaTeX packages and symlinks custom texmf directory and TeXShop engine. |
 | `paperbase.sh` | Sets up the Paperbase client (CA cert, pipx install, MCP registration). See [Paperbase](#paperbase). |
-| `install_mosek.sh` | MOSEK installer kept for reference. MOSEK is now provided via nixpkgs in per-project `flake.nix`. |
 | `vpn-LUH` | Connects to University of Hannover VPN using OpenConnect. |
 
 ### Shell Configuration
@@ -65,7 +64,7 @@ The setup script installs and configures:
 
 | File | Description |
 |------|-------------|
-| `Brewfile` | Shared Homebrew packages and cask applications (git, pyenv, CLion, PyCharm, etc.). |
+| `Brewfile` | Shared Homebrew packages and cask applications — the machine baseline only. Project build dependencies belong in that project's `flake.nix`, not here. |
 | `Brewfile.prometheus` | MacBook-specific Homebrew packages (hostname: prometheus). |
 | `Brewfile.lucifer` | Desktop-specific Homebrew packages (hostname: lucifer). |
 | `Texfile` | LaTeX packages to install via tlmgr (algorithm2e, tikz, biblatex, etc.). |
@@ -77,9 +76,12 @@ The setup script installs and configures:
 | `macos.sh` | macOS system preferences script (Dock, Finder, keyboard, energy settings). Run by `setup.sh`. |
 | `macos.prometheus.sh` | MacBook Pro specific macOS overrides (hostname, energy). Applied after `macos.sh` on prometheus. |
 | `macos.lucifer.sh` | Desktop specific macOS overrides (hostname, energy). Applied after `macos.sh` on lucifer. |
-| `.gitignore_global` | Global Git ignore patterns for compiled files, OS artifacts, secrets (`*.key`, `*.pem`), and IDE folders. Registered via `core.excludesfile` by `setup.sh`. |
+| `.gitignore_global` | **Machine-wide** Git ignore patterns — compiled files, OS artifacts, secrets (`*.key`, `*.pem`), IDE folders. Applies to every repo on the machine via `core.excludesfile`, which `setup.sh` registers. |
+| `.gitignore` | Ignores specific to *this* repo only (`Brewfile.lock.json`). Anything that should apply to every repo belongs in `.gitignore_global` instead. |
 | `certs/homelab-root.crt` | Public CA certificate for the home lab (`Home Lab Root CA`). Safe to commit; the private key must never live here. |
-| `com.user.gitupdate.plist.template` | LaunchAgent template. `setup.sh` generates the final plist at install time (not symlinked). |
+| `com.user.gitupdate.plist.template` | LaunchAgent template: runs `clone.sh` at login. `setup.sh` generates the final plist at install time (not symlinked). |
+| `com.user.dock.plist.template` | LaunchAgent template: re-applies `macos.sh` (Dock layout) at login. |
+| `com.user.claudecleanup.plist.template` | LaunchAgent template: runs `claude/claude-cleanup.sh` at login. |
 
 ### Nix
 
@@ -308,4 +310,4 @@ Both TeXShop and neovim use `.build/` for auxiliary files, keeping source direct
 
 ## Credits
 
-Based on [Dries Vints' dotfiles](https://github.com/driesvints/dotfiles). Zsh theme by [subnixr](https://github.com/subnixr/minimal).
+Originally based on [Dries Vints' dotfiles](https://github.com/driesvints/dotfiles).

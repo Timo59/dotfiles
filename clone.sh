@@ -58,12 +58,9 @@ fi
 declare -A REPOS
 REPOS=(
   [git@github.com:Timo59/dotfiles.git]="$HOME/.dotfiles"
-  [git@github.com:Timo59/HamSim.git]="$CODE_DIR/HamSim" 
-  [git@gitlab.uni-hannover.de:timo.ziegler/optlib.git]="$CODE_DIR/optlib" 
   [git@github.com:Timo59/orkan.git]="$CODE_DIR/orkan"
-  [git@github.com:Timo59/QonvexOptimization.git]="$CODE_DIR/QonvexOptimization" 
+  [git@gitlab.uni-hannover.de:timo.ziegler/optlib.git]="$CODE_DIR/optlib" 
   [git@github.com:Timo59/TensorNetworks.git]="$CODE_DIR/TensorNetworks"
-  [git@gitlab.uni-hannover.de:timo.ziegler/QCP_braket.git]="$CODE_DIR/QCP_braket"
   [git@gitlab.uni-hannover.de:timo.ziegler/thesis.git]="$PROJECT_DIR/thesis"
 )
 
@@ -98,8 +95,22 @@ update_repo() {
         return 0
     fi
     
-    # Pull latest changes
-    if $GIT_CMD pull origin "$current_branch"; then
+    # Pull the current branch from *its own* upstream rather than always from
+    # origin. Orkan's dev branch tracks gitlab — that is where all development
+    # happens; origin/GitHub only ever receives main on a release — so
+    # hardcoding origin made every boot fail with "couldn't find remote ref dev".
+    # Branches without a configured upstream fall back to origin/<branch>.
+    #
+    # --ff-only because this runs unattended at login: a boot-time pull must
+    # never create a merge commit or leave a conflicted worktree behind.
+    local -a pull_args
+    if $GIT_CMD rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' &>/dev/null; then
+        pull_args=(--ff-only)
+    else
+        pull_args=(--ff-only origin "$current_branch")
+    fi
+
+    if $GIT_CMD pull "${pull_args[@]}"; then
         echo "[DONE] Updated $repo_name"
     else
         echo "[ERROR] Failed to update $repo_name"
@@ -141,6 +152,12 @@ configure_orkan() {
         $GIT_CMD remote add gitlab git@gitlab.uni-hannover.de:timo.ziegler/orkan.git \
             || echo "[WARNING] Failed to add gitlab remote"
     fi
+
+    # Fetch it so refs/remotes/gitlab/* exist. Without this a fresh clone (which
+    # lands on main, the only branch GitHub has) cannot `git checkout dev` — the
+    # remote-tracking ref it would branch from wouldn't be there yet. Does not
+    # change the checked-out branch.
+    $GIT_CMD fetch gitlab || echo "[WARNING] Failed to fetch gitlab remote"
 
     # Per-branch push routing: main → origin (dual URLs), everything else → gitlab.
     $GIT_CMD config remote.pushDefault gitlab
