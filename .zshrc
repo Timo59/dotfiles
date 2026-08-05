@@ -77,10 +77,16 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+# Keep $PATH entries unique — re-sourcing this file (setup.sh does) won't duplicate them
+typeset -U path PATH
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # LLVM/clangd (Homebrew keg-only, not in PATH by default)
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+
+# Claude Code native install (and other user-local binaries)
+export PATH="$HOME/.local/bin:$PATH"
 
 # You may need to manually set your language environment
 export LC_ALL=en_US.UTF-8
@@ -114,4 +120,3 @@ command_not_found_handler() {
        return 127
    fi
 }
-

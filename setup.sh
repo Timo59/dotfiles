@@ -265,13 +265,15 @@ if [ -f "./vpn-LUH" ]; then
   echo "Symlinking vpn scripts to /usr/local/bin..."
   chmod +x ./vpn-LUH
 
-  if [ ! -L /usr/local/bin/vpn-LUH ]; then
+  VPN_TARGET="$PWD/vpn-LUH"
+  # Re-link if missing, not a symlink, or pointing at a stale/wrong target
+  if [ ! -L /usr/local/bin/vpn-LUH ] || [ "$(readlink /usr/local/bin/vpn-LUH)" != "$VPN_TARGET" ]; then
     # Create directory if not present
     if [ ! -d /usr/local/bin ]; then
       sudo mkdir -p /usr/local/bin
     fi
 
-    sudo ln -sf "$PWD/vpn-LUH" /usr/local/bin/vpn-LUH
+    sudo ln -sf "$VPN_TARGET" /usr/local/bin/vpn-LUH
     echo "[DONE] Symlinked vpn-LUH to /usr/local/bin"
   else
     echo "[EXISTS] Symlink vpn-LUH to /usr/local/bin"
