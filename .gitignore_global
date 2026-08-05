@@ -50,8 +50,6 @@ Thumbs.db
 #########################
 .build/
 
-.lock.json
-
 # Claude code #
 ###############
 .claude/

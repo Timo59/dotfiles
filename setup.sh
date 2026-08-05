@@ -15,10 +15,11 @@
 #   4. Sets up LaTeX environment (packages, texmf, TeXShop engine)
 #   5. Creates standard directory structure
 #   6. Clones Git repositories
-#   7. Sets up LaunchAgent for auto-updating repositories
-#   8. Symlinks VPN scripts and installs MOSEK SDK
+#   7. Sets up LaunchAgents for repo auto-update, Dock, and Claude cleanup
+#   8. Symlinks the VPN script to /usr/local/bin
 #   9. Sets up Tailscale on machines that have a tailscale.<hostname>.sh
 #  10. Sets up the Paperbase client (see paperbase.sh)
+#  11. Applies macOS defaults (macos.sh, which sources macos.<hostname>.sh)
 # =============================================================================
 
 # Check if script runs from the .dotfiles directory
@@ -158,6 +159,13 @@ if [ -d "./claude" ]; then
     echo "[DONE] Linked claude/agents"
   else
     echo "[EXISTS] claude/agents symlink"
+  fi
+  if [ ! -L "$HOME/.claude/skills" ]; then
+    rm -rf "$HOME/.claude/skills"
+    ln -s "$PWD/claude/skills" "$HOME/.claude/skills"
+    echo "[DONE] Linked claude/skills"
+  else
+    echo "[EXISTS] claude/skills symlink"
   fi
 else
   echo "[WARNING] claude directory not found in $(pwd)"
@@ -306,9 +314,6 @@ else
   echo "[WARNING] paperbase.sh not found in $(pwd), skipping Paperbase setup"
 fi
 
-
-# Symlink the Mackup config file to the home directory
-# ln -s ./.mackup.cfg $HOME/.mackup.cfg
 
 # Apply macOS system settings, machine-specific overrides, and configure Dock
 if [ -f "./macos.sh" ]; then

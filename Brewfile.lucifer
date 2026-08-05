@@ -5,4 +5,5 @@
 # Add entries here as the machines diverge over time.
 # =============================================================================
 
+cask 'utm'			# QEMU-based virtual machine host
 cask 'whatsapp'
