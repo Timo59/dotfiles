@@ -50,6 +50,7 @@ The setup script installs and configures:
 | `clone.sh` | Clones and updates Git repositories from GitHub and GitLab Uni Hannover. |
 | `dirs.sh` | Creates standard directory structure (Documents/*, Code). |
 | `tex.sh` | Installs LaTeX packages and symlinks custom texmf directory and TeXShop engine. |
+| `paperbase.sh` | Sets up the Paperbase client (CA cert, pipx install, MCP registration). See [Paperbase](#paperbase). |
 | `install_mosek.sh` | MOSEK installer kept for reference. MOSEK is now provided via nixpkgs in per-project `flake.nix`. |
 | `vpn-LUH` | Connects to University of Hannover VPN using OpenConnect. |
 
@@ -76,7 +77,8 @@ The setup script installs and configures:
 | `macos.sh` | macOS system preferences script (Dock, Finder, keyboard, energy settings). Run by `setup.sh`. |
 | `macos.prometheus.sh` | MacBook Pro specific macOS overrides (hostname, energy). Applied after `macos.sh` on prometheus. |
 | `macos.lucifer.sh` | Desktop specific macOS overrides (hostname, energy). Applied after `macos.sh` on lucifer. |
-| `.gitignore_global` | Global Git ignore patterns for compiled files, OS artifacts, and IDE folders. Registered via `core.excludesfile` by `setup.sh`. |
+| `.gitignore_global` | Global Git ignore patterns for compiled files, OS artifacts, secrets (`*.key`, `*.pem`), and IDE folders. Registered via `core.excludesfile` by `setup.sh`. |
+| `certs/homelab-root.crt` | Public CA certificate for the home lab (`Home Lab Root CA`). Safe to commit; the private key must never live here. |
 | `com.user.gitupdate.plist.template` | LaunchAgent template. `setup.sh` generates the final plist at install time (not symlinked). |
 
 ### Nix
@@ -153,6 +155,7 @@ The setup script installs and configures:
 | `latexmkrc` | `~/.latexmkrc` |
 | `claude/settings.json` | `~/.claude/settings.json` |
 | `claude/agents` | `~/.claude/agents` |
+| `certs/homelab-root.crt` | `~/.config/paperbase/homelab-root.crt` |
 | `vpn-LUH` | `/usr/local/bin/vpn-LUH` |
 
 ## Customization
@@ -224,6 +227,42 @@ nix develop   # enters a shell with cmake, gcc, pkg-config, and MOSEK from nixpk
 ```
 
 Place the MOSEK license at `~/mosek/mosek.lic` (see Local-only Setup below).
+
+## Paperbase
+
+[Paperbase](https://paperbase.lan) is the self-hosted research-paper database running on the Raspberry Pi (`192.168.178.3`), served through Traefik with a certificate from a private CA (`Home Lab Root CA`). `paperbase.sh` is called by `setup.sh` and configures this machine as a client:
+
+- Symlinks `certs/homelab-root.crt` to `~/.config/paperbase/homelab-root.crt`
+- Installs the `paperbase` CLI and `paperbase-mcp` server into `~/.local/bin`
+- Registers `paperbase-mcp` with Claude Code (user scope) and Claude Desktop
+- Trusts the CA in the System keychain (only with `--trust-ca`)
+
+`.zshrc` exports `PAPERBASE_API_URL` and `PAPERBASE_API_CA` for the CLI. The MCP registrations repeat both values explicitly, because GUI hosts do not read the shell profile.
+
+### The `--trust-ca` step
+
+Adding the CA to the System keychain needs `sudo` and prompts for a password, so it is opt-in and kept out of the default path:
+
+```zsh
+./paperbase.sh              # everything except the keychain step
+./paperbase.sh --trust-ca   # additionally trust the CA (prompts for sudo)
+./paperbase.sh --upgrade    # also upgrade the client tools if already installed
+```
+
+`setup.sh` passes `--trust-ca`, since it already requires `sudo` elsewhere — so a plain `./setup.sh` fully configures a fresh machine. Run `./paperbase.sh` on its own if you want the unattended subset. Without the keychain step, browsers show a warning on `https://paperbase.lan` and `curl` needs `-k`.
+
+### Requirements and notes
+
+- Needs an SSH key with access to `gitlab.uni-hannover.de/timo.ziegler/paperbase` (see `ssh-setup.sh`).
+- Installation uses **pipx**, not `pip install --user`: Homebrew's Python is PEP 668 externally-managed (`pip` refuses to install into it) and its user scheme targets `~/Library/Python/<version>/bin` rather than `~/.local/bin`.
+- The script pins `mcp<2` inside the paperbase venv. `paperbase` imports `mcp.server.fastmcp`, which mcp 2.x removed; the pin can be dropped once the dependency is pinned upstream in the paperbase repo.
+
+Verify with:
+
+```zsh
+paperbase search      # lists papers
+claude mcp list       # paperbase: ... ✔ Connected
+```
 
 ## Local-only Setup (manual steps)
 
