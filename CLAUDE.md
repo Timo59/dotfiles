@@ -20,7 +20,9 @@ Personal macOS dotfiles for automated setup. See README.md for file descriptions
 
 **Paperbase client**: `paperbase.sh` configures this machine as a client of the self-hosted Paperbase instance (`https://paperbase.lan`, Raspberry Pi at `192.168.178.3`, Traefik + private CA). It symlinks `certs/homelab-root.crt` into `~/.config/paperbase/`, installs the `paperbase` CLI and `paperbase-mcp` server via **pipx** (not `pip --user`: Homebrew Python is PEP 668 externally-managed and its user scheme targets `~/Library/Python/<ver>/bin`, not `~/.local/bin`), and registers the MCP server with Claude Code and Claude Desktop. `--trust-ca` adds the CA to the System keychain and is the only step needing `sudo`. MCP servers cannot be declared in the symlinked `~/.claude/settings.json` (Claude Code 2.1.x ignores `mcpServers` there), and `~/.claude.json` holds mutable state so it must not be symlinked — hence registration goes through `claude mcp add -s user`, guarded by a `claude mcp list` check. Claude Desktop's config is merged with `jq` rather than overwritten, since the app rewrites it.
 
-**Machine-specific configuration**: `Brewfile.<hostname>` and `macos.<hostname>.sh` allow per-machine package and settings overrides. Current machines: `prometheus` (MacBook Pro), `lucifer` (desktop). Both are applied after their shared counterparts.
+**Machine-specific configuration**: `Brewfile.<hostname>`, `macos.<hostname>.sh` and `tailscale.<hostname>.sh` allow per-machine package and settings overrides. Current machines: `prometheus` (MacBook Pro), `lucifer` (desktop). The first two are applied after their shared counterparts; `tailscale.<hostname>.sh` has no shared counterpart, so a machine without the file is simply skipped.
+
+**Tailscale (prometheus only)**: `tailscale.prometheus.sh` configures the mesh VPN that lets the MacBook reach the home LAN from anywhere, with no port exposed on the router. `lucifer` never leaves that LAN, so no `tailscale.lucifer.sh` exists and setup.sh's dispatch is a no-op there. The script installs nothing itself — `Brewfile.prometheus` pulls the **formula** `tailscale` (daemon + CLI, deliberately not the cask/menu-bar app) — it starts the daemon with `sudo brew services start tailscale` (a root LaunchDaemon in `/Library/LaunchDaemons`, so it runs from boot; plain `brew services list` reports its status as `none`, only `sudo brew services list` shows `started`) and ensures `--accept-routes` is set. That last part matters: the formula defaults it to false, and without it `raspberry0`'s advertised `192.168.178.3/32` subnet route is ignored. Because `tailscale up` *replaces* the previous flag set rather than merging, every wanted flag must be passed on every invocation. The action is guarded on tailscaled's own health warning naming `--accept-routes` plus the `RouteAll` pref (authoritative when the advertising peer is offline), not re-run blindly. First-time login is deliberately **not** automated: enrolling needs interactive browser auth, and the alternative — a Tailscale auth key — is a secret that must never enter this repo; the script detects the logged-out state and prints the command for the human. Server side (Pi enrolled as subnet router, split-DNS for `lan` → Pi-hole at 192.168.178.3) is configured in the admin console, not here.
 
 **Nix**: Installed via Determinate Systems (not Homebrew). Used for C/CMake project dev shells. Flakes enabled via `~/.config/nix/nix.conf`. See `templates/flake.nix` for a C/CMake+MOSEK template — MOSEK is pulled from nixpkgs (`config.allowUnfree = true`); no system-wide MOSEK installation required. License file (`~/mosek/mosek.lic`) must still be placed manually.
 
@@ -40,6 +42,7 @@ Personal macOS dotfiles for automated setup. See README.md for file descriptions
 ├── macos.prometheus.sh                  # MacBook Pro specific macOS overrides (hostname, energy)
 ├── tex.sh                               # LaTeX environment setup script
 ├── paperbase.sh                         # Paperbase client setup (cert, pipx install, MCP registration)
+├── tailscale.prometheus.sh              # Tailscale daemon + --accept-routes; prometheus only (no lucifer file)
 ├── dirs.sh                              # Creates standard directory structure
 ├── clone.sh                             # Clones Git repositories (also called by LaunchAgent)
 ├── install_mosek.sh                     # MOSEK installer kept for reference; not called by setup.sh
@@ -90,9 +93,10 @@ Personal macOS dotfiles for automated setup. See README.md for file descriptions
 18. Run `clone.sh`
 19. Generate `~/Library/LaunchAgents/com.user.gitupdate.plist` from template (sed substitutes `$PWD`); `launchctl load`
 20. `chmod +x` + `sudo` symlink `vpn-LUH` → `/usr/local/bin/vpn-LUH` (idempotent)
-21. Run `paperbase.sh --trust-ca`
-22. Run `macos.sh` (if present)
-23. Run `macos.<hostname>.sh` (if present)
+21. Run `tailscale.<hostname>.sh` if it exists (only `prometheus` has one; no-op on `lucifer`)
+22. Run `paperbase.sh --trust-ca`
+23. Run `macos.sh` (if present)
+24. Run `macos.<hostname>.sh` (if present)
 
 ## Symlink Map
 

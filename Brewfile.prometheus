@@ -5,7 +5,12 @@
 # Add entries here as the machines diverge over time.
 # =============================================================================
 
-# (empty — add MacBook-specific formulae and casks below as needed)
+# Mesh VPN — reaches the home LAN (and Paperbase on the Pi) from anywhere.
+# The formula, not the cask: the daemon and CLI without the menu-bar app.
+# Configured by tailscale.prometheus.sh. Not needed on lucifer, which never
+# leaves the LAN.
+brew 'tailscale'
+
 # Example:
 # brew "some-work-tool"
 # cask "faculty-vpn-client"

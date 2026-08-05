@@ -17,7 +17,8 @@
 #   6. Clones Git repositories
 #   7. Sets up LaunchAgent for auto-updating repositories
 #   8. Symlinks VPN scripts and installs MOSEK SDK
-#   9. Sets up the Paperbase client (see paperbase.sh)
+#   9. Sets up Tailscale on machines that have a tailscale.<hostname>.sh
+#  10. Sets up the Paperbase client (see paperbase.sh)
 # =============================================================================
 
 # Check if script runs from the .dotfiles directory
@@ -281,6 +282,17 @@ if [ -f "./vpn-LUH" ]; then
   fi
 else
   echo "[WARNING] No vpn scripts found in $(pwd), skipping vpn initialization"
+fi
+
+# Machine-specific Tailscale setup (tailscale.<hostname>.sh). Only prometheus
+# has one: it leaves the house and needs the tunnel to reach the home LAN.
+# lucifer is always on that LAN, so no file exists for it and this is a no-op.
+MACHINE_TAILSCALE="./tailscale.$(hostname -s).sh"
+if [ -f "$MACHINE_TAILSCALE" ]; then
+  chmod +x "$MACHINE_TAILSCALE"
+  "$MACHINE_TAILSCALE"
+else
+  echo "[INFO] No Tailscale setup for $(hostname -s), skipping"
 fi
 
 # Set up the Paperbase client (CA cert, pipx install, MCP registration).

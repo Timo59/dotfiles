@@ -38,6 +38,7 @@ The setup script installs and configures:
 - **Git Repositories** - Auto-cloned from GitHub and GitLab
 - **MOSEK** - Optimization SDK for convex optimization
 - **LaunchAgent** - Background service to keep repositories updated
+- **Tailscale** - Mesh VPN for reaching the home LAN from anywhere (`prometheus` only)
 
 ## File Overview
 
@@ -51,6 +52,7 @@ The setup script installs and configures:
 | `dirs.sh` | Creates standard directory structure (Documents/*, Code). |
 | `tex.sh` | Installs LaTeX packages and symlinks custom texmf directory and TeXShop engine. |
 | `paperbase.sh` | Sets up the Paperbase client (CA cert, pipx install, MCP registration). See [Paperbase](#paperbase). |
+| `tailscale.prometheus.sh` | Starts the Tailscale daemon and accepts the Pi's subnet routes. MacBook only — there is no `tailscale.lucifer.sh`. See [Tailscale](#tailscale). |
 | `install_mosek.sh` | MOSEK installer kept for reference. MOSEK is now provided via nixpkgs in per-project `flake.nix`. |
 | `vpn-LUH` | Connects to University of Hannover VPN using OpenConnect. |
 
@@ -263,6 +265,43 @@ Verify with:
 paperbase search      # lists papers
 claude mcp list       # paperbase: ... ✔ Connected
 ```
+
+## Tailscale
+
+Tailscale is a mesh VPN that gives `prometheus` access to the home LAN from anywhere, with no port exposed on the router. It is configured on the **MacBook only**: `lucifer` sits permanently on that LAN and reaches everything directly, so there is no `tailscale.lucifer.sh` and `setup.sh` skips the step there.
+
+Scoping follows the usual `<basename>.<hostname>` convention — `setup.sh` runs `./tailscale.$(hostname -s).sh` if that file exists — and the formula lives in `Brewfile.prometheus`, so nothing is installed on the desktop either.
+
+`tailscale.prometheus.sh`:
+
+- Confirms the `tailscale` **formula** is installed. The formula, not the cask: it is the daemon and CLI without the menu-bar app.
+- Starts it with `sudo brew services start tailscale`, which installs a root LaunchDaemon in `/Library/LaunchDaemons` so it comes up at boot, before login.
+- Runs `sudo tailscale up --accept-routes` when the routes are not being accepted.
+
+The `--accept-routes` flag is the part that is easy to miss. The Raspberry Pi (`raspberry0`) is enrolled as a subnet router advertising `192.168.178.3/32`, but the formula defaults `--accept-routes` to false — the GUI app would set it for you — and without it the advertised route is ignored and nothing works off-LAN. Note also that `tailscale up` *replaces* the previous flag set instead of merging into it, so every wanted flag has to be passed on every invocation.
+
+The step is guarded rather than re-run blindly: tailscaled reports a health warning naming `--accept-routes` when a peer advertises routes that are not accepted, and the `RouteAll` pref it derives that from is checked as well, so the state is still detected correctly when the Pi happens to be offline.
+
+### First-time login is manual
+
+Enrolling a device needs an interactive browser login. Automating it would require a Tailscale auth key, which is a secret and must never live in this repo — so the script detects the logged-out state and prints the command instead:
+
+```zsh
+sudo tailscale up --accept-routes   # then follow the URL it prints
+```
+
+The tailnet side — enrolling the Pi as a subnet router, approving its route, and the split-DNS rule sending the `lan` domain to Pi-hole at `192.168.178.3` — is configured in the Tailscale admin console and is not managed by these dotfiles.
+
+Verify with:
+
+```zsh
+sudo brew services list | grep tailscale    # started (plain `brew services list` shows "none")
+tailscale status                            # peers listed, no health warnings
+route -n get 192.168.178.3 | grep interface # a utun interface, not Wi-Fi
+tailscale ping raspberry0                   # responds
+```
+
+The route check is the meaningful one: it proves macOS actually sends traffic for the Pi into the tunnel. The others can pass while that one fails.
 
 ## Local-only Setup (manual steps)
 
