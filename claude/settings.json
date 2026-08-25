@@ -27,5 +27,7 @@
     "clangd-lsp@claude-plugins-official": true
   },
   "effortLevel": "high",
-  "autoMemoryEnabled": false
+  "tui": "fullscreen",
+  "autoMemoryEnabled": false,
+  "model": "claude-fable-5"
 }
