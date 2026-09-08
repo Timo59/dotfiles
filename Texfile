@@ -33,6 +33,7 @@ tikz-cd		# Create commutative diagrams with TikZ
 todonotes       # Marking things to do in a LATEX document
 truncate        # Truncate text to a specified width
 varwidth	# A variable-width minipage
+wrapfig   # Allows figures or tables to have text wrapped around them
 xargs		# Define commands with many optional arguments
 xstring		# String manipulation for LaTeX
 xypic		# Typesetting a variety of graphs and diagrams
