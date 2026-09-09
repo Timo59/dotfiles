@@ -46,6 +46,7 @@
   \let\Im\relax
   \DeclareMathOperator{\Im}{Im}							% Imaginary part of a complex number
   \DeclareMathOperator{\rk}{rk}							% Operator rank
+  \DeclareMathOperator{\im}{im}             % Image of an operator
   \DeclareMathOperator{\sign}{sign}					% Sign of a number
   \DeclareMathOperator*{\argmax}{arg\,max}  % Argument of the function's maxima
   \DeclareMathOperator*{\argmin}{arg\,min}	% Argument of the function's minima
@@ -53,9 +54,9 @@
   \newcommand{\bigO}{\mathcal{O}}						% Big-O notation
 
   \DeclareMathOperator{\Herm}{Herm}
-  \newcommand*{\herm}[1]{\Herm_{#1}}					% Hermitian matrices
+  \newcommand*{\herm}[1]{\Herm_{#1}}				% Hermitian matrices
   \DeclareMathOperator{\PSD}{PSD}
-  \newcommand*{\psd}[1]{\PSD_{#1}}						% Positive semidefinite matrices
+  \newcommand*{\psd}[1]{\PSD_{#1}}					% Positive semidefinite matrices
 
 %%%%%% OPERATIONS
 	%%% UNARY
@@ -135,9 +136,9 @@
 		\let\oldexpval\expval
 		\def\expval{\@ifstar{\oldexpval}{\oldexpval*}}
 		%
-		\DeclarePairedDelimiterX\matrixel[3]{\langle}{\rangle}{#1 \lvert #2 \rvert #3}				% Matrix element
-		\let\oldmatrixel\matrixel
-		\def\matrixel{\@ifstar{\oldmatrixel}{\oldmatrixel*}}
+		\DeclarePairedDelimiterX\matel[3]{\langle}{\rangle}{#1 \lvert #2 \rvert #3}				% Matrix element
+		\let\oldmatel\matel
+		\def\matel{\@ifstar{\oldmatel}{\oldmatel*}}
 		
 %%%%%% ENVIRONMENTS
 		\newtheorem{definition}{Definition}[section]
