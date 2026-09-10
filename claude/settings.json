@@ -20,6 +20,7 @@
       "Bash(git reset --hard *)"
     ]
   },
+  "model": "fable",
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
@@ -28,6 +29,5 @@
   },
   "effortLevel": "high",
   "tui": "fullscreen",
-  "autoMemoryEnabled": false,
-  "model": "claude-fable-5"
+  "autoMemoryEnabled": false
 }
