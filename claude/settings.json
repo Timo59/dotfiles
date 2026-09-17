@@ -20,7 +20,7 @@
       "Bash(git reset --hard *)"
     ]
   },
-  "model": "fable",
+  "model": "opus[1m]",
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
     "claude-md-management@claude-plugins-official": true,
