@@ -2,21 +2,27 @@
 # =============================================================================
 # dirs.sh - Directory structure creation script
 # =============================================================================
-# Creates the standard directory structure for organizing documents and code.
+# Creates the local directory structure that clone.sh writes into.
 #
 # Created directories:
-#   ~/Documents/Conferences:Seminars, ~/Documents/LUH, ~/Documents/PhD,
-#   ~/Documents/Projects, ~/Code
+#   ~/Code     — source repositories (orkan, optlib, TensorNetworks, ...)
+#   ~/Projects — writing and project repositories (thesis, paperbase, ...)
+#
+# Deliberately NOT created here: ~/Documents/{Conferences:Seminars,LUH,PhD,
+# Projects}. Those are symlinks into ~/Library/CloudStorage/OneDrive-Personal
+# and are placed by OneDrive itself. Creating them as real directories first
+# blocks OneDrive from putting its link there, which is what earlier versions
+# of this script did.
+#
+# Note that ~/Projects and ~/Documents/Projects are different things: the
+# former is local git checkouts, the latter is OneDrive-synced material.
 # =============================================================================
 
 # Associative array of directories to create (path: description)
 declare -A directories
 directories=(
-    ["$HOME/Documents/Conferences:Seminars"]="Conferences:Seminars"
-    ["$HOME/Documents/LUH"]="LUH"
-    ["$HOME/Documents/PhD"]="PhD"
-    ["$HOME/Documents/Projects"]="Projects"
     ["$HOME/Code"]="Code"
+    ["$HOME/Projects"]="Projects"
 )
 
 echo "Setting up directory structure..."

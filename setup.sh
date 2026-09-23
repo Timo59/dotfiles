@@ -12,7 +12,7 @@
 #   1. Installs Oh-My-Zsh and Homebrew
 #   2. Symlinks .zshrc to home directory
 #   3. Installs Homebrew packages from Brewfile
-#   4. Sets up LaTeX environment (packages, texmf, TeXShop engine)
+#   4. Sets up LaTeX environment (tlmgr packages, texmf symlink)
 #   5. Creates standard directory structure
 #   6. Clones Git repositories
 #   7. Sets up LaunchAgents for repo auto-update, Dock, and Claude cleanup
@@ -46,6 +46,12 @@ if [[ "$CURRENT_HOST" != "prometheus" && "$CURRENT_HOST" != "lucifer" ]]; then
 fi
 
 echo "Setting up your Mac..."
+
+# Non-fatal failures are collected here and reprinted as a summary at the end.
+# Nothing in this script aborts the run: a later step failing must not stop the
+# earlier ones from having been applied, and vice versa.
+typeset -a SETUP_FAILURES
+SETUP_FAILURES=()
 
 # Check whether .oh-my-zsh file is in home directory and install otherwise.
 # Do not run zsh when installation has finished
@@ -175,10 +181,20 @@ fi
 brew update
 
 # Install all dependencies with homebrew/bundle (See Brewfile)
+#
+# Failures are collected rather than fatal. A single unavailable entry — a
+# `mas` app not yet tied to this Apple ID is the usual one — makes the whole
+# `brew bundle` run exit non-zero, and aborting there would skip LaTeX, the
+# repo clones, Tailscale and Paperbase. Instead every failure is recorded and
+# reprinted in a summary at the end, so it is loud instead of scrolling past.
 echo "Install Homebrew dependencies..."
 if [ -f "./Brewfile" ]; then
-  brew bundle --file ./Brewfile --no-upgrade
-  echo "[DONE] Installed Homebrew dependencies"
+  if brew bundle --file ./Brewfile --no-upgrade; then
+    echo "[DONE] Installed Homebrew dependencies"
+  else
+    SETUP_FAILURES+=("brew bundle (Brewfile) reported unsatisfied entries — run 'brew bundle check --file ./Brewfile --verbose' for the list")
+    echo "[WARNING] Some Brewfile entries could not be installed (continuing)"
+  fi
 else
   echo "[WARNING] Brewfile not found at $(pwd), skipping Homebrew dependency installation."
 fi
@@ -186,10 +202,40 @@ fi
 # Install machine-specific packages
 MACHINE_BREWFILE="./Brewfile.$(hostname -s)"
 if [ -f "$MACHINE_BREWFILE" ]; then
-  brew bundle --file="$MACHINE_BREWFILE" --no-upgrade
-  echo "[DONE] Installed machine-specific packages from $MACHINE_BREWFILE"
+  if brew bundle --file="$MACHINE_BREWFILE" --no-upgrade; then
+    echo "[DONE] Installed machine-specific packages from $MACHINE_BREWFILE"
+  else
+    SETUP_FAILURES+=("brew bundle ($MACHINE_BREWFILE) reported unsatisfied entries")
+    echo "[WARNING] Some $MACHINE_BREWFILE entries could not be installed (continuing)"
+  fi
 else
   echo "[INFO] No machine-specific Brewfile for $(hostname -s), skipping"
+fi
+
+# Install the Claude Code CLI.
+#
+# Deliberately the native installer, not Homebrew. Homebrew ships two casks:
+# `claude-code` tracks the stable channel (about a week behind by design) and
+# `claude-code@latest` tracks latest — but neither auto-updates, so a Homebrew
+# install drifts further behind until someone runs `brew upgrade`. The native
+# install updates itself in the background and manages ~/.local/bin/claude as
+# a symlink into ~/.local/share/claude/versions/. .zshrc already has
+# ~/.local/bin on PATH.
+#
+# Must run before paperbase.sh, which needs `claude` to register its MCP
+# server and otherwise skips that step with a warning.
+if ! command -v claude &>/dev/null; then
+  echo "Installing Claude Code (native installer)..."
+  if curl -fsSL https://claude.ai/install.sh | bash; then
+    export PATH="$HOME/.local/bin:$PATH"
+    echo "[DONE] Installed Claude Code $(claude --version 2>/dev/null)"
+  else
+    SETUP_FAILURES+=("Claude Code install failed — see https://code.claude.com/docs/en/setup")
+    echo "[WARNING] Claude Code installation failed (continuing)"
+  fi
+else
+  echo "[EXISTS] Claude Code $(claude --version 2>/dev/null)"
+  claude update 2>/dev/null || true
 fi
 
 # Add MacTex CLI to the path and manpath
@@ -321,4 +367,21 @@ if [ -f "./macos.sh" ]; then
   "./macos.sh"
 else
   echo "[WARNING] macos.sh not found, skipping"
+fi
+
+# -----------------------------------------------------------------------------
+# Summary
+# -----------------------------------------------------------------------------
+echo ""
+if (( ${#SETUP_FAILURES[@]} > 0 )); then
+  echo "============================================================"
+  echo "[WARNING] Setup finished with ${#SETUP_FAILURES[@]} problem(s):"
+  for failure in "${SETUP_FAILURES[@]}"; do
+    echo "  - $failure"
+  done
+  echo "============================================================"
+  echo "Everything else was applied. Fix the above and re-run ./setup.sh."
+  exit 1
+else
+  echo "[DONE] Setup complete — no problems reported."
 fi

@@ -6,3 +6,21 @@
 # not a declaration. nvim/lazy-lock.json is deliberately NOT ignored: it
 # pins plugin versions and must stay tracked.
 Brewfile.lock.json
+
+# TeX Live artefacts inside texmf/.
+# ~/Library/texmf is a symlink to texmf/ here, so anything TeX writes to the
+# user tree lands in this repo. Two sources:
+#   - `tlmgr --usermode install` drops a whole package tree (fonts/, tlpkg/,
+#     web2c/, plus the packages themselves). Declare packages in Texfile
+#     instead — tex.sh installs them system-wide with sudo.
+#   - `mktexlsr` regenerates ls-R, the kpathsea filename cache. tex.sh runs
+#     it on every setup, so tracking it only produces phantom diffs.
+texmf/ls-R
+texmf/tlpkg/
+texmf/web2c/
+texmf/fonts/
+texmf/tex/lualatex/
+texmf/tex/latex/appendixnumberbeamer/
+texmf/tex/latex/fira/
+texmf/tex/latex/tcolorbox/
+texmf/tex/latex/tikzfill/
