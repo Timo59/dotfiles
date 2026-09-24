@@ -19,7 +19,10 @@
 brew 'bash' 			# Latest Bash version
 brew 'coreutils' 		# Those that come with macOS are outdated
 brew 'cmake'			# Cross platform compiler; mainly used for C/C++
+brew 'colima'			# Container runtime (Lima VM); Docker Desktop replacement
 brew 'direnv'			# Per-directory env loading; auto-enters Nix dev shells via .envrc
+brew 'docker'			# Docker CLI — talks to the Colima socket, not Docker Desktop
+brew 'docker-compose'		# Multi-container orchestration (Paperbase stack)
 # brew 'gh'			# GitHub CLI
 brew 'git'
 brew 'git-filter-repo'		# Quickly rewrite git repository history
@@ -30,8 +33,8 @@ brew 'libomp'			# LLVM's OpenMP runtime library
 brew 'llvm'       # LLVM's clangd compiler for LSP integration to neovim and claude code
 brew 'dockutil'			# Manage macOS Dock items from the command line
 brew 'mas' 			# Mac App Store CLI
-brew 'nano'			# Minimal terminal editor for quick edits
-brew 'node'			# Node.js runtime; required by several neovim LSP servers
+# brew 'nano'			-- macOS ships /usr/bin/nano; neovim covers everything else
+brew 'node'			# Node.js runtime; needed by neovim LSP servers and npx-based MCP servers
 brew 'openconnect'		# Open client for Cisco AnyConnect VPN
 brew 'parallel'			# Shell command parallelization utility
 brew 'pkg-config'		# Helper tool to compile applications and libraries
@@ -49,17 +52,22 @@ brew 'latexdiff'		# Marked-up diff of two LaTeX documents (not shipped via Texfi
 brew 'poppler'			# PDF utilities: pdftotext, pdfimages, pdfinfo
 
 # Apps
-cask 'adobe-acrobat-reader'	
+#
+# Note: the Claude Code *CLI* is deliberately not here. Neither Homebrew cask
+# (claude-code / claude-code@latest) auto-updates, so both drift behind.
+# setup.sh installs it with the native installer, which self-updates.
+cask 'adobe-acrobat-reader'
 cask 'basictex'
 # cask 'caffeine'
-cask 'claude'
+cask 'chatgpt'			# auto_updates: brew only bootstraps, the app updates itself
+cask 'claude'			# ditto
 # cask 'clion'
 cask 'discord'
 cask 'obsidian'
 # cask 'docker'			-- Software for isolating applications in containers
 # cask 'flutter'
 # cask 'github'
-cask 'google-chrome'
+# cask 'google-chrome'
 cask 'inkscape'
 # cask 'insomnia'		-- Design, debug, and test APIs locally or in the cloud
 # cask 'intellij-idea'
@@ -73,7 +81,7 @@ cask 'onedrive'
 # cask 'slack'			-- Team communication and collaboration software
 cask 'spotify'
 cask 'skim'			# PDF viewer with SyncTeX support for neovim
-cask 'texshop'
+# cask 'texshop'
 # cask 'tuple'			-- Remote pair programming app
 cask 'zoom'
 

@@ -6,13 +6,15 @@
 #
 # What this script does:
 #   1. Installs LaTeX packages from Texfile using tlmgr
-#   2. Symlinks custom TeXShop engine (pdfLaTeXWithBuild.engine)
-#   3. Symlinks texmf directory with custom packages and bibliographies
-#   4. Updates the TeX file database (mktexlsr)
+#   2. Symlinks texmf directory with custom packages and bibliographies
+#   3. Updates the TeX file database (mktexlsr)
+#
+# Editing is neovim + VimTeX only; TeXShop and its pdfLaTeXWithBuild.engine
+# were dropped. Compilation goes through latex-compile.sh, which VimTeX calls
+# via vimtex_compiler_generic. Nothing here writes to ~/Library/TeXShop.
 # =============================================================================
 
 DOTFILES_DIR=$HOME/.dotfiles
-ENGINE_DIR=$HOME/Library/TeXShop/Engines
 TEXMF_DIR=$HOME/Library/texmf
 
 # Install all LaTex dependencies using tlmgr from newline delimited list Texfile
@@ -34,15 +36,13 @@ else
   fi
 fi
 
-# Create a symbolic link from pdfLaTeXWithBuild.engine to TeXShop engines
-if [ -f "$DOTFILES_DIR/pdfLaTeXWithBuild.engine" ]; then
-  echo "Symlinking TeXShop engine..."
-  chmod +x "$DOTFILES_DIR/pdfLaTeXWithBuild.engine"
-  mkdir -p "$ENGINE_DIR"
-  ln -sf "$DOTFILES_DIR/pdfLaTeXWithBuild.engine" "$ENGINE_DIR/pdfLaTeXWithBuild.engine"
-  echo "[DONE] Created symlink to $DOTFILES_DIR/pdfLaTeXWithBuild.engine."
-else
-  echo "[WARNING] pdfLaTeXWithBuild.engine not found, skipping engine setup"
+# Remove the TeXShop engine symlink left behind by older versions of this
+# script. TeXShop is no longer installed (see the Brewfile) and the engine
+# file is gone from the repo, so the link is dangling.
+STALE_ENGINE="$HOME/Library/TeXShop/Engines/pdfLaTeXWithBuild.engine"
+if [ -L "$STALE_ENGINE" ]; then
+  rm -f "$STALE_ENGINE"
+  echo "[DONE] Removed stale TeXShop engine symlink"
 fi
 
 # Create a symbolic link from texmf in dotfiles to $HOME/Library/texmf

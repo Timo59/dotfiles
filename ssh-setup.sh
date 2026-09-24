@@ -1,123 +1,140 @@
 #!/bin/zsh
 # =============================================================================
-# ssh-setup.sh - SSH key generation for GitHub
+# ssh-setup.sh - SSH key generation for GitHub and GitLab
 # =============================================================================
-# Generates an ed25519 SSH key for GitHub authentication and configures the
-# SSH client. Adds key to ssh-agent and macOS Keychain for convenience.
+# Generates one ed25519 key per forge, writes the matching ~/.ssh/config
+# blocks, and loads the keys into ssh-agent + the macOS Keychain.
 #
-# After running, add the public key (copied to clipboard) to GitHub Settings.
+# Two keys, not one: GitHub and gitlab.uni-hannover.de are separate accounts
+# with separate key lists, and a single key shared between a personal and a
+# university identity is the kind of thing that becomes awkward to revoke.
+# A per-host IdentityFile also stops ssh from offering the wrong key first
+# and tripping GitLab's auth attempt limit.
+#
+# Run this BEFORE setup.sh: clone.sh needs GitHub for dotfiles/orkan/
+# TensorNetworks, GitLab for optlib/thesis, and paperbase.sh pip-installs
+# straight from the GitLab repo. Without both keys those steps fail.
+#
+# Usage: ./ssh-setup.sh
 # =============================================================================
 
-SSH_KEY_PATH="$HOME/.ssh/id_github"
+EMAIL="${EMAIL:-ziegler-timo@web.de}"
+KEY_COMMENT="$EMAIL ($(hostname -s))"
 
-echo "Setting up SSH key for GitHub with email: $EMAIL"
+SSH_DIR="$HOME/.ssh"
+SSH_CONFIG="$SSH_DIR/config"
 
-# Check if SSH key already exists
-if [ -f "$SSH_KEY_PATH" ]; then
-    echo "SSH key already exists at $SSH_KEY_PATH"
-    read -q "[REPLY] Do you want to overwrite it? (y/N): "
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo "Skipping SSH key generation"
-        exit 0
-    fi
-fi
+mkdir -p "$SSH_DIR"
+chmod 700 "$SSH_DIR"
 
-# Create .ssh directory if it doesn't exist
-mkdir -p ~/.ssh
-chmod 700 ~/.ssh
-
-echo "Generating a new SSH key for GitHub..."
-
-# Generate SSH key with passphrase
-echo "You will be prompted to enter a passphrase for your SSH key."
-echo "This adds an extra layer of security to your private key."
-ssh-keygen -t ed25519 -C "MacBook Pro" -f "$SSH_KEY_PATH"
-
-# Check if ssh-keygen was successful
-if [ $? -ne 0 ]; then
-    echo "Error: Failed to generate SSH key"
-    exit 1
-fi
-
-echo "SSH key generated successfully!"
-
-# Start ssh-agent if not running
-if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-    eval "$(ssh-agent -s)"
-fi
-
-# Create or update SSH config
-SSH_CONFIG="$HOME/.ssh/config"
-echo "Setting up SSH configuration..."
-
-# Create config file if it doesn't exist
 if [ ! -f "$SSH_CONFIG" ]; then
     touch "$SSH_CONFIG"
     chmod 600 "$SSH_CONFIG"
 fi
 
-# Check if GitHub config already exists
-if ! grep -q "Host github.com" "$SSH_CONFIG"; then
-    echo "Adding GitHub configuration to SSH config..."
-    cat >> "$SSH_CONFIG" << EOF
+# Start ssh-agent if it is not already running
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    eval "$(ssh-agent -s)" > /dev/null
+fi
 
-# GitHub configuration
-Host github.com
+# -----------------------------------------------------------------------------
+# Per-forge setup
+# -----------------------------------------------------------------------------
+# setup_forge <host> <key path> <label> <where to paste the key>
+setup_forge() {
+    local host="$1"
+    local key_path="$2"
+    local label="$3"
+    local key_page="$4"
+
+    echo ""
+    echo "=== $label ($host) ==="
+
+    # 1. Key
+    if [ -f "$key_path" ]; then
+        echo "[EXISTS] SSH key at $key_path"
+        local REPLY
+        read -q "REPLY?Regenerate it? This invalidates the key on $label. (y/N): "
+        echo
+        if [[ "$REPLY" != [Yy] ]]; then
+            echo "[INFO] Keeping existing $label key"
+        else
+            rm -f "$key_path" "${key_path}.pub"
+        fi
+    fi
+
+    if [ ! -f "$key_path" ]; then
+        echo "Generating an ed25519 key for $label..."
+        echo "You will be prompted for a passphrase (stored in the Keychain below)."
+        if ! ssh-keygen -t ed25519 -C "$KEY_COMMENT" -f "$key_path"; then
+            echo "[ERROR] Failed to generate the $label key"
+            return 1
+        fi
+        echo "[DONE] Generated $key_path"
+    fi
+
+    # 2. ~/.ssh/config block
+    if grep -q "^Host $host\$" "$SSH_CONFIG"; then
+        echo "[EXISTS] $host block in $SSH_CONFIG"
+    else
+        cat >> "$SSH_CONFIG" << EOF
+
+# $label
+Host $host
+    HostName $host
+    User git
+    IdentityFile $key_path
+    IdentitiesOnly yes
     AddKeysToAgent yes
     UseKeychain yes
-    IdentityFile ~/.ssh/id_github
-    HostName github.com
-    User git
-
 EOF
-else
-    echo "GitHub SSH configuration already exists in $SSH_CONFIG"
-fi
-
-# Add key to ssh-agent and keychain (macOS)
-echo "Adding SSH key to ssh-agent..."
-echo "You'll need to enter your passphrase to add the key to the keychain."
-
-if ssh-add --apple-use-keychain "$SSH_KEY_PATH" 2>/dev/null; then
-    echo "SSH key added to ssh-agent and keychain successfully"
-    echo "Your passphrase has been saved to the macOS keychain"
-else
-    # Fallback for older macOS versions or if --apple-use-keychain doesn't work
-    if ssh-add -K "$SSH_KEY_PATH" 2>/dev/null; then
-        echo "SSH key added to ssh-agent and keychain successfully"
-        echo "Your passphrase has been saved to the macOS keychain"
-    else
-        # Final fallback
-        ssh-add "$SSH_KEY_PATH"
-        echo "SSH key added to ssh-agent (passphrase not saved to keychain)"
+        echo "[DONE] Added $host block to $SSH_CONFIG"
     fi
-fi
 
-# Copy public key to clipboard
-if command -v pbcopy >/dev/null 2>&1; then
-    pbcopy < "${SSH_KEY_PATH}.pub"
-    echo "SSH public key copied to clipboard!"
+    # 3. ssh-agent + Keychain. --apple-use-keychain is the current flag; -K is
+    # the pre-Monterey spelling, kept as a fallback.
+    if ssh-add --apple-use-keychain "$key_path" 2>/dev/null \
+        || ssh-add -K "$key_path" 2>/dev/null; then
+        echo "[DONE] Added $label key to ssh-agent and Keychain"
+    elif ssh-add "$key_path" 2>/dev/null; then
+        echo "[WARNING] Added $label key to ssh-agent only (passphrase not saved)"
+    else
+        echo "[WARNING] Could not add the $label key to ssh-agent"
+    fi
+
+    # 4. Hand the public key to the human
     echo ""
-    echo "Next steps:"
-    echo "1. Go to GitHub.com → Settings → SSH and GPG keys"
-    echo "2. Click 'New SSH key'"
-    echo "3. Paste the key (already in your clipboard) and give it a title"
-    echo "4. Click 'Add SSH key'"
+    echo "Add this key to $label:"
+    echo "  $key_page"
     echo ""
-    echo "Your public key is:"
-    cat "${SSH_KEY_PATH}.pub"
-else
-    echo "To add this key to GitHub:"
-    echo "1. Copy the following public key:"
+    cat "${key_path}.pub"
     echo ""
-    cat "${SSH_KEY_PATH}.pub"
-    echo ""
-    echo "2. Go to GitHub.com → Settings → SSH and GPG keys"
-    echo "3. Click 'New SSH key' and paste the key above"
-fi
+    if command -v pbcopy >/dev/null 2>&1; then
+        pbcopy < "${key_path}.pub"
+        echo "[DONE] Public key copied to clipboard"
+    fi
+    read -q "REPLY?Press y once the key is added (any other key to skip the test): "
+    echo
+
+    # 5. Verify. Both forges answer an auth probe with exit code 1 and a
+    # greeting on success, so match the greeting rather than the status.
+    if [[ "$REPLY" == [Yy] ]]; then
+        if ssh -o StrictHostKeyChecking=accept-new -T "git@$host" 2>&1 \
+            | grep -qiE "successfully authenticated|Welcome to GitLab|logged in as"; then
+            echo "[DONE] Authenticated to $label"
+        else
+            echo "[WARNING] Could not authenticate to $label — check the key was added"
+        fi
+    fi
+}
+
+echo "Setting up SSH keys for $EMAIL on $(hostname -s)..."
+
+setup_forge "github.com" "$SSH_DIR/id_github" \
+    "GitHub" "https://github.com/settings/ssh/new"
+
+setup_forge "gitlab.uni-hannover.de" "$SSH_DIR/id_gitlab_luh" \
+    "GitLab LUH" "https://gitlab.uni-hannover.de/-/user_settings/ssh_keys"
 
 echo ""
-echo "[DONE] Created SSH key with passphrase for github.com"
-echo ""
-echo "Test your connection with: ssh -T git@github.com"
+echo "[DONE] SSH setup complete. Next: cd ~/.dotfiles && ./setup.sh"
