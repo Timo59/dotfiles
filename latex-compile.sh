@@ -4,7 +4,7 @@
 # =============================================================================
 # Mirrors the behavior of pdfLaTeXWithBuild.engine:
 # - Compiles LaTeX with auxiliary files in ./.build directory
-# - Runs pdflatex 2x for references, includes BibTeX support
+# - Runs pdflatex 3x; runs biber (biblatex) or BibTeX in between, as detected
 # - PDF stays in .build/ directory
 # =============================================================================
 
